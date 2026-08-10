@@ -1,0 +1,537 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --color-base: #0b0f19;
+  --color-panel: #141a2e;
+  --color-elevated: #1a2138;
+  --color-line: #232c48;
+  --color-line-soft: rgba(255, 255, 255, 0.06);
+  --color-muted: #a5adc6;
+  --color-faint: #6b7593;
+  --color-ink: #eef1fb;
+  --color-accent: #7437ff;
+  --color-accent-deep: #5a28d4;
+  --color-accent-soft: rgba(116, 55, 255, 0.18);
+
+  --animate-marquee: marquee 46s linear infinite;
+  --animate-marquee-reverse: marquee-reverse 52s linear infinite;
+  --animate-spin-slow: spin 16s linear infinite;
+  --animate-pulse-glow: pulse-glow 5s ease-in-out infinite;
+
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  @keyframes marquee-reverse {
+    from {
+      transform: translateX(-50%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+  @keyframes pulse-glow {
+    0%,
+    100% {
+      opacity: 0.55;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.08);
+    }
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-base);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: #ffffff;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #0b0f19;
+}
+::-webkit-scrollbar-thumb {
+  background: #2a3350;
+  border-radius: 999px;
+  border: 2px solid #0b0f19;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #7437ff;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Custom cursor: hide the native one on precise pointers only. */
+@media (pointer: fine) {
+  *,
+  *::before,
+  *::after {
+    cursor: none !important;
+  }
+}
+
+/* Restore the native cursor inside the embedded Sanity Studio. */
+#studio-root,
+#studio-root *,
+#studio-root *::before,
+#studio-root *::after {
+  cursor: auto !important;
+}
+
+/* Film grain overlay for a premium finish. */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: -50%;
+  z-index: 90;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  opacity: 0.02;
+  animation: grain-shift 1.2s steps(4) infinite;
+}
+
+@keyframes grain-shift {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-2%, 3%); }
+  50% { transform: translate(3%, -2%); }
+  75% { transform: translate(-3%, -3%); }
+  100% { transform: translate(0, 0); }
+}
+
+/* Outlined display text. */
+.text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(238, 241, 251, 0.25);
+}
+
+.text-outline-accent {
+  color: transparent;
+  -webkit-text-stroke: 1px #7437ff;
+}
+
+.text-outline-white {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.35);
+}
+
+/* Gradient text — royal blue to electric indigo. */
+.text-gradient {
+  background-image: linear-gradient(100deg, #9a66ff 0%, #7437ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Gradient button fill + glow — electric indigo #7437FF -> #5A28D4. */
+.bg-accent-gradient {
+  background-image: linear-gradient(222deg, #9a66ff 20%, #7437ff 60%, #5a28d4 100%);
+  box-shadow:
+    0 4px 12px -2px rgba(116, 55, 255, 0.4),
+    0 12px 28px -8px rgba(116, 55, 255, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* Repeating grid line texture used inside cards. */
+.bg-grid {
+  background-image: linear-gradient(var(--color-line-soft) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-line-soft) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+.bg-dots {
+  background-image: radial-gradient(var(--color-line-soft) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+/* Card hover gradient border. */
+.gradient-border {
+  position: relative;
+  background-clip: padding-box;
+}
+.gradient-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    140deg,
+    rgba(116, 55, 255, 0.55),
+    rgba(154, 102, 255, 0.18) 40%,
+    rgba(116, 55, 255, 0.45)
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+.gradient-border:hover::before {
+  opacity: 1;
+}
+
+.marquee-mask {
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 12%,
+    black 88%,
+    transparent
+  );
+}
+
+.marquee-row:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* ==========================================================================
+   Animated gradient background (pure CSS, no images/video).
+   Wrap it in a `relative` container with `overflow-hidden rounded-*` to clip
+   it to a card/section, or use `fixed inset-0` for a full-viewport backdrop.
+   Place it BEFORE the element that sits on top of it so a glass overlay can
+   backdrop-blur it.
+   ========================================================================== */
+.animated-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: linear-gradient(135deg, #0b0f19 0%, #0b0f19 50%, #0b0f19 100%);
+  background-size: 220% 220%;
+  animation:
+    bg-pan 34s ease-in-out infinite alternate,
+    hue-shift 90s ease-in-out infinite;
+}
+
+.animated-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 80%, rgba(116, 55, 255, 0.36), transparent 45%),
+    radial-gradient(circle at 80% 20%, rgba(116, 55, 255, 0.16), transparent 45%),
+    radial-gradient(circle at 50% 50%, rgba(23, 39, 83, 0.589), transparent 50%);
+  filter: blur(30px);
+}
+
+.animated-bg .blob {
+  position: absolute;
+  aspect-ratio: 1;
+  border-radius: 9999px;
+  filter: blur(80px);
+  opacity: 0.55;
+  mix-blend-mode: screen;
+  will-change: transform;
+}
+
+.blob-purple {
+  background: #7437ff; /* electric indigo */
+}
+.blob-pink {
+  background: #4da3ff; /* electric sky */
+}
+.blob-blue {
+  background: #232746; /* navy card */
+}
+.blob-teal {
+  background: #1e2537; /* border/surface */
+}
+
+.blob-1 {
+  top: -18%;
+  left: -12%;
+  width: clamp(240px, 44vw, 540px);
+  animation: blob-1 26s ease-in-out infinite;
+}
+.blob-2 {
+  top: 20%;
+  left: 60%;
+  width: clamp(200px, 38vw, 480px);
+  animation: blob-2 32s ease-in-out infinite;
+}
+.blob-3 {
+  bottom: -22%;
+  left: 10%;
+  width: clamp(220px, 40vw, 500px);
+  animation: blob-3 29s ease-in-out infinite;
+}
+.blob-4 {
+  top: -14%;
+  right: -10%;
+  width: clamp(180px, 34vw, 440px);
+  animation: blob-4 24s ease-in-out infinite;
+}
+
+@keyframes bg-pan {
+  0% {
+    background-position: 0% 0%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  100% {
+    background-position: 0% 100%;
+  }
+}
+
+@keyframes hue-shift {
+  0%,
+  100% {
+    filter: hue-rotate(0deg);
+  }
+  50% {
+    filter: hue-rotate(16deg);
+  }
+}
+
+@keyframes blob-1 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: translate(18vw, -12vh) scale(1.18);
+  }
+  50% {
+    transform: translate(6vw, 16vh) scale(0.92);
+  }
+  75% {
+    transform: translate(-14vw, 8vh) scale(1.12);
+  }
+}
+
+@keyframes blob-2 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  30% {
+    transform: translate(-16vw, 10vh) scale(1.1);
+  }
+  60% {
+    transform: translate(10vw, -14vh) scale(0.95);
+  }
+  85% {
+    transform: translate(-6vw, 18vh) scale(1.2);
+  }
+}
+
+@keyframes blob-3 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: translate(14vw, 12vh) scale(1.15);
+  }
+  55% {
+    transform: translate(-12vw, -10vh) scale(0.9);
+  }
+  80% {
+    transform: translate(8vw, -16vh) scale(1.1);
+  }
+}
+
+@keyframes blob-4 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  20% {
+    transform: translate(-10vw, -14vh) scale(1.12);
+  }
+  50% {
+    transform: translate(12vw, 6vh) scale(0.94);
+  }
+  75% {
+    transform: translate(-8vw, 10vh) scale(1.18);
+  }
+}
+
+/* ==========================================================================
+   Dark glassmorphism card overlay. Pairs with `.animated-bg`: place the
+   background first, then this card on top so the backdrop-blur softens the
+   moving blobs behind it.
+   Tailwind-only equivalent:
+     `relative rounded-* border border-white/15 bg-white/10 backdrop-blur-2xl
+      backdrop-saturate-150 shadow-2xl`
+   ========================================================================== */
+.glass-dark {
+  position: relative;
+  z-index: 1;
+  background:
+    radial-gradient(120% 70% at 50% 0%, rgb(255 255 255 / 19%), #000000 55%),
+    linear-gradient(160deg, rgb(255 255 255 / 8%), rgb(255 255 255 / 2%));
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+  backdrop-filter: blur(22px) saturate(150%);
+  border: 1px solid rgb(255 255 255 / 14%);
+  box-shadow:
+    0 24px 60px -16px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* ==========================================================================
+   Iridescent light waves (hero background, pure CSS + inline SVG strokes).
+   `.wave-scene` sits behind hero content; `.wave-track` drifts horizontally
+   (seamless tile), `.wave-float` bobs vertically, and the whole scene slowly
+   hue-shifts for the iridescent "Apple/neon glass" feel.
+   ========================================================================== */
+.wave-scene {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  animation: wave-hue 36s ease-in-out infinite;
+}
+
+.wave-scene::before {
+  content: "";
+  position: absolute;
+  top: -18%;
+  left: 50%;
+  width: 130%;
+  aspect-ratio: 2 / 1;
+  transform: translateX(-50%);
+  background: radial-gradient(closest-side, rgba(116, 55, 255, 0.18), transparent 70%);
+  filter: blur(40px);
+}
+
+.wave-scene::after {
+  content: "";
+  position: absolute;
+  bottom: -28%;
+  left: 15%;
+  width: 95%;
+  aspect-ratio: 2 / 1;
+  background: radial-gradient(closest-side, rgba(116, 55, 255, 0.16), transparent 70%);
+  filter: blur(50px);
+}
+
+.wave-track {
+  position: absolute;
+  left: 0;
+  top: var(--wave-top);
+  width: 200%;
+  height: var(--wave-h);
+  animation: wave-drift var(--wave-dur, 24s) linear infinite;
+}
+
+.wave-float {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  animation: wave-float var(--wave-float-dur, 8s) ease-in-out infinite alternate;
+}
+
+.wave-svg {
+  flex: 0 0 50%;
+  height: 100%;
+  overflow: visible;
+}
+
+@keyframes wave-drift {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes wave-float {
+  from {
+    transform: translateY(calc(var(--wave-float-y, 12px) * -1));
+  }
+  to {
+    transform: translateY(var(--wave-float-y, 12px));
+  }
+}
+
+@keyframes wave-hue {
+  0%,
+  100% {
+    filter: hue-rotate(0deg);
+  }
+  50% {
+    filter: hue-rotate(16deg);
+  }
+}
+
+/* ==========================================================================
+   Animated iridescent gradient border (rotating conic gradient ring).
+   Usage: add `.iridescent-border` to a `rounded-* relative` element and keep
+   the content on `z-10` above it.
+   ========================================================================== */
+@property --irid-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.iridescent-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: conic-gradient(
+    from var(--irid-angle),
+    #7437ff,
+    #9a66ff,
+    #2e3a59,
+    #1e2537,
+    #7437ff
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  animation: irid-spin 7s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes irid-spin {
+  to {
+    --irid-angle: 360deg;
+  }
+}
+
+/* Reduce motion: disable decorative animation. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
