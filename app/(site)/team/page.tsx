@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { ArrowUpRight, Mail } from "lucide-react";
-import Contact from "@/components/Contact";
+import { ArrowUpRight, Mail, Users } from "lucide-react";
 import CTABanner from "@/components/CTABanner";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import PageHero from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
 import { getOwner, getSiteSettings, getTeam } from "@/lib/data";
@@ -45,23 +45,16 @@ export default async function TeamPage() {
     <main>
       <Navbar />
 
-      <section className="relative border-b border-line bg-panel/40 py-32 md:py-44">
-        <div className="mx-auto max-w-7xl px-5 md:px-8">
-          <SectionHeading
-            kicker="The team"
-            title={
-              <>
-                The people behind
-                <br />
-                <span className="text-outline-accent">the pixels.</span>
-              </>
-            }
-            description="Designers, engineers and strategists working from one accountable bench. Meet the founder and the crew shipping every CodeXplus engagement."
-          />
-        </div>
-      </section>
+      <PageHero
+        pageTagline="The team"
+        titlePrefix="The people behind"
+        glowingWord="the pixels."
+        description="Designers, engineers and strategists working from one accountable bench. Meet the founder and the crew shipping every CodeXplus engagement."
+        primaryCtaText="Meet the Crew"
+        primaryCtaLink="#founder"
+      />
 
-      <section className="relative border-y border-line bg-panel/50 py-24 md:py-36">
+      <section id="founder" className="relative border-y border-line bg-panel/50 py-24 md:py-36">
         <div className="mx-auto max-w-7xl px-5 md:px-8">
           <Reveal>
             <div className="glass-dark overflow-hidden rounded-[2rem]">
@@ -180,7 +173,6 @@ export default async function TeamPage() {
       </section>
 
       <CTABanner />
-      <Contact />
       <Footer />
     </main>
   );

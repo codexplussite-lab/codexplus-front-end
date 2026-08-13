@@ -12,10 +12,16 @@
     "sanity:deploy": "sanity deploy"
   },
   "dependencies": {
+    "@portabletext/react": "^8.0.0",
+    "@react-three/drei": "^10.7.8",
+    "@react-three/fiber": "^9.7.0",
     "@sanity/client": "^6.29.1",
+    "@sanity/image-url": "^2.1.1",
     "@sanity/vision": "^3.99.0",
+    "@types/three": "^0.185.4",
     "clsx": "^2.1.1",
     "framer-motion": "^12.23.6",
+    "gsap": "^3.15.0",
     "lucide-react": "^0.544.0",
     "next": "^15.5.7",
     "next-sanity": "^9.8.61",
@@ -23,7 +29,8 @@
     "react-dom": "^19.1.0",
     "sanity": "^3.99.0",
     "styled-components": "^6.4.4",
-    "tailwind-merge": "^3.3.1"
+    "tailwind-merge": "^3.3.1",
+    "three": "^0.185.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.11",

@@ -4,8 +4,8 @@ export const brand = {
   email: "hello@codexplus.studio",
   phoneIntl: ["+1 (415) 555-0132", "+31 (0) 20 555 0145"],
   locations: [
-    { city: "San Francisco", country: "California, USA", region: "West Coast HQ" },
-    { city: "Amsterdam", country: "Netherlands", region: "Europe HQ" },
+    { city: "San Francisco", country: "California, USA", region: "West Coast HQ", phone: "+1 (416) 555-0147", contactType: "phone" },
+    { city: "Amsterdam", country: "Netherlands", region: "Europe HQ", phone: "+49 30 555 0186", contactType: "whatsapp" },
   ],
 };
 

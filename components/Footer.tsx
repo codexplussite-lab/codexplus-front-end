@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ArrowRight, ArrowUp, Dribbble, Github, Twitter } from "lucide-react";
+import { ArrowRight, ArrowUp, Dribbble, Github, Twitter, MessageSquare, Phone } from "lucide-react";
 import Link from "next/link";
 
 const fallbackNavCol = [
@@ -50,6 +50,7 @@ export default function Footer() {
   const [navCol, setNavCol] = useState(fallbackNavCol);
   const [usefulLinks, setUsefulLinks] = useState(fallbackUsefulLinks);
   const [socials, setSocials] = useState(fallbackSocials);
+  const [locations, setLocations] = useState<any[]>([]);
 
   useEffect(() => {
     let active = true;
@@ -64,6 +65,7 @@ export default function Footer() {
           navLinks?: FooterLink[];
           usefulLinks?: FooterLink[];
           socials?: FooterLink[];
+          locations?: any[];
         }) => {
           if (!active) return;
           if (data.siteName) setSiteName(data.siteName);
@@ -77,6 +79,9 @@ export default function Footer() {
           }
           if (Array.isArray(data.socials) && data.socials.length > 0) {
             setSocials(data.socials);
+          }
+          if (Array.isArray(data.locations) && data.locations.length > 0) {
+            setLocations(data.locations);
           }
         },
       )
@@ -237,27 +242,87 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="space-y-4">
-          <h4 className="text-lg font-800 uppercase tracking-wider text-white">
-            Canada
-          </h4>
-          <p className="text-sm leading-relaxed text-white/60">
-            71 South Los Carneros Road,
-            <br />
-            California +51 174 705 812
-          </p>
-        </div>
+        {locations.length > 0 ? (
+          locations.map((loc) => (
+            <div key={loc.city} className="space-y-4">
+              <h4 className="text-lg font-800 uppercase tracking-wider text-white">
+                {loc.country}
+              </h4>
+              <p className="text-sm leading-relaxed text-white/60">
+                {loc.address}
+                <br />
+                {loc.city}
+              </p>
+              {loc.phone && (
+                <div className="pt-2">
+                  {loc.contactType === "whatsapp" ? (
+                    <a
+                      href={`https://wa.me/${loc.phone.replace(/[^+\d]/g, "")}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-2 transition-colors duration-300 hover:text-purple-400"
+                    >
+                      <MessageSquare className="size-4" />
+                      {loc.phone}
+                    </a>
+                  ) : (
+                    <a
+                      href={`tel:${loc.phone.replace(/[^+\d]/g, "")}`}
+                      className="inline-flex items-center gap-2 transition-colors duration-300 hover:text-purple-400"
+                    >
+                      <Phone className="size-4" />
+                      {loc.phone}
+                    </a>
+                  )}
+                </div>
+              )}
+            </div>
+          ))
+        ) : (
+          <>
+            <div className="space-y-4">
+              <h4 className="text-lg font-800 uppercase tracking-wider text-white">
+                Canada
+              </h4>
+              <p className="text-sm leading-relaxed text-white/60">
+                71 South Los Carneros Road,
+                <br />
+                California
+              </p>
+              <div className="pt-2">
+                <a
+                  href="tel:+14165550147"
+                  className="inline-flex items-center gap-2 transition-colors duration-300 hover:text-purple-400"
+                >
+                  <Phone className="size-4" />
+                  +1 (416) 555-0147
+                </a>
+              </div>
+            </div>
 
-        <div className="space-y-4">
-          <h4 className="text-lg font-800 uppercase tracking-wider text-white">
-            Germany
-          </h4>
-          <p className="text-sm leading-relaxed text-white/60">
-            Leehove 40, 2678 MC De Lier,
-            <br />
-            Netherlands +31 174 705 811
-          </p>
-        </div>
+            <div className="space-y-4">
+              <h4 className="text-lg font-800 uppercase tracking-wider text-white">
+                Germany
+              </h4>
+              <p className="text-sm leading-relaxed text-white/60">
+                Leehove 40, 2678 MC De Lier,
+                <br />
+                Netherlands
+              </p>
+              <div className="pt-2">
+                <a
+                  href="https://wa.me/49305550186"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 transition-colors duration-300 hover:text-purple-400"
+                >
+                  <MessageSquare className="size-4" />
+                  +49 30 555 0186
+                </a>
+              </div>
+            </div>
+          </>
+        )}
       </div>
 
       <div className="absolute bottom-12 right-6 hidden items-center gap-3 md:flex">

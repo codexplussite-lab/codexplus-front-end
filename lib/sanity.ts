@@ -9,25 +9,25 @@ let _writeClient: SanityClient | undefined;
 
 export function getClient(): SanityClient {
   if (!projectId) {
-    throw new Error(
-      "NEXT_PUBLIC_SANITY_PROJECT_ID is missing. Add your Sanity project id to .env.local — see .env.local.example",
+    console.warn(
+      "⚠️ NEXT_PUBLIC_SANITY_PROJECT_ID is missing. Add your Sanity project id to .env.local — see .env.local.example",
     );
   }
   if (!_client) {
-    _client = createClient({ projectId, dataset, apiVersion, useCdn: false });
+    _client = createClient({ projectId: projectId || "missing", dataset, apiVersion, useCdn: false });
   }
   return _client;
 }
 
 export function getWriteClient(): SanityClient {
   if (!projectId || !process.env.SANITY_API_TOKEN) {
-    throw new Error(
-      "NEXT_PUBLIC_SANITY_PROJECT_ID and SANITY_API_TOKEN are required. Add them to .env.local — see .env.local.example",
+    console.warn(
+      "⚠️ NEXT_PUBLIC_SANITY_PROJECT_ID and SANITY_API_TOKEN are required. Add them to .env.local — see .env.local.example",
     );
   }
   if (!_writeClient) {
     _writeClient = createClient({
-      projectId,
+      projectId: projectId || "missing",
       dataset,
       apiVersion,
       token: process.env.SANITY_API_TOKEN,
@@ -53,6 +53,7 @@ export const projectsQuery = `
 *[_type == "project"] | order(sortOrder asc) {
   "id": _id,
   title,
+  "slug": slug.current,
   client,
   category,
   year,
@@ -70,6 +71,7 @@ export const postsQuery = `
 *[_type == "post"] | order(sortOrder asc) {
   "id": _id,
   title,
+  "slug": slug.current,
   category,
   date,
   readTime,
@@ -125,12 +127,87 @@ export const siteSettingsQuery = `
   tagline,
   email,
   phoneIntl,
-  locations,
+  locations[]{
+    city,
+    country,
+    region,
+    address,
+    phone,
+    contactType
+  },
   navLinks,
   usefulLinks,
   socials,
   stats,
   clients,
   highlights
+}
+`;
+
+export const homeQuery = `
+*[_type == "home"][0] {
+  heroTitle,
+  heroSubtitle,
+  ctaLabel,
+  ctaUrl
+}
+`;
+
+export const pageQuery = `
+*[_type == "page" && slug.current == $slug][0] {
+  "id": _id,
+  title,
+  "slug": slug.current,
+  lastUpdated,
+  heading,
+  subheading,
+  content
+}
+`;
+
+export const jobsQuery = `
+*[_type == "job"] | order(sortOrder asc) {
+  "id": _id,
+  title,
+  "slug": slug.current,
+  department,
+  location,
+  requirements,
+  applyUrl,
+  sortOrder
+}
+`;
+
+export const projectBySlugQuery = `
+*[_type == "project" && slug.current == $slug][0] {
+  "id": _id,
+  title,
+  "slug": slug.current,
+  client,
+  category,
+  year,
+  services,
+  summary,
+  description,
+  content,
+  liveUrl,
+  palette,
+  variant,
+  tall
+}
+`;
+
+export const postBySlugQuery = `
+*[_type == "post" && slug.current == $slug][0] {
+  "id": _id,
+  title,
+  "slug": slug.current,
+  category,
+  date,
+  readTime,
+  excerpt,
+  content,
+  accent,
+  variant
 }
 `;

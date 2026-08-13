@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
+import { Sparkles } from "lucide-react";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
-import SectionHeading from "@/components/SectionHeading";
+import PageHero from "@/components/PageHero";
 
 export const metadata: Metadata = {
   title: "Contact — Start a Project with CodeXplus",
@@ -15,23 +16,16 @@ export default function ContactPage() {
     <main>
       <Navbar />
 
-      <section className="relative border-b border-line bg-panel/40 py-32 md:py-44">
-        <div className="mx-auto max-w-7xl px-5 md:px-8">
-          <SectionHeading
-            kicker="Get in touch"
-            title={
-              <>
-                Start a project,
-                <br />
-                <span className="text-outline-accent">or just say hello.</span>
-              </>
-            }
-            description="Tell us what you're building and we'll come back with a plan and a timeline. Every message lands in the inbox of the person who will actually do the work."
-          />
-        </div>
-      </section>
+      <PageHero
+        pageTagline="Get in touch"
+        titlePrefix="Start a project,"
+        glowingWord="or just say hello."
+        description="Tell us what you're building and we'll come back with a plan and a timeline. Every message lands in the inbox of the person who will actually do the work."
+        primaryCtaText="Start Discovery"
+        primaryCtaLink="#contact"
+      />
 
-      <div className="relative border-y border-line bg-panel/50">
+      <div id="contact" className="relative border-y border-line bg-panel/50">
         <Contact />
       </div>
 

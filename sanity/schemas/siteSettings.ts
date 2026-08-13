@@ -65,6 +65,20 @@ export default defineType({
             { name: "city", title: "City", type: "string" },
             { name: "country", title: "Country", type: "string" },
             { name: "region", title: "Region", type: "string" },
+            { name: "address", title: "Address", type: "text", rows: 2 },
+            { name: "phone", title: "Phone", type: "string" },
+            {
+              name: "contactType",
+              title: "Contact Type",
+              type: "string",
+              options: {
+                list: [
+                  { title: "Phone", value: "phone" },
+                  { title: "WhatsApp", value: "whatsapp" },
+                ],
+              },
+              initialValue: "phone",
+            },
           ],
           preview: {
             select: {

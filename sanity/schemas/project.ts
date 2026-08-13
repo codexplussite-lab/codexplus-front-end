@@ -12,6 +12,21 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     },
     {
+      name: "slug",
+      title: "Slug",
+      type: "slug",
+      options: {
+        source: "title",
+        maxLength: 96,
+      },
+      validation: (Rule) => Rule.required(),
+    },
+    {
+      name: "liveUrl",
+      title: "Live URL",
+      type: "url",
+    },
+    {
       name: "client",
       title: "Client",
       type: "string",
@@ -54,6 +69,11 @@ export default defineType({
       title: "Description",
       type: "array",
       of: [{ type: "text", rows: 4 }],
+    },
+    {
+      name: "content",
+      title: "Content",
+      type: "blockContent",
     },
     {
       name: "palette",

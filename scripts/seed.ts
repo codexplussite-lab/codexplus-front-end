@@ -1,9 +1,16 @@
 import { config } from "dotenv";
 import { createClient } from "@sanity/client";
 import {
+  brand,
+  clients as clientsData,
+  navLinks,
+  owner as ownerData,
   posts as postData,
   projects as projectData,
   services as serviceData,
+  socials,
+  stats,
+  team as teamData,
   testimonials as testimonialData,
 } from "../data/content";
 
@@ -105,10 +112,50 @@ async function main() {
     );
   });
 
+  ops.push(
+    client.createOrReplace({
+      _id: "siteSettings",
+      _type: "siteSettings",
+      name: brand.name,
+      tagline: brand.tagline,
+      email: brand.email,
+      phoneIntl: brand.phoneIntl,
+      locations: brand.locations,
+      navLinks,
+      socials,
+      stats,
+      clients: clientsData,
+    }),
+  );
+
+  ops.push(
+    client.createOrReplace({
+      _id: "owner",
+      _type: "owner",
+      name: ownerData.name,
+      role: ownerData.role,
+      bio: ownerData.bio,
+      description: ownerData.description,
+    }),
+  );
+
+  teamData.forEach((t, i) => {
+    ops.push(
+      client.createOrReplace({
+        _id: `team-${slugify(t.name)}`,
+        _type: "teamMember",
+        name: t.name,
+        role: t.role,
+        bio: t.bio,
+        sortOrder: i,
+      }),
+    );
+  });
+
   await Promise.all(ops);
 
   console.log(
-    `Seeded ${serviceData.length} services, ${projectData.length} projects, ${postData.length} posts, ${testimonialData.length} testimonials into Sanity.`,
+    `Seeded ${serviceData.length} services, ${projectData.length} projects, ${postData.length} posts, ${testimonialData.length} testimonials, owner, team, and siteSettings into Sanity.`,
   );
 
   process.exit(0);

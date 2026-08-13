@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
 import { ArrowRight } from "lucide-react";
 import AbstractVisual from "@/components/AbstractVisual";
-import Contact from "@/components/Contact";
 import CTABanner from "@/components/CTABanner";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import PageHero from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
-import SectionHeading from "@/components/SectionHeading";
 import { getPosts } from "@/lib/data";
 import type { Post } from "@/data/content";
 
@@ -24,23 +23,16 @@ export default async function ArticlesPage() {
     <main>
       <Navbar />
 
-      <section className="relative border-b border-line bg-panel/40 py-32 md:py-44">
-        <div className="mx-auto max-w-7xl px-5 md:px-8">
-          <SectionHeading
-            kicker="Journal"
-            title={
-              <>
-                All articles,
-                <br />
-                <span className="text-outline-accent">every field note.</span>
-              </>
-            }
-            description="Every insight, checklist and manifesto from the studio floor — design, engineering, motion and strategy. Fresh thinking, no fluff."
-          />
-        </div>
-      </section>
+      <PageHero
+        pageTagline="Journal"
+        titlePrefix="All articles, every"
+        glowingWord="field note."
+        description="Every insight, checklist and manifesto from the studio floor — design, engineering, motion and strategy. Fresh thinking, no fluff."
+        primaryCtaText="Read Latest"
+        primaryCtaLink="#articles"
+      />
 
-      <section className="relative border-y border-line bg-panel/50 py-24 md:py-36">
+      <section id="articles" className="relative border-y border-line bg-panel/50 py-24 md:py-36">
         <div className="mx-auto max-w-7xl px-5 md:px-8">
           {posts.length > 0 ? (
             <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
@@ -91,7 +83,6 @@ export default async function ArticlesPage() {
       </section>
 
       <CTABanner />
-      <Contact />
       <Footer />
     </main>
   );

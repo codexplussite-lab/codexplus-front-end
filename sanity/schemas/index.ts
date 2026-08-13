@@ -7,9 +7,16 @@ import subscriber from "./subscriber";
 import siteSettings from "./siteSettings";
 import owner from "./owner";
 import teamMember from "./teamMember";
+import blockContent from "./blockContent";
+import job from "./job";
+import page from "./page";
+import home from "./home";
 
 export const schemaTypes = [
   siteSettings,
+  home,
+  page,
+  job,
   service,
   project,
   post,
@@ -18,4 +25,5 @@ export const schemaTypes = [
   subscriber,
   owner,
   teamMember,
+  blockContent,
 ];

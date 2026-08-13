@@ -8,6 +8,11 @@ import {
   siteSettingsQuery,
   teamQuery,
   testimonialsQuery,
+  homeQuery,
+  pageQuery,
+  jobsQuery,
+  projectBySlugQuery,
+  postBySlugQuery,
 } from "@/lib/sanity";
 import {
   brand,
@@ -36,12 +41,15 @@ export type ServiceRow = {
 export type ProjectRow = {
   id: string;
   title: string;
+  slug?: string;
   client: string;
   category: string;
   year: string;
   services: string[];
   summary: string;
   description: string[];
+  content?: any;
+  liveUrl?: string;
   palette: [string, string, string];
   variant: string;
   tall: boolean;
@@ -51,10 +59,12 @@ export type ProjectRow = {
 export type PostRow = {
   id: string;
   title: string;
+  slug?: string;
   category: string;
   date: string;
   readTime: string;
   excerpt: string;
+  content?: any;
   accent: string;
   variant: string;
   sortOrder: number;
@@ -98,13 +108,41 @@ export type SiteSettings = {
   tagline?: string;
   email?: string;
   phoneIntl?: string[];
-  locations?: { city: string; country: string; region: string }[];
+  locations?: { city: string; country: string; region: string; address?: string; phone?: string; contactType?: string }[];
   navLinks?: { label: string; href: string }[];
   usefulLinks?: { label: string; href: string }[];
   socials?: { label: string; href: string }[];
   stats?: { value: number; suffix: string; label: string }[];
   clients?: string[];
   highlights?: string[];
+};
+
+export type HomeRow = {
+  heroTitle?: string;
+  heroSubtitle?: string;
+  ctaLabel?: string;
+  ctaUrl?: string;
+};
+
+export type PageRow = {
+  id: string;
+  title: string;
+  slug: string;
+  lastUpdated?: string;
+  heading?: string;
+  subheading?: string;
+  content?: any;
+};
+
+export type JobRow = {
+  id: string;
+  title: string;
+  slug: string;
+  department?: string;
+  location?: string;
+  requirements?: any;
+  applyUrl?: string;
+  sortOrder: number;
 };
 
 const warn = (err: unknown) =>
@@ -194,4 +232,68 @@ export async function getTeam(): Promise<TeamMemberRow[]> {
     warn(err);
   }
   return teamData.map((t, i) => ({ ...t, sortOrder: i }));
+}
+
+export async function getHome(): Promise<HomeRow | null> {
+  noStore();
+  try {
+    const data = await getClient().fetch<HomeRow>(homeQuery);
+    if (data) return data;
+  } catch (err) {
+    warn(err);
+  }
+  return null;
+}
+
+export async function getPage(slug: string): Promise<PageRow | null> {
+  noStore();
+  try {
+    const data = await getClient().fetch<PageRow>(pageQuery, { slug });
+    if (data) return data;
+  } catch (err) {
+    warn(err);
+  }
+  return null;
+}
+
+export async function getJobs(): Promise<JobRow[]> {
+  noStore();
+  try {
+    const rows = await getClient().fetch<JobRow[]>(jobsQuery);
+    if (rows && rows.length > 0) return rows;
+  } catch (err) {
+    warn(err);
+  }
+  return [];
+}
+
+export async function getProjectBySlug(slug: string): Promise<ProjectRow | null> {
+  noStore();
+  try {
+    const data = await getClient().fetch<ProjectRow>(projectBySlugQuery, { slug });
+    if (data) return data;
+  } catch (err) {
+    warn(err);
+  }
+  // fallback to local if not found in sanity
+  const localProject = projectsData.find(p => p.title.toLowerCase().replace(/\s+/g, '-') === slug);
+  if (localProject) {
+    return { ...localProject, id: localProject.title, tall: localProject.tall ?? false, sortOrder: 0, slug };
+  }
+  return null;
+}
+
+export async function getPostBySlug(slug: string): Promise<PostRow | null> {
+  noStore();
+  try {
+    const data = await getClient().fetch<PostRow>(postBySlugQuery, { slug });
+    if (data) return data;
+  } catch (err) {
+    warn(err);
+  }
+  const localPost = postsData.find(p => p.title.toLowerCase().replace(/\s+/g, '-') === slug);
+  if (localPost) {
+    return { ...localPost, id: localPost.title, sortOrder: 0, slug };
+  }
+  return null;
 }

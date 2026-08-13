@@ -12,6 +12,16 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     },
     {
+      name: "slug",
+      title: "Slug",
+      type: "slug",
+      options: {
+        source: "title",
+        maxLength: 96,
+      },
+      validation: (Rule) => Rule.required(),
+    },
+    {
       name: "category",
       title: "Category",
       type: "string",
@@ -37,6 +47,11 @@ export default defineType({
       title: "Excerpt",
       type: "text",
       rows: 3,
+    },
+    {
+      name: "content",
+      title: "Content",
+      type: "blockContent",
     },
     {
       name: "accent",

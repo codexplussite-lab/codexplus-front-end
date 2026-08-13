@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
+import { ArrowUpRight, Mail, MapPin, Phone, MessageSquare } from "lucide-react";
 import Link from "next/link";
 import Polyhedron from "@/components/Polyhedron";
 import { brand, projects } from "@/data/content";
@@ -15,7 +15,7 @@ type SiteSettings = {
   logoAlt?: string;
   email?: string;
   phoneIntl?: string[];
-  locations?: { city: string; country: string; region: string }[];
+  locations?: { city: string; country: string; region: string; phone?: string; contactType?: string }[];
   socials?: { label: string; href: string }[];
 };
 
@@ -41,11 +41,13 @@ const offices = [
     city: "Canada office",
     lines: ["123 King St. West, Suite 400", "Toronto, ON M5V 3M5"],
     phone: "+1 (416) 555-0147",
+    contactType: "phone",
   },
   {
     city: "Germany office",
     lines: ["Friedrichstraße 68, 10117", "Berlin, Germany"],
     phone: "+49 30 555 0186",
+    contactType: "whatsapp",
   },
 ];
 
@@ -59,12 +61,13 @@ const fallbackSocials = [
 
 function officesFromSettings(settings: SiteSettings | null) {
   if (!settings) return offices;
-  const { locations, phoneIntl } = settings;
+  const { locations } = settings;
   if (!Array.isArray(locations) || locations.length === 0) return offices;
   return locations.map((loc, i) => ({
     city: `${loc.city} office`,
     lines: [loc.country, loc.region].filter(Boolean),
-    phone: phoneIntl?.[i] ?? "",
+    phone: loc.phone || settings.phoneIntl?.[i] || "",
+    contactType: loc.contactType || "phone",
   }));
 }
 
@@ -355,13 +358,29 @@ export default function Navbar() {
                           </li>
                           {office.phone ? (
                             <li className="flex items-center gap-3 text-sm text-muted">
-                              <Phone className="size-4 shrink-0 text-accent" />
-                              <a
-                                href={`tel:${office.phone.replace(/[^+\d]/g, "")}`}
-                                className="transition-colors hover:text-ink"
-                              >
-                                {office.phone}
-                              </a>
+                              {office.contactType === "whatsapp" ? (
+                                <>
+                                  <MessageSquare className="size-4 shrink-0 text-accent" />
+                                  <a
+                                    href={`https://wa.me/${office.phone.replace(/[^+\d]/g, "")}`}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="transition-colors hover:text-ink"
+                                  >
+                                    {office.phone}
+                                  </a>
+                                </>
+                              ) : (
+                                <>
+                                  <Phone className="size-4 shrink-0 text-accent" />
+                                  <a
+                                    href={`tel:${office.phone.replace(/[^+\d]/g, "")}`}
+                                    className="transition-colors hover:text-ink"
+                                  >
+                                    {office.phone}
+                                  </a>
+                                </>
+                              )}
                             </li>
                           ) : null}
                         </ul>
