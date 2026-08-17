@@ -94,6 +94,7 @@ export type Project = {
   palette: [string, string, string];
   variant: "blobs" | "rings" | "grid" | "waves" | "prism" | "orbits";
   tall?: boolean;
+  coverImage?: any;
 };
 
 export const projects: Project[] = [

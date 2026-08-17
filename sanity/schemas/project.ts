@@ -76,6 +76,14 @@ export default defineType({
       type: "blockContent",
     },
     {
+      name: "coverImage",
+      title: "Cover Image",
+      type: "image",
+      options: {
+        hotspot: true,
+      },
+    },
+    {
       name: "palette",
       title: "Palette",
       type: "array",

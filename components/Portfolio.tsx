@@ -7,7 +7,9 @@ import AbstractVisual from "@/components/AbstractVisual";
 import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
 import type { Project } from "@/data/content";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { urlForImage } from "@/lib/sanity";
 
 const categories = ["All", "Web Design", "E-Commerce", "Product Design", "Brand Identity", "Web App", "Mobile App"];
 
@@ -54,7 +56,20 @@ function ProjectModal({
         transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
       >
         <div className="relative aspect-[16/9] overflow-hidden">
-          <AbstractVisual palette={project.palette} variant={project.variant} />
+          {project.coverImage || (project as any).image ? (
+            <Image
+              src={
+                typeof (project.coverImage || (project as any).image) === "string"
+                  ? (project.coverImage || (project as any).image)
+                  : urlForImage(project.coverImage || (project as any).image).url()
+              }
+              alt={project.title}
+              fill
+              className="object-cover"
+            />
+          ) : (
+            <AbstractVisual palette={project.palette} variant={project.variant} />
+          )}
           <button
             type="button"
             onClick={onClose}
@@ -244,11 +259,24 @@ export default function Portfolio({
                 aria-label={`View project: ${project.title}`}
               >
                 <div className="absolute inset-0">
-                  <AbstractVisual
-                    palette={project.palette}
-                    variant={project.variant}
-                    className="transition-transform duration-[900ms] ease-out group-hover:scale-[1.06]"
-                  />
+                  {project.coverImage || (project as any).image ? (
+                    <Image
+                      src={
+                        typeof (project.coverImage || (project as any).image) === "string"
+                          ? (project.coverImage || (project as any).image)
+                          : urlForImage(project.coverImage || (project as any).image).url()
+                      }
+                      alt={project.title}
+                      fill
+                      className="object-cover transition-transform duration-[900ms] ease-out group-hover:scale-[1.06]"
+                    />
+                  ) : (
+                    <AbstractVisual
+                      palette={project.palette}
+                      variant={project.variant}
+                      className="transition-transform duration-[900ms] ease-out group-hover:scale-[1.06]"
+                    />
+                  )}
                 </div>
 
                 <span className="pointer-events-none absolute right-5 top-5 grid size-11 translate-y-2 place-items-center rounded-full bg-accent text-white opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">

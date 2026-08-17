@@ -1,4 +1,5 @@
 import { createClient, type SanityClient } from "@sanity/client";
+import imageUrlBuilder from "@sanity/image-url";
 
 export const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
 export const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production";
@@ -6,6 +7,15 @@ export const apiVersion = process.env.NEXT_PUBLIC_SANITY_API_VERSION ?? "2024-01
 
 let _client: SanityClient | undefined;
 let _writeClient: SanityClient | undefined;
+
+const builder = imageUrlBuilder({
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "missing",
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production",
+});
+
+export function urlForImage(source: any) {
+  return builder.image(source);
+}
 
 export function getClient(): SanityClient {
   if (!projectId) {
@@ -60,6 +70,7 @@ export const projectsQuery = `
   services,
   summary,
   description,
+  coverImage,
   palette,
   variant,
   tall,
@@ -190,6 +201,7 @@ export const projectBySlugQuery = `
   summary,
   description,
   content,
+  coverImage,
   liveUrl,
   palette,
   variant,
