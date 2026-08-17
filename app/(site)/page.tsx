@@ -9,12 +9,17 @@ import Navbar from "@/components/Navbar";
 import Portfolio from "@/components/Portfolio";
 import Services from "@/components/Services";
 import Testimonials from "@/components/Testimonials";
+import { getHome } from "@/lib/data";
 
-export default function Home() {
+export const dynamic = 'force-dynamic';
+
+export default async function Home() {
+  const homeData = await getHome();
+
   return (
     <main>
       <Navbar />
-      <Hero />
+      <Hero heroTitle={homeData?.heroTitle} heroSubtitle={homeData?.heroSubtitle} />
       <LogoMarquee />
       <About />
       <Services />

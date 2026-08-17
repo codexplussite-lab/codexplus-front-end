@@ -71,7 +71,7 @@ function toSlide(p: ProjectRow): HeroSlide {
   };
 }
 
-export default function Hero() {
+export default function Hero({ heroTitle, heroSubtitle }: { heroTitle?: string; heroSubtitle?: string }) {
   const reduce = useReducedMotion();
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -151,34 +151,18 @@ export default function Hero() {
         </motion.div>
 
         <h1 className="text-white font-display text-[clamp(3rem,10vw,9rem)] font-medium leading-[0.94] tracking-[-0.03em]">
-          {["We design & build", "digital experiences"].map((line, i) => (
-            <span key={line} className="block overflow-hidden">
-              <motion.span
-                className="block"
-                initial={{ y: "110%" }}
-                animate={{ y: 0 }}
-                transition={{
-                  duration: 0.9,
-                  delay: 0.15 + i * 0.12,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-              >
-                {line}
-              </motion.span>
-            </span>
-          ))}
           <span className="block overflow-hidden">
             <motion.span
               className="block"
               initial={{ y: "110%" }}
               animate={{ y: 0 }}
-              transition={{ duration: 0.9, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+              transition={{
+                duration: 0.9,
+                delay: 0.15,
+                ease: [0.22, 1, 0.36, 1],
+              }}
             >
-              that{" "}
-              <span className="text-outline-white transition-colors duration-500 hover:text-accent">
-                move
-              </span>{" "}
-              <span className="text-gradient">the world.</span>
+              {heroTitle}
             </motion.span>
           </span>
         </h1>
@@ -190,9 +174,13 @@ export default function Hero() {
             transition={{ duration: 0.7, delay: 0.55, ease: [0.22, 1, 0.36, 1] }}
             className="max-w-lg text-[1rem] leading-relaxed text-white/70 md:text-lg"
           >
-            {studioName} is an independent creative studio. We combine imagination,
-            full-stack craft and digital design expertise to build products, brands
-            and websites that people remember.
+            {heroSubtitle || (
+              <>
+                {studioName} is an independent creative studio. We combine imagination,
+                full-stack craft and digital design expertise to build products, brands
+                and websites that people remember.
+              </>
+            )}
           </motion.p>
 
           <motion.div
