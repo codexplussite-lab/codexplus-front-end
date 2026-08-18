@@ -4,12 +4,24 @@ import { CogIcon } from "@sanity/icons";
 import { visionTool } from "@sanity/vision";
 import { schemaTypes } from "@/sanity/schemas";
 
-const projectId =
-  process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || process.env.SANITY_STUDIO_PROJECT_ID || "vo41nmw5";
-const dataset =
-  process.env.NEXT_PUBLIC_SANITY_DATASET ||
-  process.env.SANITY_STUDIO_DATASET ||
-  "production";
+function requireEnv(value: string | undefined, name: string): string {
+  if (!value) {
+    throw new Error(
+      `Missing required environment variable "${name}". ` +
+        `Copy .env.local.example to .env.local and set it, then restart the dev server.`,
+    );
+  }
+  return value;
+}
+
+const projectId = requireEnv(
+  process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
+  "NEXT_PUBLIC_SANITY_PROJECT_ID",
+);
+const dataset = requireEnv(
+  process.env.NEXT_PUBLIC_SANITY_DATASET,
+  "NEXT_PUBLIC_SANITY_DATASET",
+);
 
 const structure = (S: StructureBuilder) =>
   S.list()

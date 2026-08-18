@@ -1,46 +1,59 @@
 import { createClient, type SanityClient } from "@sanity/client";
 import imageUrlBuilder from "@sanity/image-url";
 
-export const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
-export const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production";
-export const apiVersion = process.env.NEXT_PUBLIC_SANITY_API_VERSION ?? "2024-01-01";
+function requireEnv(value: string | undefined, name: string): string {
+  if (!value) {
+    throw new Error(
+      `Missing required environment variable "${name}". ` +
+        `Copy .env.local.example to .env.local and set it, then restart the dev server.`,
+    );
+  }
+  return value;
+}
+
+export const projectId = requireEnv(
+  process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
+  "NEXT_PUBLIC_SANITY_PROJECT_ID",
+);
+export const dataset = requireEnv(
+  process.env.NEXT_PUBLIC_SANITY_DATASET,
+  "NEXT_PUBLIC_SANITY_DATASET",
+);
+export const apiVersion = requireEnv(
+  process.env.NEXT_PUBLIC_SANITY_API_VERSION,
+  "NEXT_PUBLIC_SANITY_API_VERSION",
+);
 
 let _client: SanityClient | undefined;
 let _writeClient: SanityClient | undefined;
 
-const builder = imageUrlBuilder({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "missing",
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production",
-});
+const builder = imageUrlBuilder({ projectId, dataset });
 
 export function urlForImage(source: any) {
   return builder.image(source);
 }
 
 export function getClient(): SanityClient {
-  if (!projectId) {
-    console.warn(
-      "⚠️ NEXT_PUBLIC_SANITY_PROJECT_ID is missing. Add your Sanity project id to .env.local — see .env.local.example",
-    );
-  }
   if (!_client) {
-    _client = createClient({ projectId: projectId || "missing", dataset, apiVersion, useCdn: false });
+    _client = createClient({ projectId, dataset, apiVersion, useCdn: false });
   }
   return _client;
 }
 
 export function getWriteClient(): SanityClient {
-  if (!projectId || !process.env.SANITY_API_TOKEN) {
-    console.warn(
-      "⚠️ NEXT_PUBLIC_SANITY_PROJECT_ID and SANITY_API_TOKEN are required. Add them to .env.local — see .env.local.example",
+  const token = process.env.SANITY_API_TOKEN;
+  if (!token) {
+    throw new Error(
+      'Missing required environment variable "SANITY_API_TOKEN". ' +
+        "Add it to .env.local, then restart the dev server.",
     );
   }
   if (!_writeClient) {
     _writeClient = createClient({
-      projectId: projectId || "missing",
+      projectId,
       dataset,
       apiVersion,
-      token: process.env.SANITY_API_TOKEN,
+      token,
       useCdn: false,
     });
   }
@@ -55,6 +68,10 @@ export const servicesQuery = `
   description,
   points,
   icon,
+  "image": image.asset->url,
+  "imageAlt": image.alt,
+  videoUrl,
+  "videoFileUrl": videoFile.asset->url,
   sortOrder
 }
 `;
@@ -71,6 +88,16 @@ export const projectsQuery = `
   summary,
   description,
   coverImage,
+  "imageAlt": coverImage.alt,
+  videoUrl,
+  "videoFileUrl": videoFile.asset->url,
+  "backgroundMedia": backgroundMedia {
+    mediaType,
+    "image": image.asset->url,
+    "imageAlt": image.alt,
+    videoUrl,
+    "videoFileUrl": videoFile.asset->url
+  },
   palette,
   variant,
   tall,
@@ -202,6 +229,16 @@ export const projectBySlugQuery = `
   description,
   content,
   coverImage,
+  "imageAlt": coverImage.alt,
+  videoUrl,
+  "videoFileUrl": videoFile.asset->url,
+  "backgroundMedia": backgroundMedia {
+    mediaType,
+    "image": image.asset->url,
+    "imageAlt": image.alt,
+    videoUrl,
+    "videoFileUrl": videoFile.asset->url
+  },
   liveUrl,
   palette,
   variant,

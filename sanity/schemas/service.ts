@@ -45,6 +45,32 @@ export default defineType({
       },
     },
     {
+      name: "image",
+      title: "Image",
+      type: "image",
+      description: "Visual asset shown on the service card.",
+      options: {
+        hotspot: true,
+      },
+    },
+    {
+      name: "videoUrl",
+      title: "Video URL",
+      type: "url",
+      description:
+        "External video URL (e.g. Vimeo, YouTube or a hosted .mp4). Renders in the service media player and overrides the image when set.",
+    },
+    {
+      name: "videoFile",
+      title: "Video File",
+      type: "file",
+      description:
+        "Upload a video file (MP4 / WebM). Renders in the service media player and overrides the image when set.",
+      options: {
+        accept: "video/*",
+      },
+    },
+    {
       name: "sortOrder",
       title: "Sort Order",
       type: "number",

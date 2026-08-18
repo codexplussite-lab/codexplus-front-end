@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 type Variant = "blobs" | "rings" | "grid" | "waves" | "prism" | "orbits";
 
 type AbstractVisualProps = {
-  palette: [string, string, string];
+  palette?: [string, string, string] | null;
   variant: Variant;
   className?: string;
 };
@@ -204,19 +204,27 @@ export default function AbstractVisual({
   variant,
   className,
 }: AbstractVisualProps) {
+  const currentPalette = palette?.length ? palette : ["#3b82f6", "#1d4ed8"];
+  const resolved: [string, string, string] = [
+    currentPalette[0] ?? "#3b82f6",
+    currentPalette[1] ?? "#7437ff",
+    currentPalette[2] ?? "#232746",
+  ];
+  const [primary] = resolved;
+
   return (
     <div
       className={cn("relative h-full w-full overflow-hidden", className)}
       style={{
-        background: `linear-gradient(150deg, ${palette[0]}1a, transparent 40%)`,
+        background: `linear-gradient(150deg, ${primary}1a, transparent 40%)`,
       }}
     >
-      {variant === "blobs" && <Blobs palette={palette} />}
-      {variant === "rings" && <Rings palette={palette} />}
-      {variant === "grid" && <Grid palette={palette} />}
-      {variant === "waves" && <Waves palette={palette} />}
-      {variant === "prism" && <Prism palette={palette} />}
-      {variant === "orbits" && <Orbits palette={palette} />}
+      {variant === "blobs" && <Blobs palette={resolved} />}
+      {variant === "rings" && <Rings palette={resolved} />}
+      {variant === "grid" && <Grid palette={resolved} />}
+      {variant === "waves" && <Waves palette={resolved} />}
+      {variant === "prism" && <Prism palette={resolved} />}
+      {variant === "orbits" && <Orbits palette={resolved} />}
       <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
     </div>
   );

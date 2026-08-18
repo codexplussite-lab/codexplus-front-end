@@ -18,19 +18,35 @@ config();
 config({ path: ".env.local", override: true });
 
 const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
-const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production";
+const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET;
+const apiVersion = process.env.NEXT_PUBLIC_SANITY_API_VERSION;
 const token = process.env.SANITY_API_TOKEN;
 
-if (!projectId || !token) {
+if (!projectId) {
   throw new Error(
-    "NEXT_PUBLIC_SANITY_PROJECT_ID and SANITY_API_TOKEN are missing. Add them to .env.local",
+    "NEXT_PUBLIC_SANITY_PROJECT_ID is missing. Add it to .env.local — see .env.local.example",
+  );
+}
+if (!dataset) {
+  throw new Error(
+    "NEXT_PUBLIC_SANITY_DATASET is missing. Add it to .env.local — see .env.local.example",
+  );
+}
+if (!apiVersion) {
+  throw new Error(
+    "NEXT_PUBLIC_SANITY_API_VERSION is missing. Add it to .env.local — see .env.local.example",
+  );
+}
+if (!token) {
+  throw new Error(
+    "SANITY_API_TOKEN is missing. Add it to .env.local — see .env.local.example",
   );
 }
 
 const client = createClient({
   projectId,
   dataset,
-  apiVersion: process.env.NEXT_PUBLIC_SANITY_API_VERSION ?? "2024-01-01",
+  apiVersion,
   token,
   useCdn: false,
 });

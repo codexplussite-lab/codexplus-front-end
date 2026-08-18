@@ -41,6 +41,10 @@ export type Service = {
   description: string;
   points: string[];
   icon: "palette" | "code" | "megaphone" | "lightbulb";
+  image?: string;
+  imageAlt?: string;
+  videoUrl?: string;
+  videoFileUrl?: string;
 };
 
 export const services: Service[] = [
@@ -95,6 +99,16 @@ export type Project = {
   variant: "blobs" | "rings" | "grid" | "waves" | "prism" | "orbits";
   tall?: boolean;
   coverImage?: any;
+  imageAlt?: string;
+  videoUrl?: string;
+  videoFileUrl?: string;
+  backgroundMedia?: {
+    mediaType?: "image" | "video";
+    image?: string;
+    imageAlt?: string;
+    videoUrl?: string;
+    videoFileUrl?: string;
+  };
 };
 
 export const projects: Project[] = [
@@ -113,6 +127,12 @@ export const projects: Project[] = [
     palette: ["#0b0f19", "#9a66ff", "#2e3a59"],
     variant: "prism",
     tall: true,
+    backgroundMedia: {
+      mediaType: "image",
+      image:
+        "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1800&auto=format&fit=crop",
+      imageAlt: "Serene minimalist interior of Maison Noor",
+    },
   },
   {
     id: "vanta-commerce",
@@ -128,6 +148,12 @@ export const projects: Project[] = [
     ],
     palette: ["#0b0f19", "#7437ff", "#232746"],
     variant: "grid",
+    backgroundMedia: {
+      mediaType: "video",
+      videoUrl:
+        "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      imageAlt: "Vanta Commerce fashion platform showreel",
+    },
   },
   {
     id: "pulse-analytics",
@@ -143,6 +169,12 @@ export const projects: Project[] = [
     ],
     palette: ["#0b0f19", "#7437ff", "#9a66ff"],
     variant: "blobs",
+    backgroundMedia: {
+      mediaType: "image",
+      image:
+        "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1800&auto=format&fit=crop",
+      imageAlt: "Pulse Analytics real-time dashboard",
+    },
   },
   {
     id: "northwind-identity",
@@ -159,6 +191,12 @@ export const projects: Project[] = [
     palette: ["#0b0f19", "#7437ff", "#232746"],
     variant: "waves",
     tall: true,
+    backgroundMedia: {
+      mediaType: "image",
+      image:
+        "https://images.unsplash.com/photo-1454496522488-7a8e488e8606?q=80&w=1800&auto=format&fit=crop",
+      imageAlt: "Alpine peaks at dusk for the Northwind rebrand",
+    },
   },
   {
     id: "folio-builder",
@@ -174,6 +212,12 @@ export const projects: Project[] = [
     ],
     palette: ["#0b0f19", "#2e3a59", "#9a66ff"],
     variant: "orbits",
+    backgroundMedia: {
+      mediaType: "video",
+      videoUrl:
+        "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.webm",
+      imageAlt: "Folio Builder creator workspace",
+    },
   },
   {
     id: "aurora-app",
@@ -189,6 +233,12 @@ export const projects: Project[] = [
     ],
     palette: ["#0b0f19", "#9a66ff", "#7437ff"],
     variant: "rings",
+    backgroundMedia: {
+      mediaType: "image",
+      image:
+        "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1800&auto=format&fit=crop",
+      imageAlt: "Calm night sky for the Aurora Health app",
+    },
   },
 ];
 

@@ -1,6 +1,7 @@
 import { ArrowUpRight, Check, Code2, Lightbulb, Megaphone, Palette } from "lucide-react";
 import Link from "next/link";
 import Reveal from "@/components/Reveal";
+import MediaAsset from "@/components/MediaAsset";
 import type { Service } from "@/data/content";
 
 const icons = {
@@ -24,6 +25,16 @@ export default function ServiceCard({ service, index }: { service: Service; inde
           className="pointer-events-none absolute -right-16 -top-16 size-48 rounded-full opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100"
           style={{ background: "radial-gradient(circle, rgba(116,55,255,0.2), transparent 70%)" }}
         />
+        {service.image || service.videoUrl || service.videoFileUrl ? (
+          <div className="relative mb-8 aspect-[16/9] overflow-hidden rounded-2xl border border-line bg-elevated">
+            <MediaAsset
+              image={service.image}
+              video={service.videoUrl || service.videoFileUrl}
+              alt={service.imageAlt || service.title}
+              className="transition-transform duration-[900ms] ease-out group-hover:scale-[1.05]"
+            />
+          </div>
+        ) : null}
         <div className="flex items-start justify-between">
           <span className="grid size-13 place-items-center rounded-2xl border border-line bg-elevated text-ink transition-all duration-500 group-hover:border-accent/50 group-hover:bg-accent group-hover:text-white">
             <Icon className="size-6" strokeWidth={1.5} />
@@ -41,7 +52,7 @@ export default function ServiceCard({ service, index }: { service: Service; inde
         </p>
 
         <ul className="mt-6 space-y-2.5">
-          {service.points.map((point) => (
+          {(service.points ?? []).map((point) => (
             <li key={point} className="flex items-center gap-2.5 text-sm text-ink/85">
               <Check className="size-4 shrink-0 text-accent-deep" />
               {point}

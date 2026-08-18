@@ -8,6 +8,7 @@
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "seed": "tsx scripts/seed.ts",
+    "check:cors": "tsx scripts/check-cors.ts",
     "studio": "sanity dev",
     "sanity:deploy": "sanity deploy"
   },

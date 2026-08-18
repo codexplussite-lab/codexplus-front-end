@@ -13,6 +13,7 @@ export default async function AboutPage() {
     notFound();
   }
 
+  return (
     <main className="bg-slate-950">
       <Navbar />
       
@@ -36,4 +37,5 @@ export default async function AboutPage() {
       
       <Footer />
     </main>
+  );
 }

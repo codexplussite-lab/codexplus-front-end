@@ -2,146 +2,16 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { ArrowUpRight, X } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import AbstractVisual from "@/components/AbstractVisual";
+import MediaAsset from "@/components/MediaAsset";
+import ProjectModal from "@/components/ProjectModal";
 import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
 import type { Project } from "@/data/content";
-import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { urlForImage } from "@/lib/sanity";
 
 const categories = ["All", "Web Design", "E-Commerce", "Product Design", "Brand Identity", "Web App", "Mobile App"];
-
-function ProjectModal({
-  project,
-  onClose,
-}: {
-  project: Project;
-  onClose: () => void;
-}) {
-  const reduce = useReducedMotion();
-
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
-    window.addEventListener("keydown", onKey);
-    return () => {
-      document.body.style.overflow = "";
-      window.removeEventListener("keydown", onKey);
-    };
-  }, [onClose]);
-
-  return (
-    <motion.div
-      className="fixed inset-0 z-[100] flex items-end justify-center p-0 sm:items-center sm:p-6"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      role="dialog"
-      aria-modal="true"
-      aria-label={project.title}
-    >
-      <div
-        className="absolute inset-0 bg-black/75 backdrop-blur-md"
-        onClick={onClose}
-        aria-hidden
-      />
-
-      <motion.div
-        className="relative max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-t-3xl border border-line bg-panel sm:rounded-3xl"
-        initial={{ y: reduce ? 0 : 60, opacity: 0, scale: reduce ? 1 : 0.98 }}
-        animate={{ y: 0, opacity: 1, scale: 1 }}
-        exit={{ y: reduce ? 0 : 40, opacity: 0 }}
-        transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-      >
-        <div className="relative aspect-[16/9] overflow-hidden">
-          {project.coverImage || (project as any).image ? (
-            <Image
-              src={
-                typeof (project.coverImage || (project as any).image) === "string"
-                  ? (project.coverImage || (project as any).image)
-                  : urlForImage(project.coverImage || (project as any).image).url()
-              }
-              alt={project.title}
-              fill
-              className="object-cover"
-            />
-          ) : (
-            <AbstractVisual palette={project.palette} variant={project.variant} />
-          )}
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close project details"
-            className="absolute right-4 top-4 grid size-11 place-items-center rounded-full border border-white/20 bg-black/50 text-white backdrop-blur transition-colors hover:bg-accent hover:text-white"
-          >
-            <X className="size-5" />
-          </button>
-          <span className="absolute left-4 top-4 rounded-full border border-white/20 bg-black/50 px-4 py-1.5 text-[11px] uppercase tracking-[0.18em] text-white backdrop-blur">
-            {project.category} · {project.year}
-          </span>
-        </div>
-
-        <div className="p-6 md:p-10">
-          <p className="text-xs uppercase tracking-[0.24em] text-accent">
-            {project.client}
-          </p>
-          <h3 className="mt-2 font-display text-3xl font-medium tracking-tight md:text-4xl">
-            {project.title}
-          </h3>
-          <p className="mt-4 text-[1rem] leading-relaxed text-muted">
-            {project.summary}
-          </p>
-
-          <div className="mt-8 grid gap-4 sm:grid-cols-3">
-            {[
-              { label: "Client", value: project.client },
-              { label: "Year", value: project.year },
-              { label: "Disciplines", value: project.services.join(" · ") },
-            ].map((item) => (
-              <div key={item.label} className="rounded-2xl border border-line bg-elevated p-4">
-                <p className="text-[11px] uppercase tracking-[0.18em] text-faint">
-                  {item.label}
-                </p>
-                <p className="mt-1.5 text-sm leading-snug text-ink">{item.value}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-8 space-y-4">
-            {project.description.map((para) => (
-              <p key={para.slice(0, 24)} className="text-[15px] leading-relaxed text-muted">
-                {para}
-              </p>
-            ))}
-          </div>
-
-          <div className="mt-9 flex flex-wrap items-center justify-between gap-4 border-t border-line pt-6">
-            <div className="flex flex-wrap gap-2">
-              {project.services.map((s) => (
-                <span
-                  key={s}
-                  className="rounded-full border border-line px-3.5 py-1.5 text-xs text-muted"
-                >
-                  {s}
-                </span>
-              ))}
-            </div>
-            <a
-              href="#contact"
-              onClick={onClose}
-              className="inline-flex items-center gap-2 rounded-xl bg-accent-gradient px-6 py-3 text-sm font-semibold text-white transition-shadow hover:shadow-[0_0_30px_rgba(116,55,255,0.45)]"
-            >
-              Start something similar
-              <ArrowUpRight className="size-4" />
-            </a>
-          </div>
-        </div>
-      </motion.div>
-    </motion.div>
-  );
-}
 
 export default function Portfolio({
   heading = true,
@@ -242,7 +112,12 @@ export default function Portfolio({
             </p>
           ) : (
             <AnimatePresence mode="popLayout">
-            {filtered.map((project) => (
+            {filtered.map((project) => {
+              const bg = project.backgroundMedia;
+              const bgImage = bg?.image || project.coverImage || (project as any).image;
+              const bgVideo = bg?.videoUrl || bg?.videoFileUrl || project.videoUrl || project.videoFileUrl;
+
+              return (
               <motion.button
                 key={project.id}
                 type="button"
@@ -259,16 +134,12 @@ export default function Portfolio({
                 aria-label={`View project: ${project.title}`}
               >
                 <div className="absolute inset-0">
-                  {project.coverImage || (project as any).image ? (
-                    <Image
-                      src={
-                        typeof (project.coverImage || (project as any).image) === "string"
-                          ? (project.coverImage || (project as any).image)
-                          : urlForImage(project.coverImage || (project as any).image).url()
-                      }
-                      alt={project.title}
-                      fill
-                      className="object-cover transition-transform duration-[900ms] ease-out group-hover:scale-[1.06]"
+                  {bgImage || bgVideo ? (
+                    <MediaAsset
+                      image={bgImage}
+                      video={bgVideo}
+                      alt={bg?.imageAlt || project.title}
+                      className="transition-transform duration-[900ms] ease-out group-hover:scale-[1.06]"
                     />
                   ) : (
                     <AbstractVisual
@@ -278,6 +149,10 @@ export default function Portfolio({
                     />
                   )}
                 </div>
+                <div
+                  aria-hidden
+                  className="absolute inset-0 bg-gradient-to-t from-[#0b0f19]/95 via-[#0b0f19]/40 to-transparent"
+                />
 
                 <span className="pointer-events-none absolute right-5 top-5 grid size-11 translate-y-2 place-items-center rounded-full bg-accent text-white opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
                   <ArrowUpRight className="size-5" />
@@ -299,7 +174,8 @@ export default function Portfolio({
                   </span>
                 </span>
               </motion.button>
-            ))}
+              );
+            })}
             </AnimatePresence>
           )}
         </motion.div>

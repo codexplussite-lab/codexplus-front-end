@@ -35,6 +35,10 @@ export type ServiceRow = {
   description: string;
   points: string[];
   icon: string;
+  image?: string;
+  imageAlt?: string;
+  videoUrl?: string;
+  videoFileUrl?: string;
   sortOrder: number;
 };
 
@@ -50,6 +54,17 @@ export type ProjectRow = {
   description: string[];
   content?: any;
   liveUrl?: string;
+  coverImage?: any;
+  imageAlt?: string;
+  videoUrl?: string;
+  videoFileUrl?: string;
+  backgroundMedia?: {
+    mediaType?: "image" | "video";
+    image?: string;
+    imageAlt?: string;
+    videoUrl?: string;
+    videoFileUrl?: string;
+  };
   palette: [string, string, string];
   variant: string;
   tall: boolean;

@@ -2,6 +2,7 @@ import { getProjectBySlug } from "@/lib/data";
 import { notFound } from "next/navigation";
 import { PortableText } from "@portabletext/react";
 import AbstractVisual from "@/components/AbstractVisual";
+import MediaAsset from "@/components/MediaAsset";
 import { ArrowUpRight } from "lucide-react";
 
 export const revalidate = 60;
@@ -55,6 +56,18 @@ export default async function ProjectPage({
           )}
         </div>
 
+        {project.videoUrl || project.videoFileUrl || project.coverImage ? (
+          <div className="relative mb-16 aspect-[16/9] overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-[0_0_60px_rgba(116,55,255,0.15)] backdrop-blur">
+            <MediaAsset
+              image={project.coverImage}
+              video={project.videoUrl || project.videoFileUrl}
+              alt={project.imageAlt || project.title}
+              priority
+              controls
+            />
+          </div>
+        ) : null}
+
         <div className="grid grid-cols-1 md:grid-cols-[1fr_300px] gap-12">
           {/* Main Content */}
           <div className="glass-dark rounded-3xl p-8 md:p-12 prose prose-invert prose-lg max-w-none 
@@ -79,7 +92,7 @@ export default async function ProjectPage({
               <div className="glass-dark rounded-2xl p-6">
                 <h3 className="text-xs uppercase tracking-[0.15em] text-white/50 mb-4">Services</h3>
                 <ul className="flex flex-col gap-2">
-                  {project.services.map((s) => (
+                  {(project.services ?? []).map((s) => (
                     <li key={s} className="text-white/80">{s}</li>
                   ))}
                 </ul>

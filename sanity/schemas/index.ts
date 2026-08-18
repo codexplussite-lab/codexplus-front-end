@@ -1,5 +1,6 @@
 import service from "./service";
 import project from "./project";
+import mediaAsset from "./mediaAsset";
 import post from "./post";
 import testimonial from "./testimonial";
 import lead from "./lead";
@@ -19,6 +20,7 @@ export const schemaTypes = [
   job,
   service,
   project,
+  mediaAsset,
   post,
   testimonial,
   lead,

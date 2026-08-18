@@ -84,6 +84,30 @@ export default defineType({
       },
     },
     {
+      name: "backgroundMedia",
+      title: "Background Media",
+      type: "mediaAsset",
+      description:
+        "Full-card background image or video shown on the portfolio grid. Video overrides image when both are set.",
+    },
+    {
+      name: "videoUrl",
+      title: "Video URL",
+      type: "url",
+      description:
+        "External video URL (e.g. Vimeo, YouTube or a hosted .mp4). Renders in the project media player and overrides the cover image when set.",
+    },
+    {
+      name: "videoFile",
+      title: "Video File",
+      type: "file",
+      description:
+        "Upload a video file (MP4 / WebM). Renders in the project media player and overrides the cover image when set.",
+      options: {
+        accept: "video/*",
+      },
+    },
+    {
       name: "palette",
       title: "Palette",
       type: "array",
