@@ -22,6 +22,7 @@ import {
   posts as postsData,
   projects as projectsData,
   services as servicesData,
+  slugify,
   socials,
   stats,
   team as teamData,
@@ -49,7 +50,7 @@ export type ProjectRow = {
   client: string;
   category: string;
   year: string;
-  services: string[];
+  disciplines: string[];
   summary: string;
   description: string[];
   content?: any;
@@ -291,7 +292,7 @@ export async function getProjectBySlug(slug: string): Promise<ProjectRow | null>
     warn(err);
   }
   // fallback to local if not found in sanity
-  const localProject = projectsData.find(p => p.title.toLowerCase().replace(/\s+/g, '-') === slug);
+  const localProject = projectsData.find((p) => slugify(p.title) === slug);
   if (localProject) {
     return { ...localProject, id: localProject.title, tall: localProject.tall ?? false, sortOrder: 0, slug };
   }

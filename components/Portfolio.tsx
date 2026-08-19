@@ -45,10 +45,14 @@ export default function Portfolio({
     };
   }, []);
 
+  const normalizedCategory = category.trim().toLowerCase();
   const filtered =
     category === "All"
       ? projects
-      : projects.filter((p) => p.category === category);
+      : projects.filter(
+          (p) =>
+            (p.category ?? "").trim().toLowerCase() === normalizedCategory,
+        );
 
   const close = useCallback(() => setActive(null), []);
 

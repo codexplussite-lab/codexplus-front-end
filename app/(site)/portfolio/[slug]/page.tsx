@@ -88,11 +88,11 @@ export default async function ProjectPage({
               </div>
             )}
             
-            {project.services && project.services.length > 0 && (
+            {project.disciplines && project.disciplines.length > 0 && (
               <div className="glass-dark rounded-2xl p-6">
-                <h3 className="text-xs uppercase tracking-[0.15em] text-white/50 mb-4">Services</h3>
+                <h3 className="text-xs uppercase tracking-[0.15em] text-white/50 mb-4">Disciplines</h3>
                 <ul className="flex flex-col gap-2">
-                  {(project.services ?? []).map((s) => (
+                  {(project.disciplines ?? []).map((s) => (
                     <li key={s} className="text-white/80">{s}</li>
                   ))}
                 </ul>

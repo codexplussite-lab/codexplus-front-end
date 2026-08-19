@@ -53,10 +53,11 @@ export default defineType({
       type: "string",
     },
     {
-      name: "services",
-      title: "Services",
+      name: "disciplines",
+      title: "Disciplines",
       type: "array",
       of: [{ type: "string" }],
+      description: "Disciplines involved in the project (e.g. Web Design, Brand Strategy).",
     },
     {
       name: "summary",

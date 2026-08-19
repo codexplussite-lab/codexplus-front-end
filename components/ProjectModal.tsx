@@ -97,7 +97,7 @@ export default function ProjectModal({
             {[
               { label: "Client", value: project.client },
               { label: "Year", value: project.year },
-              { label: "Disciplines", value: (project.services ?? []).join(" · ") },
+              { label: "Disciplines", value: (project.disciplines ?? []).join(" · ") },
             ].map((item) => (
               <div key={item.label} className="rounded-2xl border border-line bg-elevated p-4">
                 <p className="text-[11px] uppercase tracking-[0.18em] text-faint">
@@ -118,7 +118,7 @@ export default function ProjectModal({
 
           <div className="mt-9 flex flex-wrap items-center justify-between gap-4 border-t border-line pt-6">
             <div className="flex flex-wrap gap-2">
-              {(project.services ?? []).map((s) => (
+              {(project.disciplines ?? []).map((s) => (
                 <span
                   key={s}
                   className="rounded-full border border-line px-3.5 py-1.5 text-xs text-muted"
