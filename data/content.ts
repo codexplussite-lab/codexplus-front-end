@@ -99,6 +99,7 @@ export type Project = {
   variant: "blobs" | "rings" | "grid" | "waves" | "prism" | "orbits";
   tall?: boolean;
   liveUrl?: string;
+  repoUrl?: string;
   coverImage?: any;
   imageAlt?: string;
   videoUrl?: string;

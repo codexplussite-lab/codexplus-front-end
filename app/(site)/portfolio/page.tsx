@@ -1,38 +1,23 @@
 import type { Metadata } from "next";
-import Reveal from "@/components/Reveal";
-import { Layout, ArrowUpRight } from "lucide-react";
 import Contact from "@/components/Contact";
 import CTABanner from "@/components/CTABanner";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
-import PageHero from "@/components/PageHero";
-import Portfolio from "@/components/Portfolio";
-import SectionHeading from "@/components/SectionHeading";
+import PortfolioHero from "@/components/PortfolioHero";
+import WorkSection from "@/components/WorkSection";
 
 export const metadata: Metadata = {
-  title: "Portfolio — Selected Work by CodeXplus",
+  title: "Portfolio — Arman Naqvi · Frontend & Full-Stack Developer",
   description:
-    "Browse CodeXplus selected work — web design, e-commerce, product design, brand identity and web apps shipped by one accountable team.",
+    "Selected work by Arman Naqvi — web design, e-commerce, product design, brand identity and full-stack platforms, crafted end to end.",
 };
 
 export default function PortfolioPage() {
   return (
     <main>
       <Navbar />
-
-      <PageHero
-        pageTagline="Selected work"
-        titlePrefix="Work that"
-        glowingWord="ships."
-        description="A slice of the brands, storefronts and products we've built — filter by discipline and open any tile for the full story."
-        primaryCtaText="Explore Projects"
-        primaryCtaLink="#portfolio"
-      />
-
-      <div id="portfolio" className="relative border-y border-line bg-panel/50">
-        <Portfolio heading={false} />
-      </div>
-
+      <PortfolioHero />
+      <WorkSection />
       <CTABanner />
       <Contact />
       <Footer />
