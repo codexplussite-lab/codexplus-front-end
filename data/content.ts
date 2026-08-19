@@ -1,12 +1,3 @@
-export function slugify(value: string) {
-  return value
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "");
-}
-
 export const brand = {
   name: "CodeXplus",
   tagline: "Creative Studio",
@@ -101,7 +92,7 @@ export type Project = {
   client: string;
   category: string;
   year: string;
-  disciplines: string[];
+  services: string[];
   summary: string;
   description: string[];
   palette: [string, string, string];
@@ -122,25 +113,22 @@ export type Project = {
 };
 
 export const projects: Project[] = [
-  // ------------------------------------------------------------
-  // Web Design (4)
-  // ------------------------------------------------------------
+  // ---------- Web Design ----------
   {
     id: "maison-noor",
     title: "Maison Noor",
-    client: "Interior Design Studio",
+    client: "Maison Noor Interiors",
     category: "Web Design",
     year: "2026",
-    disciplines: ["Brand Identity", "Web Design", "Next.js Development"],
+    liveUrl: "https://maisonnoor.example.com",
+    services: ["Brand Identity", "Web Design", "Next.js Development"],
     summary: "A serene digital flagship for a high-end interior studio — slow, editorial, sculptural.",
     description: [
       "Maison Noor came to us with a decade of iconic interiors and a website that said nothing about them. We rebuilt their presence around stillness: generous negative space, a bespoke serif system and full-bleed imagery that lets their spaces breathe.",
-      "The result is a site that behaves like a gallery — quiet navigation, cinematic scroll reveals and a CMS that lets their team publish new projects in minutes.",
+      "The result is a site that behaves like a gallery — quiet navigation, cinematic scroll reveals and a headless Sanity CMS that lets their team publish new projects in minutes. Edge-rendered pages load in under a second from any region.",
     ],
     palette: ["#0b0f19", "#9a66ff", "#2e3a59"],
     variant: "prism",
-    tall: true,
-    liveUrl: "https://demo.maisonnoor.com",
     backgroundMedia: {
       mediaType: "image",
       image:
@@ -149,91 +137,86 @@ export const projects: Project[] = [
     },
   },
   {
-    id: "atelier-lumiere",
-    title: "Atelier Lumière",
-    client: "Lumière Lighting",
+    id: "halcyon-estates",
+    title: "Halcyon Estates",
+    client: "Halcyon Properties",
     category: "Web Design",
     year: "2026",
-    disciplines: ["Art Direction", "Web Design", "Editorial CMS", "Motion"],
-    summary: "An online gallery for sculptural lighting — dark, warm and impossibly tactile.",
+    liveUrl: "https://halcyonestates.example.com",
+    services: ["Web Design", "Art Direction", "Next.js Development"],
+    summary: "A cinematic listings platform for luxury real estate that sells before the viewing.",
     description: [
-      "Lumière builds hand-finished lamps that deserve more than a product grid. We designed a site that reads like a showroom at dusk: deep shadows, warm amber gradients and photography that glows on screen.",
-      "Every collection page is a scrollable still-life, and a deliberately slow motion layer gives each fixture a moment in the light. Traffic to the studio's showroom doubled within three months of launch.",
+      "Halcyon needed to translate $40M listings into feeling, not just floor plans. We art-directed an immersive, editorial experience — full-bleed architectural photography, subtle parallax and a map-driven search that feels like a private concierge.",
+      "We built it on Next.js with edge-rendered listing pages and an ISR pipeline that refreshes new properties in seconds. Average session time tripled and listing inquiries rose 57% in the first quarter.",
     ],
-    palette: ["#1a120b", "#e8a04c", "#4a3b2f"],
-    variant: "rings",
-    tall: true,
-    liveUrl: "https://demo.atelierlumiere.com",
+    palette: ["#0b0f19", "#7437ff", "#232746"],
+    variant: "waves",
     backgroundMedia: {
       mediaType: "image",
       image:
-        "https://images.unsplash.com/photo-1567016432779-094069958ea5?q=80&w=1800&auto=format&fit=crop",
-      imageAlt: "Warm lamplight in an intimate interior",
+        "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=1800&auto=format&fit=crop",
+      imageAlt: "Modern luxury home at dusk for Halcyon Estates",
     },
   },
   {
-    id: "haven-oak",
-    title: "Haven & Oak",
-    client: "Haven & Oak Hotels",
+    id: "meridian-legal",
+    title: "Meridian Legal",
+    client: "Meridian & Partners LLP",
     category: "Web Design",
     year: "2025",
-    disciplines: ["Brand Direction", "Web Design", "Booking Experience", "Content Strategy"],
-    summary: "A slow, story-first booking site for a collection of countryside retreats.",
+    liveUrl: "https://meridianlegal.example.com",
+    services: ["Web Design", "Content Strategy", "CMS Integration"],
+    summary: "A calm, authoritative digital presence for a global law firm — built for trust at scale.",
     description: [
-      "Haven & Oak runs seven small retreats across the country, each with its own character and terrain. We built one digital home that celebrates each property as a chapter — long-form storytelling, seasonal photography and a booking flow that never feels like a funnel.",
-      "Direct bookings now outpace third-party channels for the first time in the group's history, and the site was awarded a Site of the Day within a week of launch.",
+      "Meridian's practice spans 14 jurisdictions, and their old site made that feel like a maze. We redesigned around clarity: a disciplined editorial grid, a practice-area navigation that explains the firm in one scroll, and typography that reads like print.",
+      "A headless CMS gives their marketing team ownership of every page, while edge caching keeps the site instant worldwide. Organic inbound enquiries grew 44% within six months of launch.",
     ],
-    palette: ["#101a12", "#7fb069", "#2c3f31"],
-    variant: "waves",
-    liveUrl: "https://demo.havenandoak.com",
+    palette: ["#0b0f19", "#2e3a59", "#9a66ff"],
+    variant: "grid",
     backgroundMedia: {
       mediaType: "image",
       image:
-        "https://images.unsplash.com/photo-1582719508461-905c673771fd?q=80&w=1800&auto=format&fit=crop",
-      imageAlt: "Countryside hotel exterior at golden hour",
+        "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1800&auto=format&fit=crop",
+      imageAlt: "Refined office interior for Meridian Legal",
     },
   },
   {
-    id: "studio-meridian",
-    title: "Studio Meridian",
-    client: "Meridian Architecture",
+    id: "atlas-ventures",
+    title: "Atlas Ventures",
+    client: "Atlas Venture Studio",
     category: "Web Design",
-    year: "2024",
-    disciplines: ["Web Design", "Immersive Interaction", "WebGL / 3D", "Case Study System"],
-    summary: "A portfolio for an architecture practice where every project renders like a walkthrough.",
+    year: "2026",
+    liveUrl: "https://atlasventures.example.com",
+    services: ["Web Design", "Motion", "WebGL"],
+    summary: "A kinetic studio site that turns portfolio into theatre — WebGL, motion and edge speed.",
     description: [
-      "Meridian's buildings are precise, geometric and light-driven. Their old site was a PDF list. We designed a portfolio where each project opens as a case study with layered imagery, material swatches and a WebGL viewer that lets visitors orbit key structures.",
-      "The site now doubles as a pitch tool — partners share project pages instead of decks, and Meridian won two major commissions directly through the work presented here.",
+      "Atlas is a venture studio that launches companies, and their site needed to feel like one of their products: fast, kinetic and impossible to ignore. We designed a motion-heavy experience with WebGL accents and a reel that plays like an opening sequence.",
+      "Built on Next.js with edge rendering and aggressively optimized media, the site holds a perfect Lighthouse score while streaming full-res film backgrounds. Portfolio engagement doubled in the first month.",
     ],
-    palette: ["#10141f", "#8fa3c4", "#2c3850"],
-    variant: "blobs",
-    liveUrl: "https://demo.studiomeridian.com",
+    palette: ["#0b0f19", "#7437ff", "#9a66ff"],
+    variant: "orbits",
     backgroundMedia: {
-      mediaType: "image",
-      image:
-        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1800&auto=format&fit=crop",
-      imageAlt: "Modern residential architecture by Studio Meridian",
+      mediaType: "video",
+      videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+      imageAlt: "Atlas Ventures kinetic studio showreel",
     },
   },
-
-  // ------------------------------------------------------------
-  // E-Commerce (4)
-  // ------------------------------------------------------------
+  // ---------- E-Commerce ----------
   {
     id: "vanta-commerce",
     title: "Vanta Commerce",
-    client: "D2C Fashion Platform",
+    client: "Vanta Fashion Group",
     category: "E-Commerce",
-    year: "2025",
-    disciplines: ["UX Strategy", "Shopify / Next.js", "Performance"],
+    year: "2026",
+    liveUrl: "https://vanta.example.com",
+    services: ["UX Strategy", "Headless Commerce", "Performance"],
     summary: "A 190ms storefront rebuild that lifted conversion by 38% within a single quarter.",
     description: [
-      "Vanta's legacy store was drowning in plugins and loading at 4.2 seconds. We stripped it to essentials and rebuilt on a headless Next.js architecture with edge rendering and instant optimistic cart interactions.",
-      "Core Web Vitals went from red to perfect green, and every product page now behaves like a runway show.",
+      "Vanta's legacy store was drowning in plugins and loading at 4.2 seconds. We stripped it to essentials and rebuilt on a headless Next.js architecture with edge rendering, instant optimistic cart interactions and a product page that behaves like a runway show.",
+      "Core Web Vitals went from red to perfect green, and the new storefront converts 38% better. A Sanity-powered merchandising layer lets their team curate drops without touching code.",
     ],
     palette: ["#0b0f19", "#7437ff", "#232746"],
     variant: "grid",
-    liveUrl: "https://demo.vantacommerce.com",
     backgroundMedia: {
       mediaType: "video",
       videoUrl:
@@ -242,92 +225,86 @@ export const projects: Project[] = [
     },
   },
   {
-    id: "bin-libaas-ecommerce",
+    id: "bin-libaas",
     title: "Bin Libaas",
     client: "Bin Libaas Boutique",
     category: "E-Commerce",
     year: "2026",
-    disciplines: ["E-Commerce Strategy", "Shopify / Next.js", "UI/UX Design", "Performance"],
-    summary: "A headless storefront for a premium boutique — runway-fast, editorial-rich and conversion-focused.",
+    liveUrl: "https://binlibaas.example.com",
+    services: ["E-Commerce", "UI/UX Design", "Full-Stack Development"],
+    summary: "A premium headless storefront for a boutique fashion house — luxe feel, instant loads.",
     description: [
-      "Bin Libaas needed a platform that reflected their premium tailoring while delivering blazing-fast load times and a seamless checkout experience.",
-      "We rebuilt their storefront headlessly on Next.js with Sanity CMS, editorial product storytelling and a one-page checkout. Conversion rose 45% and bounce rates dropped by more than half within the first quarter.",
+      "Bin Libaas needed a platform that reflected their premium positioning while delivering blazing-fast loads and a frictionless checkout. We paired a headless Shopify backend with a Next.js storefront and a Sanity CMS merchandising layer.",
+      "The result: a 45% conversion lift, a bounce rate cut nearly in half, and a design language — silk gradients, editorial type and tactile motion — that carries the brand from lookbook to cart.",
     ],
-    palette: ["#1e293b", "#0f172a", "#3b82f6"],
-    variant: "prism",
-    tall: true,
-    liveUrl: "https://demo.binlibaas.com",
+    palette: ["#0b0f19", "#9a66ff", "#2e3a59"],
+    variant: "blobs",
     backgroundMedia: {
       mediaType: "image",
       image:
         "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?q=80&w=1800&auto=format&fit=crop",
-      imageAlt: "Rack of tailored garments at Bin Libaas boutique",
+      imageAlt: "Curated boutique retail space for Bin Libaas",
     },
   },
   {
-    id: "terra-market",
-    title: "Terra Market",
-    client: "Terra Organic Grocers",
+    id: "northline-supply",
+    title: "Northline Supply",
+    client: "Northline Outdoor Co.",
     category: "E-Commerce",
     year: "2025",
-    disciplines: ["E-Commerce", "Art Direction", "Subscriptions", "Checkout Design"],
-    summary: "A weekly-basket grocery brand with a subscription flow that feels like a farmers' market.",
+    liveUrl: "https://northline.example.com",
+    services: ["E-Commerce", "Shopify Plus", "CRO"],
+    summary: "A rugged D2C storefront for outdoor gear — engineered for mobile-first field traffic.",
     description: [
-      "Terra sells weekly organic baskets, but their old store made subscribing feel like filing taxes. We redesigned the entire journey as a tasting menu — seasonal produce photography, a playful basket-builder and one-tap week-skipping.",
-      "Subscriber retention climbed to 82% at six months, and average basket value grew 27% as customers discovered produce they'd never considered.",
+      "Northline's customers shop from trailheads, so every millisecond mattered. We rebuilt their storefront on a headless architecture with edge caching, compressed imagery and one-tap checkout for returning customers.",
+      "Mobile conversion climbed 52%, and their Shopify Plus backend now syncs inventory across retail and D2C in real time. The design system they gained from the build ships every campaign in days.",
     ],
-    palette: ["#0f1f17", "#4ade80", "#1e3a2f"],
-    variant: "blobs",
-    tall: true,
-    liveUrl: "https://demo.terramarket.com",
+    palette: ["#0b0f19", "#7437ff", "#232746"],
+    variant: "waves",
     backgroundMedia: {
       mediaType: "image",
       image:
-        "https://images.unsplash.com/photo-1543168256-418811576931?q=80&w=1800&auto=format&fit=crop",
-      imageAlt: "Fresh organic vegetables in a market basket",
+        "https://images.unsplash.com/photo-1551632811-561732d1e306?q=80&w=1800&auto=format&fit=crop",
+      imageAlt: "Hikers on a ridgeline for Northline Supply",
     },
   },
   {
-    id: "velora-jewelry",
-    title: "Velora",
-    client: "Velora Fine Jewelry",
+    id: "aurelia-beauty",
+    title: "Aurelia Beauty",
+    client: "Aurelia Cosmetics",
     category: "E-Commerce",
-    year: "2024",
-    disciplines: ["E-Commerce", "Luxury Positioning", "Photography Direction", "Personalisation"],
-    summary: "A fine-jewelry atelier storefront built around a 'virtual try-on' concierge journey.",
+    year: "2025",
+    liveUrl: "https://aurelia.example.com",
+    services: ["E-Commerce", "Brand Experience", "Subscriptions"],
+    summary: "A sensorial beauty storefront with subscription flows that convert 2.4x better.",
     description: [
-      "Selling high-ticket jewelry online demands confidence. Velora's store now pairs cinematic macro photography with a virtual try-on studio, bespoke concierge chat and a checkout that handles stones, sizes and engraving without friction.",
-      "Average order value rose 60%, and the atelier's international clientele grew into markets their physical stores had never reached.",
+      "Aurelia's clean-beauty range demanded a storefront as considered as its formulas. We designed a sensorial experience — slow reveals, macro product cinematography and a skin-profile quiz that feeds a personalised subscription flow.",
+      "On a headless Next.js stack, page loads dropped below 600ms and subscription sign-ups improved 2.4x. Reorder reminders and smart bundles now drive 40% of revenue.",
     ],
-    palette: ["#161014", "#e8c17a", "#4a3040"],
-    variant: "orbits",
-    liveUrl: "https://demo.velora.com",
+    palette: ["#0b0f19", "#9a66ff", "#7437ff"],
+    variant: "prism",
     backgroundMedia: {
-      mediaType: "image",
-      image:
-        "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=1800&auto=format&fit=crop",
-      imageAlt: "Fine jewelry ring lit against dark silk",
+      mediaType: "video",
+      videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+      imageAlt: "Aurelia Beauty sensorial product film",
     },
   },
-
-  // ------------------------------------------------------------
-  // Product Design (4)
-  // ------------------------------------------------------------
+  // ---------- Product Design ----------
   {
     id: "pulse-analytics",
     title: "Pulse Analytics",
-    client: "SaaS Platform",
+    client: "Pulse Data Systems",
     category: "Product Design",
-    year: "2025",
-    disciplines: ["Product Design", "Design System", "Frontend"],
+    year: "2026",
+    liveUrl: "https://pulse.example.com",
+    services: ["Product Design", "Design System", "Frontend"],
     summary: "A real-time analytics suite with an interface calm enough to live in all day.",
     description: [
       "Pulse needed to make a firehose of data feel approachable. We designed a modular dashboard language — dense but airy, technical but warm — and shipped a 120-component design system in Figma and React.",
-      "Onboarding completion jumped 41% after launch. Their team now builds features in days instead of weeks.",
+      "Onboarding completion jumped 41% after launch. Their team now builds features in days instead of weeks, and the system's accessibility layer passed WCAG 2.2 AA across every surface.",
     ],
     palette: ["#0b0f19", "#7437ff", "#9a66ff"],
     variant: "blobs",
-    liveUrl: "https://demo.pulseanalytics.com",
     backgroundMedia: {
       mediaType: "image",
       image:
@@ -336,93 +313,86 @@ export const projects: Project[] = [
     },
   },
   {
-    id: "flow-focus-workspace",
+    id: "flow-focus",
     title: "Flow Focus",
-    client: "Flow Focus",
+    client: "Flow Focus Inc.",
     category: "Product Design",
-    year: "2024",
-    disciplines: ["Product Design", "UX Research", "Frontend Engineering", "Accessibility"],
-    summary: "A minimalist productivity workspace designed to minimize distractions and enhance deep work.",
+    year: "2025",
+    liveUrl: "https://flowfocus.example.com",
+    services: ["UI/UX Design", "Frontend Engineering", "Accessibility"],
+    summary: "A minimalist productivity workspace designed to minimise distraction and protect deep work.",
     description: [
-      "The Flow Focus team approached us to redesign their core workspace application, focusing heavily on accessibility and cognitive load reduction.",
-      "Through extensive user testing and iterative design, we delivered a streamlined interface that users love, increasing daily active usage by over 60%.",
+      "Flow Focus asked us to redesign their core web application around one metric: time spent in flow. We ran extensive user testing, mapped cognitive load and rebuilt the interface around restraint — quiet chrome, keyboard-first flows and a theming engine tuned for long sessions.",
+      "Daily active usage rose 60% and support tickets about confusion fell by a third. The component library we shipped now powers their roadmap.",
     ],
-    palette: ["#064e3b", "#022c22", "#10b981"],
+    palette: ["#0b0f19", "#2e3a59", "#9a66ff"],
     variant: "rings",
-    tall: true,
-    liveUrl: "https://demo.flowfocus.com",
     backgroundMedia: {
       mediaType: "image",
       image:
         "https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?q=80&w=1800&auto=format&fit=crop",
-      imageAlt: "Clean, focused workspace interface on a laptop",
+      imageAlt: "Minimal workspace for Flow Focus",
     },
   },
   {
-    id: "kite-finance",
-    title: "Kite Finance",
-    client: "Kite Inc.",
+    id: "lumen-ledger",
+    title: "Lumen Ledger",
+    client: "Lumen Financial",
     category: "Product Design",
     year: "2026",
-    disciplines: ["Product Design", "Data Visualisation", "Design System", "Fintech"],
-    summary: "A personal finance product that makes budgets feel like a game, not an audit.",
+    liveUrl: "https://lumenledger.example.com",
+    services: ["Product Design", "Fintech UX", "Design System"],
+    summary: "A fintech reporting suite where trust is designed in — clarity, precision, calm.",
     description: [
-      "Kite set out to prove that money management can be delightful. We designed the core product: playful spending categories, animated goal rings and a 'kite' metaphor that makes monthly cash flow intuitively visual.",
-      "The result is a fintech product with consumer-app polish — 4.8 stars across stores, and 3x the industry's 90-day retention for a budgeting app.",
+      "Lumen's accounting product stored its depth behind dated UI. We redesigned the reporting suite around clarity: a typographic scale built for dense tables, chart patterns that encode meaning instantly, and empty states that teach.",
+      "The redesign lifted feature adoption 34% and cut onboarding time in half. Every state is now covered by a token-driven design system that their engineers ship against without a designer in the room.",
     ],
-    palette: ["#0c1a2e", "#38bdf8", "#1e3a5f"],
-    variant: "prism",
-    tall: true,
-    liveUrl: "https://demo.kitefinance.com",
+    palette: ["#0b0f19", "#7437ff", "#232746"],
+    variant: "grid",
     backgroundMedia: {
       mediaType: "image",
       image:
-        "https://images.unsplash.com/photo-1553877522-43269d4ea984?q=80&w=1800&auto=format&fit=crop",
-      imageAlt: "Finance dashboard with charts on a laptop",
+        "https://images.unsplash.com/photo-1554224155-6726b3ff858f?q=80&w=1800&auto=format&fit=crop",
+      imageAlt: "Financial reports on a desk for Lumen Ledger",
     },
   },
   {
-    id: "mosaic-studio",
-    title: "Mosaic Studio",
-    client: "Mosaic Labs",
+    id: "orbit-crm",
+    title: "Orbit CRM",
+    client: "Orbit Software",
     category: "Product Design",
     year: "2025",
-    disciplines: ["Product Strategy", "Interface Design", "Collaboration Tools", "Motion"],
-    summary: "A whiteboard-meets-workspace product designed to keep distributed teams in flow.",
+    liveUrl: "https://orbitcrm.example.com",
+    services: ["Product Design", "UX Research", "Motion"],
+    summary: "A sales CRM redesigned around momentum — every screen nudges the next best action.",
     description: [
-      "Mosaic wanted the energy of a studio whiteboard for remote teams — without the chaos. We designed a canvas workspace with guided structure: sticky notes that snap to grids, voting that feels physical, and meeting modes that quiet the room automatically.",
-      "Teams onboard in minutes rather than afternoons, and session retention is 74% week-over-week — proof that structure can feel creative.",
+      "Orbit's CRM buried next steps in menus. We redesigned the pipeline around momentum: a narrative timeline view, a next-best-action engine surfaced in context, and motion that guides the eye without slowing it.",
+      "Reps saved an average of 4 hours a week, and pipeline velocity increased 28%. The new interface became the flagship their enterprise sales team demos first.",
     ],
-    palette: ["#1a1030", "#a78bfa", "#3b2a5f"],
-    variant: "grid",
-    liveUrl: "https://demo.mosaicstudio.com",
+    palette: ["#0b0f19", "#9a66ff", "#2e3a59"],
+    variant: "orbits",
     backgroundMedia: {
-      mediaType: "image",
-      image:
-        "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1800&auto=format&fit=crop",
-      imageAlt: "Distributed team collaborating around a table",
+      mediaType: "video",
+      videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+      imageAlt: "Orbit CRM product film",
     },
   },
-
-  // ------------------------------------------------------------
-  // Brand Identity (4)
-  // ------------------------------------------------------------
+  // ---------- Brand Identity ----------
   {
     id: "northwind-identity",
     title: "Northwind",
-    client: "Outdoor Apparel Brand",
+    client: "Northwind Apparel",
     category: "Brand Identity",
-    year: "2024",
-    disciplines: ["Brand Strategy", "Identity", "Packaging"],
+    year: "2026",
+    liveUrl: "https://northwind.example.com",
+    services: ["Brand Strategy", "Identity", "Packaging"],
     summary: "A complete rebrand forged in the mountains — type, tone and texture built to endure weather.",
     description: [
       "Northwind had great product and a forgettable logo. We built an identity rooted in topographic lines, weatherproof utility and a bolder shade of alpine orange that owns every shelf it sits on.",
-      "The system spans packaging, wayfinding and a full motion kit — and doubled wholesale inquiries in six months.",
+      "The system spans packaging, wayfinding and a full motion kit — and doubled wholesale inquiries in six months. We also delivered a brand playbook that keeps every future campaign on-ridge.",
     ],
     palette: ["#0b0f19", "#7437ff", "#232746"],
     variant: "waves",
-    tall: true,
-    liveUrl: "https://demo.northwind.co",
     backgroundMedia: {
       mediaType: "image",
       image:
@@ -431,91 +401,86 @@ export const projects: Project[] = [
     },
   },
   {
-    id: "fern-co-identity",
-    title: "Fern & Co.",
-    client: "Fern & Co. Skincare",
-    category: "Brand Identity",
-    year: "2026",
-    disciplines: ["Brand Strategy", "Identity System", "Packaging", "Editorial Design"],
-    summary: "A skincare rebrand rooted in botanicals — clean, alive and impossible to ignore on shelf.",
-    description: [
-      "Fern & Co. was selling science in plain white bottles. We gave them a living identity — pressed-leaf textures, an editorial type system and a color story pulled from their own greenhouse.",
-      "The rebrand rolled out across packaging, social and a new 'botanical index' label system. Retail sell-through doubled, and the brand's Instagram following tripled in four months.",
-    ],
-    palette: ["#0c1912", "#6ee7b7", "#223c2e"],
-    variant: "blobs",
-    liveUrl: "https://demo.fernandco.com",
-    backgroundMedia: {
-      mediaType: "image",
-      image:
-        "https://images.unsplash.com/photo-1556228578-8c89e6adf883?q=80&w=1800&auto=format&fit=crop",
-      imageAlt: "Botanical skincare products in soft natural light",
-    },
-  },
-  {
-    id: "halcyon-hotels",
-    title: "Halcyon Hotels",
-    client: "Halcyon Group",
+    id: "marrow-studio",
+    title: "Marrow",
+    client: "Marrow Creative",
     category: "Brand Identity",
     year: "2025",
-    disciplines: ["Brand Strategy", "Visual Identity", "Guest Experience", "Guidelines"],
-    summary: "A five-star identity system that moves from business card to infinity pool without breaking.",
+    liveUrl: "https://marrow.example.com",
+    services: ["Brand Strategy", "Identity", "Art Direction"],
+    summary: "An identity for a creative studio that feels like a loaded palette — bold, warm, unmistakable.",
     description: [
-      "Halcyon's twelve properties each had their own personality and their own logo. We unified them under one system — a single mark that flexes across eleven colorways, one type family, and a photographic language of light and water.",
-      "The guidelines became the backbone of their guest experience: from amenity kits to pool towels to the mobile check-in app, every touchpoint now speaks Halcyon.",
+      "Marrow is a multidisciplinary studio that wanted a mark with substance. We built their identity around a marrow-red core, a variable display face and a grid system flexible enough for print, film titles and every touchpoint in between.",
+      "The rebrand earned their first D&AD shortlist and immediately raised the calibre of conversations — their average project value is up 65% since launch.",
     ],
-    palette: ["#0f141c", "#93c5fd", "#243246"],
-    variant: "orbits",
-    liveUrl: "https://demo.halcyonhotels.com",
+    palette: ["#0b0f19", "#9a66ff", "#7437ff"],
+    variant: "blobs",
     backgroundMedia: {
       mediaType: "image",
       image:
-        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1800&auto=format&fit=crop",
-      imageAlt: "Resort infinity pool at dusk for Halcyon Hotels",
+        "https://images.unsplash.com/photo-1572044162444-ad60f128bdea?q=80&w=1800&auto=format&fit=crop",
+      imageAlt: "Brand stationery mockups for Marrow",
     },
   },
   {
-    id: "polar-coffee",
-    title: "Polar Coffee",
-    client: "Polar Roasters",
+    id: "fern-and-co",
+    title: "Fern & Co",
+    client: "Fern & Co. Living",
     category: "Brand Identity",
-    year: "2024",
-    disciplines: ["Naming", "Identity", "Packaging", "Environmental Design"],
-    summary: "A third-wave coffee identity built on frost, fire and four decades of roasting craft.",
+    year: "2026",
+    liveUrl: "https://fernco.example.com",
+    services: ["Brand Strategy", "Identity", "Packaging"],
+    summary: "A botanical identity for a sustainable lifestyle brand — quiet, honest, alive.",
     description: [
-      "Polar has roasted since 1984 but looked like every new café on the block. We built an identity around the roast itself — a frost-and-fire duotone, a flame-shaped logomark and bag architecture that sorts beans by altitude and profile.",
-      "The redesign landed Polar in specialty retail chains across the Nordics, with direct-to-consumer sales up 130% in the launch quarter.",
+      "Fern & Co. make plant-based home goods with serious sustainability credentials that their packaging never mentioned. We built an identity around living systems: botanical linework, recycled paper texture and a colour story pulled from a moss garden.",
+      "The redesign lifted retail sell-through 31% and earned a plastic-free packaging award. Their new system scales from seed sachets to the flagship storefront.",
     ],
-    palette: ["#191206", "#d4a373", "#3d2c1a"],
-    variant: "rings",
-    tall: true,
-    liveUrl: "https://demo.polarcoffee.com",
+    palette: ["#0b0f19", "#2e3a59", "#9a66ff"],
+    variant: "prism",
     backgroundMedia: {
       mediaType: "image",
       image:
-        "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=1800&auto=format&fit=crop",
-      imageAlt: "Pour-over coffee with warm morning light",
+        "https://images.unsplash.com/photo-1446071103084-c257b5f70672?q=80&w=1800&auto=format&fit=crop",
+      imageAlt: "Botanical greenery for the Fern & Co identity",
     },
   },
-
-  // ------------------------------------------------------------
-  // Web App (4)
-  // ------------------------------------------------------------
+  {
+    id: "vertex-pay",
+    title: "Vertex Pay",
+    client: "Vertex Payments",
+    category: "Brand Identity",
+    year: "2025",
+    liveUrl: "https://vertexpay.example.com",
+    services: ["Brand Strategy", "Identity", "Motion Identity"],
+    summary: "A fintech identity with the confidence of a vault and the warmth of a good accountant.",
+    description: [
+      "Vertex Pay processes billions of dollars and had the brand presence of a PDF. We designed an identity that balances institutional trust with human warmth — a geometric mark, a precise type system and a motion language that feels like money well handled.",
+      "The new brand unified nine product surfaces and their sales deck closes faster; brand recall in their market rose 48% in a post-launch study.",
+    ],
+    palette: ["#0b0f19", "#7437ff", "#232746"],
+    variant: "rings",
+    backgroundMedia: {
+      mediaType: "video",
+      videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+      imageAlt: "Vertex Pay motion identity film",
+    },
+  },
+  // ---------- Web App ----------
   {
     id: "folio-builder",
     title: "Folio Builder",
-    client: "Creator Platform",
+    client: "Folio Inc.",
     category: "Web App",
-    year: "2024",
-    disciplines: ["Full-Stack", "No-code Engine", "CMS"],
+    year: "2026",
+    liveUrl: "https://folio.example.com",
+    services: ["Full-Stack", "No-code Engine", "CMS"],
     summary: "A no-code portfolio engine helping 40k+ creators ship beautiful sites in under an hour.",
     description: [
-      "Folio makes it effortless for photographers, designers and writers to publish stunning portfolios without touching code. We built the core editor, block engine and marketplace from the ground up.",
-      "Fourteen thousand sites launched in the first 90 days. The template marketplace is now their biggest revenue line.",
+      "Folio makes it effortless for photographers, designers and writers to publish stunning portfolios without touching code. We built the core editor, block engine and marketplace from the ground up on a serverless Next.js stack.",
+      "Fourteen thousand sites launched in the first 90 days, with p95 load times under 800ms. The template marketplace is now their biggest revenue line.",
     ],
     palette: ["#0b0f19", "#2e3a59", "#9a66ff"],
     variant: "orbits",
-    liveUrl: "https://demo.foliobuilder.com",
     backgroundMedia: {
       mediaType: "video",
       videoUrl:
@@ -524,92 +489,86 @@ export const projects: Project[] = [
     },
   },
   {
-    id: "gigflow-freelance-platform",
+    id: "gigflow",
     title: "GigFlow",
-    client: "GigFlow Inc",
+    client: "GigFlow Inc.",
     category: "Web App",
     year: "2025",
-    disciplines: ["SaaS Architecture", "Full-Stack Development", "UI/UX Design", "Payments"],
+    liveUrl: "https://gigflow.example.com",
+    services: ["SaaS Architecture", "Full-Stack Development", "UI/UX Design"],
     summary: "A next-generation marketplace connecting top-tier freelance talent with enterprise clients.",
     description: [
-      "GigFlow required a robust, scalable architecture to handle real-time messaging, secure payments and complex matching algorithms.",
-      "We engineered a scalable Next.js application with a serverless backend, facilitating thousands of concurrent users with zero downtime.",
+      "GigFlow required a robust, scalable architecture to handle real-time messaging, secure payments and complex matching algorithms at enterprise scale.",
+      "We engineered a serverless Next.js application with edge-rendered job feeds, live presence and an AI matching layer. The platform sustains thousands of concurrent users with zero downtime and cut time-to-first-match by 60%.",
     ],
-    palette: ["#4c1d95", "#2e1065", "#8b5cf6"],
+    palette: ["#0b0f19", "#7437ff", "#9a66ff"],
     variant: "blobs",
-    tall: true,
-    liveUrl: "https://demo.gigflow.com",
     backgroundMedia: {
       mediaType: "image",
       image:
-        "https://images.unsplash.com/photo-1521737711867-e3b97375f902?q=80&w=1800&auto=format&fit=crop",
-      imageAlt: "Freelance team collaborating in a bright studio",
+        "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1800&auto=format&fit=crop",
+      imageAlt: "Collaborative team workspace for GigFlow",
     },
   },
   {
-    id: "nimbus-hr",
-    title: "Nimbus HR",
-    client: "Nimbus Systems",
+    id: "relay-desk",
+    title: "Relay Desk",
+    client: "Relay Systems",
     category: "Web App",
     year: "2026",
-    disciplines: ["Product Design", "HR Platform", "Design System", "API Integration"],
-    summary: "An HR suite that replaced 14 tools — onboarding to payroll in one calm dashboard.",
+    liveUrl: "https://relaydesk.example.com",
+    services: ["Product Design", "Full-Stack Development", "Real-time Infrastructure"],
+    summary: "An internal comms hub that replaced four tools — and made 12k employees calmer.",
     description: [
-      "Nimbus's clients were juggling a dozen HR tools that never talked to each other. We designed and built the replacement: a single dashboard covering onboarding, time-off, performance and payroll with role-aware views for every team.",
-      "The platform now serves 2,300 companies, and the average onboarding process dropped from 11 days to 4.",
+      "Relay Desk was born from a single problem: teams at this logistics giant lived in four chat and document tools. We designed and built one calm, unified workspace with threaded rooms, shared canvases and reliable presence.",
+      "Built on edge-rendered React with a realtime layer tuned for flaky office Wi-Fi, Relay now carries 12,000 employees daily. Internal search time dropped 70%, and the company retired two legacy licenses.",
     ],
-    palette: ["#0b1220", "#5b8def", "#1c2b45"],
+    palette: ["#0b0f19", "#9a66ff", "#2e3a59"],
     variant: "grid",
-    tall: true,
-    liveUrl: "https://demo.nimbushr.com",
     backgroundMedia: {
       mediaType: "image",
       image:
-        "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=1800&auto=format&fit=crop",
-      imageAlt: "Modern office space for the Nimbus HR platform",
+        "https://images.unsplash.com/photo-1497366811353-6870744d04b2?q=80&w=1800&auto=format&fit=crop",
+      imageAlt: "Modern open-plan office for Relay Desk",
     },
   },
   {
-    id: "ledger-line",
-    title: "Ledger Line",
-    client: "Ledger Line",
+    id: "beacon-crm",
+    title: "Beacon CRM",
+    client: "Beacon Labs",
     category: "Web App",
     year: "2025",
-    disciplines: ["Full-Stack", "Fintech UX", "Realtime Data", "Security"],
-    summary: "Real-time accounting for growing teams — every number reconciled the second it lands.",
+    liveUrl: "https://beaconcrm.example.com",
+    services: ["Full-Stack Development", "Data Visualisation", "AI Features"],
+    summary: "A sales intelligence app that turns noisy pipelines into signals — and revenue.",
     description: [
-      "Ledger Line's customers were doing month-end in two weeks. We rebuilt the core web app around live reconciliation: bank feeds, invoicing and expense tracking all update instantly in a single ledger view.",
-      "Month-end closes now take 48 hours, and the app's NPS rose 34 points after the redesign.",
+      "Beacon's data layer was rich; its interface was a spreadsheet graveyard. We built a web app that surfaces the signals that matter: deal health scores, forecast confidence and coaching nudges computed from live pipeline data.",
+      "On a Next.js front end with streaming analytics, dashboards render in milliseconds even on 100k-row datasets. Teams using Beacon report 23% faster close cycles.",
     ],
-    palette: ["#101820", "#2dd4bf", "#1e3a3a"],
-    variant: "prism",
-    liveUrl: "https://demo.ledgerline.com",
+    palette: ["#0b0f19", "#7437ff", "#232746"],
+    variant: "waves",
     backgroundMedia: {
-      mediaType: "image",
-      image:
-        "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1800&auto=format&fit=crop",
-      imageAlt: "Laptop showing financial charts and graphs",
+      mediaType: "video",
+      videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+      imageAlt: "Beacon CRM analytics experience",
     },
   },
-
-  // ------------------------------------------------------------
-  // Mobile App (4)
-  // ------------------------------------------------------------
+  // ---------- Mobile App ----------
   {
     id: "aurora-app",
     title: "Aurora Health",
-    client: "Consumer Health App",
+    client: "Aurora Health Inc.",
     category: "Mobile App",
-    year: "2023",
-    disciplines: ["UX Research", "App Design", "Motion"],
+    year: "2026",
+    liveUrl: "https://aurora.example.com",
+    services: ["UX Research", "App Design", "Motion"],
     summary: "A sleep-and-recovery companion designed to feel as calm as it promises to be.",
     description: [
       "Aurora helps people build better recovery habits. We designed an app experience built around gentleness — soft gradients, breathing micro-interactions and data framed as encouragement, not judgment.",
-      "App Store rating sits at 4.9 with a 71% 30-day retention rate.",
+      "App Store rating sits at 4.9 with a 71% 30-day retention rate. The motion system we shipped — every transition tuned to a calm easing curve — is now their brand signature.",
     ],
     palette: ["#0b0f19", "#9a66ff", "#7437ff"],
     variant: "rings",
-    liveUrl: "https://demo.aurorahealth.app",
     backgroundMedia: {
       mediaType: "image",
       image:
@@ -618,71 +577,68 @@ export const projects: Project[] = [
     },
   },
   {
-    id: "fit-loop-app",
-    title: "FitLoop",
-    client: "FitLoop Health",
+    id: "nest-finance",
+    title: "Nest Finance",
+    client: "Nest Financial",
     category: "Mobile App",
     year: "2026",
-    disciplines: ["App Design", "Wearables", "Motion", "UX Research"],
-    summary: "A training companion that closes the loop between gym, sleep and streak.",
+    liveUrl: "https://nestfinance.example.com",
+    services: ["App Design", "Fintech UX", "Design System"],
+    summary: "A personal finance app that makes saving feel like progress, not punishment.",
     description: [
-      "FitLoop syncs wearables, gym sessions and recovery into one honest daily score. We designed an app that motivates without guilt — animated loops, streak mechanics and a 'rest day' language that makes recovery part of the win.",
-      "Retention at 90 days is 2.3x the fitness-app average, and the app was featured as App of the Day in 40 countries.",
+      "Nest set out to fix the guilt spiral of budgeting apps. We designed a spending experience that celebrates intent — round-ups, habit nudges and forecasts drawn in warm, digestible charts — across iOS and Android.",
+      "The app grew to 300k downloads in its first year with a 4.8-star average. Our cross-platform design system keeps both native teams shipping in lockstep.",
     ],
-    palette: ["#1a0f0f", "#f87171", "#3a2020"],
+    palette: ["#0b0f19", "#7437ff", "#2e3a59"],
     variant: "blobs",
-    tall: true,
-    liveUrl: "https://demo.fitloop.app",
     backgroundMedia: {
       mediaType: "image",
       image:
-        "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=1800&auto=format&fit=crop",
-      imageAlt: "Athlete mid-workout with resistance bands",
+        "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?q=80&w=1800&auto=format&fit=crop",
+      imageAlt: "Phone in hand for the Nest Finance app",
     },
   },
   {
-    id: "spicebox-app",
-    title: "Spicebox",
-    client: "Spicebox Kitchen",
+    id: "trailmate",
+    title: "Trailmate",
+    client: "Trailmate Outdoors",
     category: "Mobile App",
     year: "2025",
-    disciplines: ["App Design", "Recipe System", "Content Design", "Offline-first"],
-    summary: "A meal-planning app that turns pantry leftovers into weeknight recipes.",
+    liveUrl: "https://trailmate.example.com",
+    services: ["App Design", "Offline Architecture", "Navigation UX"],
+    summary: "An offline-first hiking companion that guides 90k explorers through real terrain.",
     description: [
-      "Spicebox asked: what if the recipe starts with what's already in your kitchen? We designed an offline-first app that inventories your pantry and suggests recipes by what you have — with a voice mode for hands covered in flour.",
-      "The app averages 9 weekly sessions per user, and its 'use it up' challenge became the most-shared feature on social media in the brand's history.",
+      "Trailmate needed to work where cell signal doesn't. We designed a navigation app built offline-first — preloaded topographic tiles, battery-sipping GPS and a UI legible in glare, rain and gloves.",
+      "Ninety thousand hikers relied on it last season with zero crash reports above baseline. Route completion nudges grew repeat usage 35% year over year.",
     ],
-    palette: ["#1d1206", "#fbbf24", "#4a3010"],
+    palette: ["#0b0f19", "#2e3a59", "#9a66ff"],
     variant: "grid",
-    tall: true,
-    liveUrl: "https://demo.spicebox.app",
     backgroundMedia: {
       mediaType: "image",
       image:
-        "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=1800&auto=format&fit=crop",
-      imageAlt: "Vibrant healthy bowl prepared from pantry staples",
+        "https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1800&auto=format&fit=crop",
+      imageAlt: "Mountain landscape for the Trailmate app",
     },
   },
   {
-    id: "wander-app",
-    title: "Wander",
-    client: "Wander Travel",
+    id: "dailydo",
+    title: "Dailydo",
+    client: "Dailydo Labs",
     category: "Mobile App",
-    year: "2024",
-    disciplines: ["App Design", "Maps & Geo", "Motion", "Personalisation"],
-    summary: "A travel companion that plans itineraries from a single conversation.",
+    year: "2025",
+    liveUrl: "https://dailydo.example.com",
+    services: ["App Design", "Gamification", "Motion"],
+    summary: "A habit app that turns streaks into stories — 2M sessions a month and climbing.",
     description: [
-      "Wander turns a short prompt — 'five days, coastal, no museums' — into a complete itinerary with flights, stays and a live map. We designed the conversational interface, the map layer and the calm, confident visual system.",
-      "Over a million itineraries were planned in the first year, and Wander's store rating holds at 4.8.",
+      "Habit apps die at day twelve, so we designed Dailydo to reward momentum instead of perfection. Streaks are framed as stories, check-ins take two seconds, and the celebration motion is worth the habit itself.",
+      "The app now logs 2M sessions a month with a 42% week-four retention — nearly double the category average — and a fully motion-based onboarding that converts at 68%.",
     ],
-    palette: ["#0d1b2a", "#7dd3fc", "#1b3a52"],
-    variant: "waves",
-    liveUrl: "https://demo.wander.app",
+    palette: ["#0b0f19", "#7437ff", "#9a66ff"],
+    variant: "prism",
     backgroundMedia: {
-      mediaType: "image",
-      image:
-        "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?q=80&w=1800&auto=format&fit=crop",
-      imageAlt: "Turquoise coastline seen from above",
+      mediaType: "video",
+      videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4",
+      imageAlt: "Dailydo habit streak experience",
     },
   },
 ];
@@ -741,80 +697,290 @@ export const testimonials = [
 export type Post = {
   id: string;
   title: string;
+  slug?: string;
   category: string;
   date: string;
   readTime: string;
   excerpt: string;
+  author?: string;
+  coverImage?: any;
+  coverImageAlt?: string;
+  videoUrl?: string;
+  content?: any;
   accent: string;
   variant: "blobs" | "rings" | "grid";
 };
+
+let _ptKey = 0;
+const ptBlock = (
+  text: string,
+  style: "normal" | "h2" | "h3" | "blockquote" = "normal",
+  listItem?: "bullet",
+): any => ({
+  _key: `pt-${_ptKey++}`,
+  _type: "block",
+  style,
+  listItem,
+  level: listItem ? 1 : undefined,
+  children: [{ _key: `pts-${_ptKey++}`, _type: "span", marks: [], text }],
+});
+const ptCode = (language: string, code: string): any => ({
+  _key: `ptc-${_ptKey++}`,
+  _type: "codeBlock",
+  language,
+  code,
+});
 
 export const posts: Post[] = [
   {
     id: "design-systems-2026",
     title: "Why Design Systems Fail After Year One",
+    slug: "why-design-systems-fail-after-year-one",
     category: "Design",
     date: "Jun 18, 2026",
     readTime: "8 min read",
     excerpt:
       "Most design systems die quietly. Here's the organizational wiring — not the tokens — that keeps them alive.",
+    author: "Maya Chen",
+    coverImage:
+      "https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?q=80&w=1800&auto=format&fit=crop",
+    coverImageAlt: "Design workspace with a component library on screen",
     accent: "#7437ff",
     variant: "grid",
+    content: [
+      ptBlock(
+        "Every design system we audit was beautiful at launch. The marketing site shipped with a hero section that sparkled, and then, quietly, twelve weeks in, the first shadow override appeared. By month eight, the system was a museum: visited by tourists, maintained by no one.",
+      ),
+      ptBlock("The failure isn't in the tokens", "h2"),
+      ptBlock(
+        "Tokens don't rot — ownership does. A design system is a product with internal customers, and like any product it dies when nobody owns its roadmap, its deprecation cycle, or its release notes. The teams that keep systems alive for years all share one thing: a named, accountable owner with real bandwidth.",
+      ),
+      ptBlock(
+        "A design system without an owner is a style guide with good intentions. The one with an owner ships a new version every two weeks, and the product teams actually read the changelog.",
+        "blockquote",
+      ),
+      ptBlock("Wiring over wireframes", "h2"),
+      ptBlock("The systems that survive share three pieces of wiring:", "normal"),
+      ptBlock("A deprecation policy — old patterns get a sunset date, not an afterlife.", "normal", "bullet"),
+      ptBlock("A contribution loop — product engineers can propose, review and merge changes like code.", "normal", "bullet"),
+      ptBlock("Usage telemetry — you measure adoption of every component the way you measure conversion.", "normal", "bullet"),
+      ptBlock(
+        "We stopped designing components we couldn't measure, and our systems started feeling like infrastructure instead of decoration. That's the difference between a toolkit and a museum.",
+      ),
+    ],
   },
   {
     id: "nextjs-performance",
     title: "The Next.js Performance Checklist We Ship To Every Client",
+    slug: "the-next-js-performance-checklist-we-ship-to-every-client",
     category: "Engineering",
     date: "May 02, 2026",
     readTime: "12 min read",
     excerpt:
       "Image pipelines, edge caching, font strategy and the 190ms storefront recipe we apply before launch day.",
+    author: "Daniel Okafor",
+    coverImage:
+      "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1800&auto=format&fit=crop",
+    coverImageAlt: "Code editor with syntax highlighted in the dark",
     accent: "#9a66ff",
     variant: "rings",
+    content: [
+      ptBlock(
+        "A storefront we rebuilt in 2025 went from 4.2 seconds to 190 milliseconds time-to-interactive. No magic — just a checklist we now run on every engagement. Here is that checklist, in the order it pays off.",
+      ),
+      ptBlock("The 190ms recipe", "h2"),
+      ptBlock(
+        "The single biggest lever is moving static work off the origin. Every page that can be prerendered should be, and every dynamic page should stream. That combination alone accounts for roughly half the gains on any legacy Next.js app.",
+      ),
+      ptCode(
+        "typescript",
+        `// next.config.ts — the baseline we ship
+export default {
+  images: {
+    formats: ["image/avif", "image/webp"],
+    minimumCacheTTL: 31536000,
+  },
+  experimental: {
+    optimizePackageImports: ["lucide-react"],
+  },
+}`,
+      ),
+      ptBlock("Then, in priority order:", "normal"),
+      ptBlock("Preload fonts with font-display: swap and inline the critical CSS.", "normal", "bullet"),
+      ptBlock("Serve AVIF/WebP from the CDN edge — never the origin server.", "normal", "bullet"),
+      ptBlock("Cache API responses at the edge with stale-while-revalidate windows.", "normal", "bullet"),
+      ptBlock("Keep the first bundle under 100KB gzipped; code-split everything else.", "normal", "bullet"),
+      ptBlock(
+        "Measure before and after with the same Lab + Field mix, or you'll be optimizing for a dashboard instead of for people.",
+        "blockquote",
+      ),
+      ptBlock(
+        "The last 100 milliseconds cost more than the first 3 seconds, but they're also what separates a fast site from a suspiciously fast site. Users can feel the difference.",
+      ),
+    ],
   },
   {
     id: "motion-principles",
     title: "Micro-Motion: The 12 Principles of Interfaces That Feel Alive",
+    slug: "micro-motion-the-12-principles-of-interfaces-that-feel-alive",
     category: "Motion",
     date: "Mar 21, 2026",
     readTime: "6 min read",
     excerpt:
       "A tiny easing curve is worth a thousand hero videos. Notes from our design systems on making UI breathe.",
+    author: "Maya Chen",
+    coverImage:
+      "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=1800&auto=format&fit=crop",
+    coverImageAlt: "Retro computer with glowing screen",
     accent: "#2e3a59",
     variant: "blobs",
+    content: [
+      ptBlock(
+        "Motion is the cheapest way to make software feel expensive — and the fastest way to make it feel cheap. The difference is rarely the animation itself; it's the easing curve, the duration, and whether the motion has a reason to exist.",
+      ),
+      ptBlock("Easing is a personality", "h2"),
+      ptBlock(
+        "Ease-in-out is the default of defaults, which is exactly why your UI feels like everyone else's. We keep a tiny library of curves on every project — an assertive one for entrances, a soft one for exits, and a barely-there one for hover states that should whisper.",
+      ),
+      ptCode(
+        "css",
+        `:root {
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-soft:     cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-whisper:  cubic-bezier(0.4, 0, 0.2, 1);
+}`,
+      ),
+      ptBlock("The twelve principles reduce to four behaviours:", "normal"),
+      ptBlock("Entrances assert: 300–400ms, expo-out, always towards the user.", "normal", "bullet"),
+      ptBlock("Exits recede: 200–250ms, soft curve, never towards the user.", "normal", "bullet"),
+      ptBlock("States whisper: 150ms, subtle, and reversible under the cursor.", "normal", "bullet"),
+      ptBlock("Reduced motion is a first-class citizen, not a checkbox.", "normal", "bullet"),
+      ptBlock(
+        "If you remove the animation and nobody asks where it went, it was decoration. If they ask, it was doing its job.",
+        "blockquote",
+      ),
+      ptBlock(
+        "Motion should tell the user where they are and where they're going. Everything else is confetti.",
+      ),
+    ],
   },
   {
     id: "brand-audit",
     title: "The 20-Question Brand Audit We Run On Every Engagement",
+    slug: "the-20-question-brand-audit-we-run-on-every-engagement",
     category: "Strategy",
     date: "Feb 09, 2026",
     readTime: "10 min read",
     excerpt:
       "Before a single moodboard, we answer twenty uncomfortable questions. Steal the full audit we run internally.",
+    author: "Lena Fischer",
+    coverImage:
+      "https://images.unsplash.com/photo-1561070791-2526d30994b5?q=80&w=1800&auto=format&fit=crop",
+    coverImageAlt: "Brand design tools arranged on a desk",
     accent: "#232746",
     variant: "blobs",
+    content: [
+      ptBlock(
+        "Every brand engagement starts the same way at our studio: twenty questions, answered in a room with the founders, before a single pixel exists. The audit is uncomfortable by design — if it weren't, it wouldn't be doing its job.",
+      ),
+      ptBlock("Question one: What does the brand refuse?", "h2"),
+      ptBlock(
+        "Positioning is more often defined by refusal than aspiration. What you won't do, won't say, and won't be seen next to is what makes you distinctive. Most brands answer this question with a shrug, which is itself an answer.",
+      ),
+      ptBlock(
+        "A brand is a decision repeated. Every time you say yes to something off-brand, you spend a little of what the last rebrand earned.",
+        "blockquote",
+      ),
+      ptBlock("The audit in miniature", "h2"),
+      ptBlock("Run it before strategy, before moodboards, before logos:", "normal"),
+      ptBlock("If the brand were a person, who would it politely leave the party for?", "normal", "bullet"),
+      ptBlock("What would a competitor have to do to make your brand irrelevant?", "normal", "bullet"),
+      ptBlock("What's the most expensive word in your vocabulary — and when do you use it?", "normal", "bullet"),
+      ptBlock("Who is the smartest person who would hate this brand, and why?", "normal", "bullet"),
+      ptBlock(
+        "Twenty questions takes ninety minutes and saves months. Every engagement that skipped it later wished it hadn't.",
+      ),
+    ],
   },
   {
     id: "cms-headless",
     title: "Headless CMS in 2026: Choosing With Your Eyes Open",
+    slug: "headless-cms-in-2026-choosing-with-your-eyes-open",
     category: "Engineering",
     date: "Jan 27, 2026",
     readTime: "9 min read",
     excerpt:
       "Sanity, Contentful, a custom file system — the trade-offs that actually matter for editorial teams, not demos.",
+    author: "Daniel Okafor",
+    coverImage:
+      "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=1800&auto=format&fit=crop",
+    coverImageAlt: "Server racks with glowing indicator lights",
     accent: "#7437ff",
     variant: "grid",
+    content: [
+      ptBlock(
+        "Every headless CMS demo looks identical: a beautiful editor, a snappy API, and a confetti of integrations. The differences that actually decide a project live in the boring parts — content modelling freedom, preview workflows, and what happens when the team grows.",
+      ),
+      ptBlock("The three decisions that matter", "h2"),
+      ptBlock("Decision one is data shape. Can you model relationships the way your content actually relates, or do you flatten everything into folders and tags? Decision two is preview. Editors need a preview that runs their real front end, not a mock. Decision three is exit cost — what you keep if you leave.",
+      ),
+      ptBlock("If your editors can't preview it in one click, your 'headless CMS' is a ticket queue in disguise.", "blockquote"),
+      ptCode(
+        "json",
+        `{
+  // A content model that matches editorial reality
+  "article": {
+    "title": "string",
+    "body": "portableText[]",
+    "author": "ref(person)",
+    "related": "ref(article)[]",
+    "preview": "ref(studio)"
+  }
+}`,
+      ),
+      ptBlock("The pragmatic checklist:", "normal"),
+      ptBlock("Structured content with custom types, not just rich text.", "normal", "bullet"),
+      ptBlock("Editor preview wired to your deployed front end.", "normal", "bullet"),
+      ptBlock("A migration path for content when you outgrow the tool.", "normal", "bullet"),
+      ptBlock(
+        "Pick the CMS you'll still be comfortable arguing about in three years. The demo confetti always fades.",
+      ),
+    ],
   },
   {
     id: "creative-process",
     title: "Imagination Is a Full-Stack Discipline",
+    slug: "imagination-is-a-full-stack-discipline",
     category: "Opinion",
     date: "Jan 04, 2026",
     readTime: "5 min read",
     excerpt:
       "The best ideas live at the seam between strategy, engineering and aesthetics. A manifesto from the studio floor.",
+    author: "Arman Naqvi",
+    coverImage:
+      "https://images.unsplash.com/photo-1558655146-9f40138edfeb?q=80&w=1800&auto=format&fit=crop",
+    coverImageAlt: "Creative studio desk with sketches and screens",
     accent: "#9a66ff",
     variant: "rings",
+    content: [
+      ptBlock(
+        "Somewhere along the way, we divided the work into disciplines and told everyone to stay in their lane. Designers sketch, engineers build, strategists think. And then we wonder why the results feel assembled instead of imagined.",
+      ),
+      ptBlock(
+        "The best ideas we've shipped were never born fully formed in a Figma file. They came out of an engineer asking why a loading state had to exist, a strategist arguing with a developer about a 200-millisecond difference, a designer who could read the code their mockups implied.",
+      ),
+      ptBlock(
+        "Imagination is a full-stack discipline. It doesn't care about your job title — it cares about what you're willing to build with your own hands.",
+        "blockquote",
+      ),
+      ptBlock("How we keep the seam open", "h2"),
+      ptBlock("Everyone on the team can ship, and everyone can critique a brand.", "normal", "bullet"),
+      ptBlock("Design reviews include the people who will build the thing — in the first week, not the fourth.", "normal", "bullet"),
+      ptBlock("The fastest prototype wins, regardless of who made it.", "normal", "bullet"),
+      ptBlock(
+        "When we stopped protecting disciplines and started protecting the idea, the work got faster, sharper and more fun. The seam is where the signal lives.",
+      ),
+    ],
   },
 ];
 

@@ -54,6 +54,13 @@ export default async function ProjectPage({
               <ArrowUpRight className="size-4" />
             </a>
           )}
+          <a
+            href={`/?contact=${encodeURIComponent(project.title)}#contact`}
+            className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/5 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur transition-all duration-300 hover:border-accent/60 hover:text-accent hover:shadow-[0_0_30px_rgba(116,55,255,0.35)]"
+          >
+            Start something similar
+            <ArrowUpRight className="size-4" />
+          </a>
         </div>
 
         {project.videoUrl || project.videoFileUrl || project.coverImage ? (
@@ -88,11 +95,11 @@ export default async function ProjectPage({
               </div>
             )}
             
-            {project.disciplines && project.disciplines.length > 0 && (
+            {project.services && project.services.length > 0 && (
               <div className="glass-dark rounded-2xl p-6">
-                <h3 className="text-xs uppercase tracking-[0.15em] text-white/50 mb-4">Disciplines</h3>
+                <h3 className="text-xs uppercase tracking-[0.15em] text-white/50 mb-4">Services</h3>
                 <ul className="flex flex-col gap-2">
-                  {(project.disciplines ?? []).map((s) => (
+                  {(project.services ?? []).map((s) => (
                     <li key={s} className="text-white/80">{s}</li>
                   ))}
                 </ul>

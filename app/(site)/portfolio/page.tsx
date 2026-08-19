@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Reveal from "@/components/Reveal";
 import { Layout, ArrowUpRight } from "lucide-react";
+import Contact from "@/components/Contact";
 import CTABanner from "@/components/CTABanner";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
@@ -33,6 +34,7 @@ export default function PortfolioPage() {
       </div>
 
       <CTABanner />
+      <Contact />
       <Footer />
     </main>
   );

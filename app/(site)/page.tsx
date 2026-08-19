@@ -23,7 +23,7 @@ export default async function Home() {
       <LogoMarquee />
       <About />
       <Services />
-      <Portfolio />
+      <Portfolio carousel />
       <Testimonials />
       <Blog />
       <CTABanner />

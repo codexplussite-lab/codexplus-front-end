@@ -1,10 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Check, Loader2, Send } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
 import { brand } from "@/data/content";
+import {
+  LEAD_CONTEXT_EVENT,
+  leadContextMessage,
+  type LeadContext,
+} from "@/lib/leadContext";
 
 type Status = "idle" | "loading" | "success" | "error";
 
@@ -17,8 +22,23 @@ export default function Contact() {
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState("");
+  const [flash, setFlash] = useState(false);
   const [contactEmail, setContactEmail] = useState(brand.email);
   const [locations, setLocations] = useState(brand.locations);
+  const formRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const flashTimer = useRef<number | null>(null);
+
+  const applyLeadContext = (context: LeadContext) => {
+    const prefix = `${leadContextMessage(context)}\n\n`;
+    setMessage((prev) => (prev.trim() ? prev : prefix));
+    setFlash(true);
+    if (flashTimer.current) window.clearTimeout(flashTimer.current);
+    flashTimer.current = window.setTimeout(() => setFlash(false), 2400);
+    window.setTimeout(() => {
+      textareaRef.current?.focus({ preventScroll: true });
+    }, 700);
+  };
 
   useEffect(() => {
     let active = true;
@@ -37,9 +57,26 @@ export default function Contact() {
       .catch(() => {
         /* fall back to static content */
       });
+
+    const onLeadContext = (e: Event) => {
+      applyLeadContext((e as CustomEvent<LeadContext>).detail);
+    };
+    window.addEventListener(LEAD_CONTEXT_EVENT, onLeadContext);
+
+    const params = new URLSearchParams(window.location.search);
+    const fromUrl = params.get("contact");
+    if (fromUrl) {
+      applyLeadContext({ title: fromUrl });
+      const contact = document.getElementById("contact");
+      if (contact) contact.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
     return () => {
       active = false;
+      window.removeEventListener(LEAD_CONTEXT_EVENT, onLeadContext);
+      if (flashTimer.current) window.clearTimeout(flashTimer.current);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -66,7 +103,7 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="relative py-24 md:py-36">
+    <section id="contact" className="relative scroll-mt-20 py-24 md:scroll-mt-24 md:py-36">
       <div className="mx-auto max-w-7xl px-5 md:px-8">
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
           <div>
@@ -124,7 +161,14 @@ export default function Contact() {
           </div>
 
           <Reveal delay={0.2}>
-            <div className="gradient-border rounded-3xl border border-line bg-panel p-6 md:p-8">
+            <div
+              ref={formRef}
+              className={`gradient-border rounded-3xl border border-line bg-panel p-6 transition-shadow duration-500 md:p-8 ${
+                flash
+                  ? "shadow-[0_0_70px_rgba(116,55,255,0.4)] ring-1 ring-accent/70"
+                  : ""
+              }`}
+            >
               <form onSubmit={submit} className="space-y-5">
                 <div>
                   <label htmlFor="name" className="mb-2 block text-xs uppercase tracking-[0.2em] text-faint">
@@ -162,6 +206,7 @@ export default function Contact() {
                   </label>
                   <textarea
                     id="message"
+                    ref={textareaRef}
                     required
                     rows={5}
                     value={message}

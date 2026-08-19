@@ -49,6 +49,28 @@ export default defineType({
       rows: 3,
     },
     {
+      name: "author",
+      title: "Author",
+      type: "string",
+      description: "Display name of the author or team member.",
+    },
+    {
+      name: "coverImage",
+      title: "Cover Image",
+      type: "image",
+      description: "Featured hero image shown at the top of the article.",
+      options: {
+        hotspot: true,
+      },
+    },
+    {
+      name: "videoUrl",
+      title: "Video URL",
+      type: "url",
+      description:
+        "Optional external video URL (e.g. hosted .mp4). Renders as the hero background and overrides the cover image.",
+    },
+    {
       name: "content",
       title: "Content",
       type: "blockContent",

@@ -8,7 +8,6 @@ import {
   posts as postData,
   projects as projectData,
   services as serviceData,
-  slugify,
   socials,
   stats,
   team as teamData,
@@ -52,39 +51,11 @@ const client = createClient({
   useCdn: false,
 });
 
-const CATEGORY_ORDER = [
-  "Web Design",
-  "E-Commerce",
-  "Product Design",
-  "Brand Identity",
-  "Web App",
-  "Mobile App",
-];
-
-async function uploadImage(url: string, label: string) {
-  try {
-    const res = await fetch(url);
-    if (!res.ok) {
-      console.warn(
-        `Could not fetch image for ${label} (HTTP ${res.status}): ${url}`,
-      );
-      return null;
-    }
-    const buffer = Buffer.from(await res.arrayBuffer());
-    const asset = await client.assets.upload("image", buffer, {
-      contentType: res.headers.get("content-type") || "image/jpeg",
-      filename: `${label}.jpg`,
-    });
-    return asset._id;
-  } catch (err) {
-    console.warn(`Could not upload image for ${label}:`, err);
-    return null;
-  }
-}
-
-function imageRef(assetId: string | null) {
-  if (!assetId) return undefined;
-  return { _type: "image", asset: { _type: "reference", _ref: assetId } };
+function slugify(value: string) {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
 }
 
 async function main() {
@@ -105,24 +76,11 @@ async function main() {
     );
   });
 
-  // ----------------------------------------------------
-  // PROJECTS — 24 documents (4 per category), images uploaded as Sanity assets
-  // ----------------------------------------------------
-  const projectOps: Promise<unknown>[] = [];
-  for (let i = 0; i < projectData.length; i++) {
-    const p = projectData[i];
-    const bg = p.backgroundMedia;
-    const imageUrl = typeof bg?.image === "string" ? bg.image : undefined;
-    const coverImageUrl =
-      typeof p.coverImage === "string" ? p.coverImage : imageUrl;
-
-    const imageAssetId = imageUrl ? await uploadImage(imageUrl, p.id) : null;
-    const coverAssetId =
-      coverImageUrl && coverImageUrl !== imageUrl
-        ? await uploadImage(coverImageUrl, `${p.id}-cover`)
-        : imageAssetId;
-
-    projectOps.push(
+  projectData.forEach((p, i) => {
+    const media = p.backgroundMedia;
+    const isImage = media?.mediaType !== "video";
+    const imageUrl = isImage ? media?.image : undefined;
+    ops.push(
       client.createOrReplace({
         _id: `project-${p.id}`,
         _type: "project",
@@ -131,57 +89,61 @@ async function main() {
         client: p.client,
         category: p.category,
         year: p.year,
-        disciplines: p.disciplines,
+        services: p.services,
         summary: p.summary,
         description: p.description,
-        liveUrl: p.liveUrl,
         palette: p.palette,
         variant: p.variant,
         tall: p.tall ?? false,
+        liveUrl: p.liveUrl,
+        coverImage: imageUrl
+          ? { _type: "image", _sanityAsset: `image@${imageUrl}` }
+          : undefined,
+        backgroundMedia: media
+          ? isImage && imageUrl
+            ? {
+                mediaType: "image",
+                image: { _type: "image", _sanityAsset: `image@${imageUrl}` },
+              }
+            : { mediaType: "video", videoUrl: media.videoUrl }
+          : undefined,
         sortOrder: i,
-        ...(coverAssetId && { coverImage: imageRef(coverAssetId) }),
-        ...(bg?.videoUrl && { videoUrl: bg.videoUrl }),
-        backgroundMedia: {
-          _type: "mediaAsset",
-          mediaType: bg?.mediaType ?? "image",
-          ...(imageAssetId && { image: imageRef(imageAssetId) }),
-          ...(bg?.videoUrl && { videoUrl: bg.videoUrl }),
-        },
       }),
     );
-  }
-  console.log(`Uploading images and seeding ${projectData.length} projects…`);
-  await Promise.all(projectOps);
+  });
 
   // ----------------------------------------------------
-  // ADD REQUESTED DEMO SERVICES
+  // ADD REQUESTED DEMO DATA
   // ----------------------------------------------------
 
   const customServices = [
     {
       id: "full-stack-web-development",
-      index: "05",
+      index: "01",
       title: "Full-Stack Web Development",
       description: "End-to-end web engineering focusing on performance, scalability, and seamless user experiences. We build robust architectures using modern frameworks.",
       points: ["React & Next.js", "Node.js & Express", "Database Design", "API Development"],
       icon: "code",
+      image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2070&auto=format&fit=crop", // added as per request
     },
     {
       id: "ui-ux-brand-design",
-      index: "06",
+      index: "02",
       title: "UI/UX & Digital Brand Design",
       description: "Crafting digital identities and user interfaces that resonate. We prioritize intuitive flows, accessibility, and pixel-perfect visual design.",
       points: ["Wireframing", "Prototyping", "Brand Identity", "Design Systems"],
       icon: "palette",
+      image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?q=80&w=2000&auto=format&fit=crop",
     },
     {
       id: "headless-cms-ecommerce",
-      index: "07",
+      index: "03",
       title: "Headless CMS & E-Commerce",
       description: "Future-proof content and commerce architectures. We decouple your frontend from the backend to deliver blazing-fast, omnichannel experiences.",
       points: ["Sanity CMS", "Shopify Plus", "Content Modeling", "Omnichannel Delivery"],
       icon: "lightbulb",
-    },
+      image: "https://images.unsplash.com/photo-1661956602116-aa6865609028?q=80&w=2000&auto=format&fit=crop",
+    }
   ];
 
   customServices.forEach((s, i) => {
@@ -195,6 +157,8 @@ async function main() {
         points: s.points,
         icon: s.icon,
         sortOrder: serviceData.length + i,
+        // Using imageUrl in case the schema gets updated, though it's not currently mapped
+        imageUrl: s.image,
       }),
     );
   });
@@ -210,6 +174,12 @@ async function main() {
         date: p.date,
         readTime: p.readTime,
         excerpt: p.excerpt,
+        author: p.author,
+        coverImage: p.coverImage
+          ? { _type: "image", _sanityAsset: `image@${p.coverImage}` }
+          : undefined,
+        videoUrl: p.videoUrl,
+        content: p.content,
         accent: p.accent,
         variant: p.variant,
         sortOrder: i,
@@ -274,13 +244,8 @@ async function main() {
 
   await Promise.all(ops);
 
-  const counts = CATEGORY_ORDER.map((cat) => {
-    const n = projectData.filter((p) => p.category === cat).length;
-    return `${cat}: ${n}`;
-  }).join(", ");
-
   console.log(
-    `Seeded ${serviceData.length + customServices.length} services, ${projectData.length} projects (${counts}), ${postData.length} posts, ${testimonialData.length} testimonials, owner, team, and siteSettings into Sanity.`,
+    `Seeded ${serviceData.length} services, ${projectData.length} projects, ${postData.length} posts, ${testimonialData.length} testimonials, owner, team, and siteSettings into Sanity.`,
   );
 
   process.exit(0);

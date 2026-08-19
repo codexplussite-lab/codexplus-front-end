@@ -22,7 +22,6 @@ import {
   posts as postsData,
   projects as projectsData,
   services as servicesData,
-  slugify,
   socials,
   stats,
   team as teamData,
@@ -50,7 +49,7 @@ export type ProjectRow = {
   client: string;
   category: string;
   year: string;
-  disciplines: string[];
+  services: string[];
   summary: string;
   description: string[];
   content?: any;
@@ -80,6 +79,10 @@ export type PostRow = {
   date: string;
   readTime: string;
   excerpt: string;
+  author?: string;
+  coverImage?: any;
+  coverImageAlt?: string;
+  videoUrl?: string;
   content?: any;
   accent: string;
   variant: string;
@@ -292,7 +295,7 @@ export async function getProjectBySlug(slug: string): Promise<ProjectRow | null>
     warn(err);
   }
   // fallback to local if not found in sanity
-  const localProject = projectsData.find((p) => slugify(p.title) === slug);
+  const localProject = projectsData.find(p => p.title.toLowerCase().replace(/\s+/g, '-') === slug);
   if (localProject) {
     return { ...localProject, id: localProject.title, tall: localProject.tall ?? false, sortOrder: 0, slug };
   }
@@ -307,9 +310,21 @@ export async function getPostBySlug(slug: string): Promise<PostRow | null> {
   } catch (err) {
     warn(err);
   }
-  const localPost = postsData.find(p => p.title.toLowerCase().replace(/\s+/g, '-') === slug);
+  const slugified = (value: string) =>
+    value.toLowerCase().replace(/\s+/g, "-");
+  const localPost = postsData.find(
+    (p) =>
+      p.slug === slug ||
+      p.id === slug ||
+      slugified(p.title) === slug,
+  );
   if (localPost) {
-    return { ...localPost, id: localPost.title, sortOrder: 0, slug };
+    return {
+      ...localPost,
+      id: localPost.title,
+      slug: localPost.slug ?? slugified(localPost.title),
+      sortOrder: 0,
+    };
   }
   return null;
 }

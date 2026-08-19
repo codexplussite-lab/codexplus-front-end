@@ -41,6 +41,66 @@ export default defineType({
     defineArrayMember({
       type: "image",
       options: { hotspot: true },
+      fields: [
+        {
+          name: "alt",
+          title: "Alternative text",
+          type: "string",
+        },
+        {
+          name: "caption",
+          title: "Caption",
+          type: "string",
+          description: "Optional caption rendered under the image.",
+        },
+      ],
+    }),
+    defineArrayMember({
+      title: "Code Block",
+      name: "codeBlock",
+      type: "object",
+      fields: [
+        {
+          name: "language",
+          title: "Language",
+          type: "string",
+          options: {
+            list: [
+              "javascript",
+              "typescript",
+              "tsx",
+              "jsx",
+              "css",
+              "html",
+              "bash",
+              "json",
+              "sql",
+              "graphql",
+              "plaintext",
+            ],
+            layout: "dropdown",
+          },
+          initialValue: "typescript",
+        },
+        {
+          name: "code",
+          title: "Code",
+          type: "text",
+          rows: 12,
+        },
+      ],
+      preview: {
+        select: {
+          language: "language",
+          code: "code",
+        },
+        prepare({ language, code }) {
+          return {
+            title: `Code — ${language ?? "plaintext"}`,
+            subtitle: code?.split("\n").slice(0, 2).join(" ").slice(0, 80),
+          };
+        },
+      },
     }),
   ],
 });

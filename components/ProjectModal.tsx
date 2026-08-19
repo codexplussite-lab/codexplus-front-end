@@ -6,6 +6,7 @@ import { ArrowUpRight, X } from "lucide-react";
 import AbstractVisual from "@/components/AbstractVisual";
 import MediaAsset from "@/components/MediaAsset";
 import type { Project } from "@/data/content";
+import { LEAD_CONTEXT_EVENT } from "@/lib/leadContext";
 
 export default function ProjectModal({
   project,
@@ -30,6 +31,30 @@ export default function ProjectModal({
   const mediaVideo =
     bg?.videoUrl || bg?.videoFileUrl || project.videoUrl || project.videoFileUrl;
   const mediaImage = bg?.image || project.coverImage || (project as any).image;
+
+  const startSimilar = () => {
+    onClose();
+    document.body.style.overflow = "";
+    window.setTimeout(() => {
+      window.dispatchEvent(
+        new CustomEvent(LEAD_CONTEXT_EVENT, {
+          detail: {
+            title: project.title,
+            category: project.category,
+            year: project.year,
+          },
+        }),
+      );
+      const contact = document.getElementById("contact");
+      if (contact) {
+        contact.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+      } else {
+        window.location.href = `/?contact=${encodeURIComponent(
+          project.title,
+        )}#contact`;
+      }
+    }, 150);
+  };
 
   return (
     <motion.div
@@ -97,7 +122,7 @@ export default function ProjectModal({
             {[
               { label: "Client", value: project.client },
               { label: "Year", value: project.year },
-              { label: "Disciplines", value: (project.disciplines ?? []).join(" · ") },
+              { label: "Disciplines", value: (project.services ?? []).join(" · ") },
             ].map((item) => (
               <div key={item.label} className="rounded-2xl border border-line bg-elevated p-4">
                 <p className="text-[11px] uppercase tracking-[0.18em] text-faint">
@@ -118,7 +143,7 @@ export default function ProjectModal({
 
           <div className="mt-9 flex flex-wrap items-center justify-between gap-4 border-t border-line pt-6">
             <div className="flex flex-wrap gap-2">
-              {(project.disciplines ?? []).map((s) => (
+              {(project.services ?? []).map((s) => (
                 <span
                   key={s}
                   className="rounded-full border border-line px-3.5 py-1.5 text-xs text-muted"
@@ -127,14 +152,14 @@ export default function ProjectModal({
                 </span>
               ))}
             </div>
-            <a
-              href="#contact"
-              onClick={onClose}
+            <button
+              type="button"
+              onClick={startSimilar}
               className="inline-flex items-center gap-2 rounded-xl bg-accent-gradient px-6 py-3 text-sm font-semibold text-white transition-shadow hover:shadow-[0_0_30px_rgba(116,55,255,0.45)]"
             >
               Start something similar
               <ArrowUpRight className="size-4" />
-            </a>
+            </button>
           </div>
         </div>
       </motion.div>
