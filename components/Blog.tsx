@@ -39,7 +39,7 @@ export default async function Blog() {
           </Reveal>
         </div>
 
-        <div className="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+        <div className="mt-14 grid grid-cols-2 gap-3 md:gap-5 lg:grid-cols-3 lg:gap-6">
           {posts.slice(0, 6).map((post, i) => (
             <Reveal key={post.id} delay={(i % 3) * 0.1} className="h-full">
               <Link
@@ -57,24 +57,24 @@ export default async function Blog() {
                       variant={post.variant}
                       className="transition-transform duration-700 ease-out group-hover:scale-105"
                     />
-                    <span className="absolute left-4 top-4 rounded-full border border-white/20 bg-black/45 px-3.5 py-1.5 text-[11px] uppercase tracking-[0.16em] text-white/85 backdrop-blur">
+                    <span className="absolute left-3 top-3 rounded-full border border-white/20 bg-black/45 px-2.5 py-1 text-[10px] uppercase tracking-[0.14em] text-white/85 backdrop-blur sm:left-4 sm:top-4 sm:px-3.5 sm:py-1.5 sm:text-[11px] sm:tracking-[0.16em]">
                       {post.category}
                     </span>
                   </div>
 
-                  <div className="flex flex-1 flex-col p-6 md:p-7">
-                    <div className="flex items-center gap-3 text-xs text-faint">
+                  <div className="flex flex-1 flex-col p-4 sm:p-6 md:p-7">
+                    <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[10px] text-faint sm:text-xs">
                       <time dateTime={post.date}>{post.date}</time>
                       <span className="size-1 rounded-full bg-faint" />
                       <span>{post.readTime}</span>
                     </div>
-                    <h3 className="mt-3 font-display text-xl font-medium leading-snug tracking-tight text-ink transition-colors duration-300 group-hover:text-accent md:text-[1.35rem]">
+                    <h3 className="mt-2.5 font-display text-[1.05rem] font-medium leading-snug tracking-tight text-ink transition-colors duration-300 group-hover:text-accent sm:mt-3 sm:text-xl md:text-[1.35rem]">
                       {post.title}
                     </h3>
-                    <p className="mt-3 text-sm leading-relaxed text-muted">
+                    <p className="mt-2 line-clamp-3 text-xs leading-relaxed text-muted sm:mt-3 sm:text-sm">
                       {post.excerpt}
                     </p>
-                    <span className="mt-auto inline-flex items-center gap-2 pt-6 text-xs font-medium uppercase tracking-[0.2em] text-faint transition-colors duration-300 group-hover:text-accent">
+                    <span className="mt-auto inline-flex items-center gap-2 pt-4 text-[10px] font-medium uppercase tracking-[0.2em] text-faint transition-colors duration-300 group-hover:text-accent sm:pt-6 sm:text-xs">
                       Read article
                       <ArrowRight className="size-3.5 transition-transform duration-300 group-hover:translate-x-1" />
                     </span>

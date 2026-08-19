@@ -175,12 +175,23 @@ export default function Navbar() {
             className="group flex items-center transition-colors duration-500"
             aria-label={`Home — ${siteName}`}
           >
-            {siteLogo && (
+            {siteLogo ? (
               <img
                 src={siteLogo}
                 alt={settings?.logoAlt ?? `${siteName} logo`}
-                className="h-14 w-auto object-contain"
+                className="h-8 w-auto object-contain sm:h-10 md:h-12"
               />
+            ) : (
+              <span
+                className={cn(
+                  "font-display text-lg font-medium tracking-tight transition-colors duration-500 sm:text-2xl",
+                  onDark
+                    ? "text-white group-hover:text-accent"
+                    : "text-ink group-hover:text-accent"
+                )}
+              >
+                {siteName}
+              </span>
             )}
           </Link>
 
@@ -190,7 +201,7 @@ export default function Navbar() {
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
             className={cn(
-              "relative z-[85] grid size-12 place-items-center rounded-full border backdrop-blur transition-all duration-500 hover:border-accent/60",
+              "relative z-[85] grid size-9 place-items-center rounded-full border backdrop-blur transition-all duration-500 hover:border-accent/60 sm:size-12",
               onDark
                 ? "border-white/20 bg-white/10 text-white hover:border-white/40"
                 : "border-line bg-elevated/60 text-ink"
@@ -198,23 +209,23 @@ export default function Navbar() {
           >
             <span
               className={cn(
-                "absolute h-[2px] w-6 rounded-full transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
+                "absolute h-[2px] w-4 rounded-full transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] sm:w-6",
                 onDark ? "bg-white" : "bg-ink",
-                open ? "translate-y-0 rotate-45" : "-translate-y-2"
+                open ? "translate-y-0 rotate-45" : "-translate-y-1.5 sm:-translate-y-2"
               )}
             />
             <span
               className={cn(
-                "absolute h-[2px] w-6 rounded-full transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
+                "absolute h-[2px] w-4 rounded-full transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] sm:w-6",
                 onDark ? "bg-white" : "bg-ink",
                 open && "scale-x-0 opacity-0"
               )}
             />
             <span
               className={cn(
-                "absolute h-[2px] w-6 rounded-full transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
+                "absolute h-[2px] w-4 rounded-full transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] sm:w-6",
                 onDark ? "bg-white" : "bg-ink",
-                open ? "translate-y-0 -rotate-45" : "translate-y-2"
+                open ? "translate-y-0 -rotate-45" : "translate-y-1.5 sm:translate-y-2"
               )}
             />
           </button>
