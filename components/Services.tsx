@@ -1,5 +1,5 @@
 import SectionHeading from "@/components/SectionHeading";
-import ServiceCard from "@/components/ServiceCard";
+import ServicesAccordion from "@/components/ServicesAccordion";
 import { getServices } from "@/lib/data";
 import type { Service } from "@/data/content";
 
@@ -25,11 +25,7 @@ export default async function Services() {
           description="Four tightly-argued disciplines, one accountable team. Strategy through shipping — no hand-offs, no dropped balls."
         />
 
-        <div className="grid gap-5 md:grid-cols-2 lg:gap-6">
-          {services.map((service, i) => (
-            <ServiceCard key={service.id} service={service} index={i} />
-          ))}
-        </div>
+        <ServicesAccordion services={services} />
       </div>
     </section>
   );
