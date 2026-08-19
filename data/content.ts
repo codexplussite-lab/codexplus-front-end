@@ -699,6 +699,7 @@ export type Post = {
   title: string;
   slug?: string;
   category: string;
+  tags?: string[];
   date: string;
   readTime: string;
   excerpt: string;
@@ -737,6 +738,7 @@ export const posts: Post[] = [
     title: "Why Design Systems Fail After Year One",
     slug: "why-design-systems-fail-after-year-one",
     category: "Design",
+    tags: ["Design Systems", "DesignOps", "Components"],
     date: "Jun 18, 2026",
     readTime: "8 min read",
     excerpt:
@@ -774,6 +776,7 @@ export const posts: Post[] = [
     title: "The Next.js Performance Checklist We Ship To Every Client",
     slug: "the-next-js-performance-checklist-we-ship-to-every-client",
     category: "Engineering",
+    tags: ["Next.js", "Performance", "Edge Rendering"],
     date: "May 02, 2026",
     readTime: "12 min read",
     excerpt:
@@ -824,6 +827,7 @@ export default {
     title: "Micro-Motion: The 12 Principles of Interfaces That Feel Alive",
     slug: "micro-motion-the-12-principles-of-interfaces-that-feel-alive",
     category: "Motion",
+    tags: ["Motion Design", "Easing", "Micro-interactions"],
     date: "Mar 21, 2026",
     readTime: "6 min read",
     excerpt:
@@ -869,6 +873,7 @@ export default {
     title: "The 20-Question Brand Audit We Run On Every Engagement",
     slug: "the-20-question-brand-audit-we-run-on-every-engagement",
     category: "Strategy",
+    tags: ["Brand Strategy", "Positioning", "Research"],
     date: "Feb 09, 2026",
     readTime: "10 min read",
     excerpt:
@@ -907,6 +912,7 @@ export default {
     title: "Headless CMS in 2026: Choosing With Your Eyes Open",
     slug: "headless-cms-in-2026-choosing-with-your-eyes-open",
     category: "Engineering",
+    tags: ["Headless CMS", "Sanity", "Content Modelling"],
     date: "Jan 27, 2026",
     readTime: "9 min read",
     excerpt:
@@ -952,6 +958,7 @@ export default {
     title: "Imagination Is a Full-Stack Discipline",
     slug: "imagination-is-a-full-stack-discipline",
     category: "Opinion",
+    tags: ["Creative Process", "Studio Life", "Full-stack"],
     date: "Jan 04, 2026",
     readTime: "5 min read",
     excerpt:

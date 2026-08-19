@@ -76,6 +76,7 @@ export type PostRow = {
   title: string;
   slug?: string;
   category: string;
+  tags?: string[];
   date: string;
   readTime: string;
   excerpt: string;

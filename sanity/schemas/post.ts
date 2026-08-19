@@ -31,6 +31,15 @@ export default defineType({
       },
     },
     {
+      name: "tags",
+      title: "Tags",
+      type: "array",
+      of: [{ type: "string" }],
+      options: {
+        layout: "tags",
+      },
+    },
+    {
       name: "date",
       title: "Date",
       type: "string",

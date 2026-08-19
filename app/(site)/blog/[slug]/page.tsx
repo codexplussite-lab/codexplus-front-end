@@ -3,13 +3,16 @@ import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { PortableText, type PortableTextComponents } from "@portabletext/react";
-import { ArrowLeft, ArrowUpRight, CalendarDays, Clock3, Layers } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, CalendarDays, Clock3 } from "lucide-react";
 import AbstractVisual from "@/components/AbstractVisual";
+import ArticleActions from "@/components/ArticleActions";
+import ArticleSidebar from "@/components/ArticleSidebar";
 import Footer from "@/components/Footer";
 import MediaAsset from "@/components/MediaAsset";
 import Navbar from "@/components/Navbar";
 import { team } from "@/data/content";
-import { getPostBySlug } from "@/lib/data";
+import type { Post } from "@/data/content";
+import { getPostBySlug, getPosts } from "@/lib/data";
 import { urlForImage } from "@/lib/sanity";
 
 export const revalidate = 60;
@@ -154,6 +157,9 @@ function initialsOf(name: string) {
     .toUpperCase();
 }
 
+const slugify = (value: { id: string; title: string; slug?: string }) =>
+  value.slug ?? value.title.toLowerCase().replace(/\s+/g, "-");
+
 export default async function BlogPostPage({ params }: { params: Params }) {
   const { slug } = await params;
   const post = await getPostBySlug(slug);
@@ -168,8 +174,18 @@ export default async function BlogPostPage({ params }: { params: Params }) {
   const heroVideo = post.videoUrl;
   const heroImage = post.coverImage;
 
+  const rows = await getPosts();
+  const allPosts = rows as unknown as Post[];
+  const others = allPosts.filter((p) => p.id !== post.id);
+  const relatedPosts = [
+    ...others.filter((p) => p.category === post.category),
+    ...others.filter((p) => p.category !== post.category),
+  ].slice(0, 3);
+
+  const sharePath = `/blog/${slugify(post)}`;
+
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#0b0f19]">
+    <main className="relative min-h-screen overflow-hidden bg-base">
       <Navbar />
 
       {/* Ambient gradient glows */}
@@ -190,133 +206,128 @@ export default async function BlogPostPage({ params }: { params: Params }) {
         }}
       />
 
-      <div className="relative z-10 mx-auto max-w-5xl px-5 pt-28 md:px-8 md:pt-32">
-        <Link
-          href="/articles"
-          className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.2em] text-faint transition-colors hover:text-accent"
-        >
-          <ArrowLeft className="size-3.5" />
-          All articles
-        </Link>
-
-        {/* Header */}
-        <header className="mt-10 max-w-3xl">
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="rounded-full border border-accent/30 bg-accent/10 px-4 py-1.5 text-[11px] uppercase tracking-[0.16em] text-accent backdrop-blur">
-              {post.category}
-            </span>
-            <span className="inline-flex items-center gap-1.5 text-sm text-white/50">
-              <CalendarDays className="size-3.5" />
-              {post.date}
-            </span>
-            <span className="inline-flex items-center gap-1.5 text-sm text-white/50">
-              <Clock3 className="size-3.5" />
-              {post.readTime}
-            </span>
-          </div>
-          <h1 className="mt-6 font-display text-4xl font-medium leading-[1.08] tracking-tight text-white md:text-6xl">
-            {post.title}
-          </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/65">
-            {post.excerpt}
-          </p>
-
-          <div className="mt-8 flex items-center gap-4 border-t border-white/10 pt-6">
-            <span className="grid size-12 place-items-center rounded-2xl border border-white/15 bg-gradient-to-br from-accent to-[#9a66ff] font-display text-sm font-semibold text-white shadow-[0_0_24px_rgba(116,55,255,0.35)]">
-              {initialsOf(authorName)}
-            </span>
-            <div>
-              <p className="text-sm font-medium text-white">{authorName}</p>
-              <p className="text-xs text-white/50">{authorRole}</p>
-            </div>
-          </div>
-        </header>
-
-        {/* Featured hero media */}
-        <div className="mt-12">
-          {heroVideo || heroImage ? (
-            <div className="relative aspect-[16/9] overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-[0_0_80px_rgba(116,55,255,0.18)] backdrop-blur">
-              <MediaAsset
-                image={heroImage}
-                video={heroVideo}
-                alt={post.coverImageAlt || post.title}
-                priority
-                controls={Boolean(heroVideo)}
-              />
-              <div
-                aria-hidden
-                className="absolute inset-0 bg-gradient-to-t from-[#0b0f19]/60 via-transparent to-transparent"
-              />
-            </div>
-          ) : (
-            <div className="relative aspect-[16/9] overflow-hidden rounded-3xl border border-line">
-              <AbstractVisual
-                palette={[post.accent, "#0b0f19", "#232746"]}
-                variant={post.variant as any}
-              />
-            </div>
-          )}
-        </div>
-
-        {/* Bento meta row */}
-        <div className="mt-6 grid gap-5 sm:grid-cols-3">
-          <div className="rounded-2xl border border-line bg-white/[0.03] p-5 backdrop-blur">
-            <Layers className="size-4 text-accent" />
-            <p className="mt-3 text-[11px] uppercase tracking-[0.18em] text-faint">
-              Discipline
-            </p>
-            <p className="mt-1.5 text-sm font-medium text-ink">{post.category}</p>
-          </div>
-          <div className="rounded-2xl border border-line bg-white/[0.03] p-5 backdrop-blur">
-            <CalendarDays className="size-4 text-accent" />
-            <p className="mt-3 text-[11px] uppercase tracking-[0.18em] text-faint">
-              Published
-            </p>
-            <p className="mt-1.5 text-sm font-medium text-ink">{post.date}</p>
-          </div>
-          <div className="rounded-2xl border border-line bg-white/[0.03] p-5 backdrop-blur">
-            <Clock3 className="size-4 text-accent" />
-            <p className="mt-3 text-[11px] uppercase tracking-[0.18em] text-faint">
-              Reading time
-            </p>
-            <p className="mt-1.5 text-sm font-medium text-ink">{post.readTime}</p>
-          </div>
-        </div>
-
-        {/* Article body */}
-        <article className="mt-14">
-          {post.content ? (
-            <PortableText value={post.content} components={components} />
-          ) : (
-            <div className="rounded-3xl border border-line bg-white/[0.02] p-10 text-center">
-              <p className="text-muted">
-                The full story is being polished in the studio. Check back soon.
-              </p>
-              <Link
-                href="/articles"
-                className="mt-6 inline-flex items-center gap-2 rounded-xl bg-accent-gradient px-6 py-3 text-sm font-semibold text-white transition-shadow hover:shadow-[0_0_30px_rgba(116,55,255,0.45)]"
-              >
-                Browse all articles
-                <ArrowUpRight className="size-4" />
-              </Link>
-            </div>
-          )}
-
-          <div className="mt-16 flex flex-wrap items-center justify-between gap-5 rounded-2xl border border-line bg-white/[0.03] px-6 py-5 backdrop-blur">
-            <p className="text-sm text-muted">
-              Written by{" "}
-              <span className="font-medium text-ink">{authorName}</span> ·{" "}
-              {post.readTime} read
-            </p>
+      <div className="relative z-10 mx-auto max-w-7xl px-5 pt-28 md:px-8 md:pt-32">
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-8">
+          {/* Left content column */}
+          <div className="lg:col-span-8">
             <Link
               href="/articles"
-              className="inline-flex items-center gap-2 rounded-xl bg-accent-gradient px-5 py-2.5 text-sm font-semibold text-white transition-shadow hover:shadow-[0_0_30px_rgba(116,55,255,0.45)]"
+              className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.2em] text-faint transition-colors hover:text-accent"
             >
-              Read next article
-              <ArrowUpRight className="size-4" />
+              <ArrowLeft className="size-3.5" />
+              All articles
             </Link>
+
+            {/* Header */}
+            <header className="mt-10 max-w-3xl">
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
+                <span className="rounded-full border border-accent/30 bg-accent/10 px-4 py-1.5 text-[11px] uppercase tracking-[0.16em] text-accent backdrop-blur">
+                  {post.category}
+                </span>
+                <span className="inline-flex items-center gap-1.5 text-sm text-muted">
+                  <CalendarDays className="size-3.5" />
+                  {post.date}
+                </span>
+                <span className="inline-flex items-center gap-1.5 text-sm text-muted">
+                  <Clock3 className="size-3.5" />
+                  {post.readTime}
+                </span>
+              </div>
+              <h1 className="mt-6 font-display text-4xl font-medium leading-[1.08] tracking-tight text-ink md:text-6xl">
+                {post.title}
+              </h1>
+              <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted">
+                {post.excerpt}
+              </p>
+
+              <div className="mt-8 flex items-center gap-4 border-t border-line pt-6">
+                <span className="grid size-12 shrink-0 place-items-center rounded-2xl border border-line bg-accent-gradient font-display text-sm font-semibold text-white shadow-[0_0_24px_rgba(116,55,255,0.35)]">
+                  {initialsOf(authorName)}
+                </span>
+                <div>
+                  <p className="text-sm font-medium text-ink">{authorName}</p>
+                  <p className="text-xs text-faint">{authorRole}</p>
+                </div>
+                <div className="ml-auto">
+                  <ArticleActions />
+                </div>
+              </div>
+            </header>
+
+            {/* Featured hero media */}
+            <div className="mt-12">
+              {heroVideo || heroImage ? (
+                <div className="relative aspect-[16/9] overflow-hidden rounded-3xl border border-line bg-panel/40 shadow-[0_0_80px_rgba(116,55,255,0.18)] backdrop-blur">
+                  <MediaAsset
+                    image={heroImage}
+                    video={heroVideo}
+                    alt={post.coverImageAlt || post.title}
+                    priority
+                    controls={Boolean(heroVideo)}
+                  />
+                  <div
+                    aria-hidden
+                    className="absolute inset-0 bg-gradient-to-t from-base/60 via-transparent to-transparent"
+                  />
+                </div>
+              ) : (
+                <div className="relative aspect-[16/9] overflow-hidden rounded-3xl border border-line">
+                  <AbstractVisual
+                    palette={[post.accent, "#0b0f19", "#232746"]}
+                    variant={post.variant as any}
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Article body */}
+            <article className="mt-14">
+              {post.content ? (
+                <PortableText value={post.content} components={components} />
+              ) : (
+                <div className="rounded-3xl border border-line bg-panel/40 p-10 text-center">
+                  <p className="text-muted">
+                    The full story is being polished in the studio. Check back soon.
+                  </p>
+                  <Link
+                    href="/articles"
+                    className="mt-6 inline-flex items-center gap-2 rounded-xl bg-accent-gradient px-6 py-3 text-sm font-semibold text-white transition-shadow hover:shadow-[0_0_30px_rgba(116,55,255,0.45)]"
+                  >
+                    Browse all articles
+                    <ArrowUpRight className="size-4" />
+                  </Link>
+                </div>
+              )}
+            </article>
+
+            {/* Author card */}
+            <div className="mt-14 flex items-center gap-5 rounded-3xl border border-line bg-panel/70 p-6 backdrop-blur-xl md:p-8">
+              <span className="grid size-14 shrink-0 place-items-center rounded-2xl border border-line bg-accent-gradient font-display text-sm font-semibold text-white shadow-[0_0_24px_rgba(116,55,255,0.35)]">
+                {initialsOf(authorName)}
+              </span>
+              <div className="min-w-0">
+                <p className="text-[11px] uppercase tracking-[0.18em] text-faint">
+                  Written by
+                </p>
+                <p className="mt-1 font-display text-lg font-medium text-ink">
+                  {authorName}
+                </p>
+                <p className="mt-0.5 text-sm text-muted">{authorRole}</p>
+              </div>
+            </div>
           </div>
-        </article>
+
+          {/* Right sidebar column */}
+          <aside className="lg:col-span-4">
+            <div className="lg:sticky lg:top-28">
+              <ArticleSidebar
+                post={post}
+                relatedPosts={relatedPosts}
+                sharePath={sharePath}
+              />
+            </div>
+          </aside>
+        </div>
       </div>
 
       <Footer />
