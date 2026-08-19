@@ -100,6 +100,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [settings, setSettings] = useState<SiteSettings | null>(null);
+  const [logoReady, setLogoReady] = useState(false);
 
   const onDark = !scrolled && !open;
   const siteName = settings?.siteName || brand.name;
@@ -109,6 +110,10 @@ export default function Navbar() {
     Array.isArray(settings?.socials) && settings.socials.length > 0
       ? settings.socials
       : fallbackSocials;
+
+  useEffect(() => {
+    if (!siteLogo) setLogoReady(false);
+  }, [siteLogo]);
 
   useEffect(() => {
     let active = true;
@@ -175,24 +180,30 @@ export default function Navbar() {
             className="group flex items-center transition-colors duration-500"
             aria-label={`Home — ${siteName}`}
           >
-            {siteLogo ? (
-              <img
-                src={siteLogo}
-                alt={settings?.logoAlt ?? `${siteName} logo`}
-                className="h-8 w-auto object-contain sm:h-10 md:h-12"
-              />
-            ) : (
+            <span className="relative flex h-8 items-center sm:h-10 md:h-12">
               <span
                 className={cn(
-                  "font-display text-lg font-medium tracking-tight transition-colors duration-500 sm:text-2xl",
-                  onDark
-                    ? "text-white group-hover:text-accent"
-                    : "text-ink group-hover:text-accent"
+                  "font-display text-lg font-medium tracking-tight transition-opacity duration-300 sm:text-2xl",
+                  onDark ? "text-white" : "text-ink",
+                  siteLogo && logoReady && "opacity-0"
                 )}
               >
                 {siteName}
               </span>
-            )}
+              {siteLogo && (
+                <img
+                  src={siteLogo}
+                  alt={settings?.logoAlt ?? `${siteName} logo`}
+                  fetchPriority="high"
+                  decoding="async"
+                  onLoad={() => setLogoReady(true)}
+                  className={cn(
+                    "absolute left-0 top-1/2 h-full max-w-[240px] -translate-y-1/2 object-contain transition-opacity duration-300",
+                    logoReady ? "opacity-100" : "opacity-0"
+                  )}
+                />
+              )}
+            </span>
           </Link>
 
           <button

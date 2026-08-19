@@ -40,7 +40,7 @@ export default async function Blog() {
         </div>
 
         <div className="mt-14 grid grid-cols-2 gap-3 md:gap-5 lg:grid-cols-3 lg:gap-6">
-          {posts.slice(0, 6).map((post, i) => (
+          {posts.slice(0, 3).map((post, i) => (
             <Reveal key={post.id} delay={(i % 3) * 0.1} className="h-full">
               <Link
                 href={`/blog/${postSlug(post)}`}
