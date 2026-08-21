@@ -188,7 +188,7 @@ export default function Footer() {
           </ul>
         </nav>
 
-        <div className="space-y-5 pt-1">
+        <div className="space-y-5 pt-1.5">
           <ul className="space-y-4 text-lg text-white/70">
             {usefulLinks.map((link) => (
               <li key={link.label}>
@@ -205,8 +205,8 @@ export default function Footer() {
 
         {locations.length > 0 ? (
           locations.map((loc) => (
-            <div key={loc.city} className="space-y-4">
-              <h4 className="text-lg font-800 uppercase tracking-wider text-white">
+            <div key={loc.city} className="space-y-4 pt-1.5">
+              <h4 className="text-lg font-bold uppercase tracking-wider text-white">
                 {loc.country}
               </h4>
               <p className="text-sm leading-relaxed text-white/60">
@@ -241,8 +241,8 @@ export default function Footer() {
           ))
         ) : (
           <>
-            <div className="space-y-4">
-              <h4 className="text-lg font-800 uppercase tracking-wider text-white">
+            <div className="space-y-4 pt-1.5">
+              <h4 className="text-lg font-bold uppercase tracking-wider text-white">
                 Canada
               </h4>
               <p className="text-sm leading-relaxed text-white/60">
@@ -261,8 +261,8 @@ export default function Footer() {
               </div>
             </div>
 
-            <div className="space-y-4">
-              <h4 className="text-lg font-800 uppercase tracking-wider text-white">
+            <div className="space-y-4 pt-1.5">
+              <h4 className="text-lg font-bold uppercase tracking-wider text-white">
                 Germany
               </h4>
               <p className="text-sm leading-relaxed text-white/60">
