@@ -97,7 +97,7 @@ function InfoBlock({
 }
 
 export default function Navbar() {
-  const [mounted, setMounted] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [settings, setSettings] = useState<SiteSettings | null>(null);
@@ -113,7 +113,7 @@ export default function Navbar() {
       : fallbackSocials;
 
   useEffect(() => {
-    setMounted(true);
+    setIsMounted(true);
   }, []);
 
   useEffect(() => {
@@ -185,18 +185,23 @@ export default function Navbar() {
             className="group flex items-center transition-colors duration-500"
             aria-label={`Home — ${siteName}`}
           >
-            {!mounted ? (
-              <span
+            {!isMounted ? (
+              <div
                 aria-hidden
-                className="relative block h-8 w-32 sm:h-10 md:h-12"
+                className="h-8 w-32 opacity-0 sm:h-10 md:h-12"
               />
             ) : (
-              <span className="relative flex h-8 animate-fade-in items-center sm:h-10 md:h-12">
+              <span
+                className={cn(
+                  "relative flex h-8 items-center transition-opacity duration-300 sm:h-10 md:h-12",
+                  isMounted ? "opacity-100" : "opacity-0"
+                )}
+              >
                 <span
                   className={cn(
                     "font-display text-lg font-medium tracking-tight transition-opacity duration-300 sm:text-2xl",
                     onDark ? "text-white" : "text-ink",
-                    siteLogo && logoReady && "opacity-0"
+                    siteLogo || settings === null ? "opacity-0" : "opacity-100"
                   )}
                 >
                   {siteName}
