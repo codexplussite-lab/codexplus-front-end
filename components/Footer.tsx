@@ -127,7 +127,7 @@ export default function Footer() {
         </span>
       </Link>
 
-      <div className="mx-auto grid max-w-7xl grid-cols-1 items-start gap-12 md:grid-cols-3 lg:gap-50">
+      <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-8 md:flex-row">
         <div className="space-y-9">
           <Link
             href="/"
@@ -201,45 +201,6 @@ export default function Footer() {
               </li>
             ))}
           </ul>
-        </div>
-      </div>
-
-      <div className="mx-auto mt-16 grid max-w-7xl grid-cols-1 items-start gap-18 border-t border-white/10 pt-16 text-xs text-white/50 md:grid-cols-3 lg:gap-50">
-        <div className="space-y-6">
-          <div className="flex items-center gap-4 text-sm text-white">
-            {socials.map((s) => (
-              <a
-                key={s.label}
-                href={s.href}
-                target="_blank"
-                rel="noreferrer"
-                aria-label={s.label}
-                className="transition-colors hover:text-accent"
-              >
-                {s.label === "Behance" ? (
-                  <BehanceIcon className="size-6" />
-                ) : s.label === "Dribbble" ? (
-                  <Dribbble className="size-6" />
-                ) : s.label === "Twitter" ? (
-                  <Twitter className="size-6" />
-                ) : (
-                  <Github className="size-6" />
-                )}
-              </a>
-            ))}
-          </div>
-          <div className="text-[14px] tracking-wide text-white/50">
-            © Copyright {new Date().getFullYear()} - CodeXplus. All Rights
-            Reserved.Develop by{" "}
-            <a
-              className="text-gradient"
-              href="https://techmiresolutions.com/"
-              target="_blank"
-              rel="noreferrer"
-            >
-              ARMAN NAQVI
-            </a>
-          </div>
         </div>
 
         {locations.length > 0 ? (
@@ -323,6 +284,43 @@ export default function Footer() {
             </div>
           </>
         )}
+      </div>
+
+      <div className="mx-auto mt-16 flex max-w-7xl flex-col items-start justify-between gap-8 border-t border-white/10 pt-16 text-xs text-white/50 md:flex-row md:items-center">
+        <div className="flex items-center gap-4 text-sm text-white">
+          {socials.map((s) => (
+            <a
+              key={s.label}
+              href={s.href}
+              target="_blank"
+              rel="noreferrer"
+              aria-label={s.label}
+              className="transition-colors hover:text-accent"
+            >
+              {s.label === "Behance" ? (
+                <BehanceIcon className="size-6" />
+              ) : s.label === "Dribbble" ? (
+                <Dribbble className="size-6" />
+              ) : s.label === "Twitter" ? (
+                <Twitter className="size-6" />
+              ) : (
+                <Github className="size-6" />
+              )}
+            </a>
+          ))}
+        </div>
+        <div className="text-[14px] tracking-wide text-white/50">
+          © Copyright {new Date().getFullYear()} - CodeXplus. All Rights
+          Reserved.Develop by{" "}
+          <a
+            className="text-gradient"
+            href="https://techmiresolutions.com/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            ARMAN NAQVI
+          </a>
+        </div>
       </div>
 
       <div className="absolute bottom-12 right-6 hidden items-center gap-3 md:flex">
