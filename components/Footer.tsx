@@ -203,87 +203,89 @@ export default function Footer() {
           </ul>
         </div>
 
-        {locations.length > 0 ? (
-          locations.map((loc) => (
-            <div key={loc.city} className="space-y-4 pt-1.5">
-              <h4 className="text-lg font-bold uppercase tracking-wider text-white">
-                {loc.country}
-              </h4>
-              <p className="text-sm leading-relaxed text-white/60">
-                {loc.address}
-                <br />
-                {loc.city}
-              </p>
-              {loc.phone && (
+        <div className="flex flex-col gap-8 pt-1.5">
+          {locations.length > 0 ? (
+            locations.map((loc) => (
+              <div key={loc.city} className="space-y-4">
+                <h4 className="text-lg font-bold uppercase tracking-wider text-white">
+                  {loc.country}
+                </h4>
+                <p className="text-sm leading-relaxed text-white/60">
+                  {loc.address}
+                  <br />
+                  {loc.city}
+                </p>
+                {loc.phone && (
+                  <div className="pt-2">
+                    {loc.contactType === "whatsapp" ? (
+                      <a
+                        href={`https://wa.me/${loc.phone.replace(/[^+\d]/g, "")}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-2 transition-colors duration-300 hover:text-purple-400"
+                      >
+                        <MessageSquare className="size-4" />
+                        {loc.phone}
+                      </a>
+                    ) : (
+                      <a
+                        href={`tel:${loc.phone.replace(/[^+\d]/g, "")}`}
+                        className="inline-flex items-center gap-2 transition-colors duration-300 hover:text-purple-400"
+                      >
+                        <Phone className="size-4" />
+                        {loc.phone}
+                      </a>
+                    )}
+                  </div>
+                )}
+              </div>
+            ))
+          ) : (
+            <>
+              <div className="space-y-4">
+                <h4 className="text-lg font-bold uppercase tracking-wider text-white">
+                  Canada
+                </h4>
+                <p className="text-sm leading-relaxed text-white/60">
+                  71 South Los Carneros Road,
+                  <br />
+                  California
+                </p>
                 <div className="pt-2">
-                  {loc.contactType === "whatsapp" ? (
-                    <a
-                      href={`https://wa.me/${loc.phone.replace(/[^+\d]/g, "")}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center gap-2 transition-colors duration-300 hover:text-purple-400"
-                    >
-                      <MessageSquare className="size-4" />
-                      {loc.phone}
-                    </a>
-                  ) : (
-                    <a
-                      href={`tel:${loc.phone.replace(/[^+\d]/g, "")}`}
-                      className="inline-flex items-center gap-2 transition-colors duration-300 hover:text-purple-400"
-                    >
-                      <Phone className="size-4" />
-                      {loc.phone}
-                    </a>
-                  )}
+                  <a
+                    href="tel:+14165550147"
+                    className="inline-flex items-center gap-2 transition-colors duration-300 hover:text-purple-400"
+                  >
+                    <Phone className="size-4" />
+                    +1 (416) 555-0147
+                  </a>
                 </div>
-              )}
-            </div>
-          ))
-        ) : (
-          <>
-            <div className="space-y-4 pt-1.5">
-              <h4 className="text-lg font-bold uppercase tracking-wider text-white">
-                Canada
-              </h4>
-              <p className="text-sm leading-relaxed text-white/60">
-                71 South Los Carneros Road,
-                <br />
-                California
-              </p>
-              <div className="pt-2">
-                <a
-                  href="tel:+14165550147"
-                  className="inline-flex items-center gap-2 transition-colors duration-300 hover:text-purple-400"
-                >
-                  <Phone className="size-4" />
-                  +1 (416) 555-0147
-                </a>
               </div>
-            </div>
 
-            <div className="space-y-4 pt-1.5">
-              <h4 className="text-lg font-bold uppercase tracking-wider text-white">
-                Germany
-              </h4>
-              <p className="text-sm leading-relaxed text-white/60">
-                Leehove 40, 2678 MC De Lier,
-                <br />
-                Netherlands
-              </p>
-              <div className="pt-2">
-                <a
-                  href="https://wa.me/49305550186"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-2 transition-colors duration-300 hover:text-purple-400"
-                >
-                  <MessageSquare className="size-4" />
-                  +49 30 555 0186
-                </a>
+              <div className="space-y-4">
+                <h4 className="text-lg font-bold uppercase tracking-wider text-white">
+                  Germany
+                </h4>
+                <p className="text-sm leading-relaxed text-white/60">
+                  Leehove 40, 2678 MC De Lier,
+                  <br />
+                  Netherlands
+                </p>
+                <div className="pt-2">
+                  <a
+                    href="https://wa.me/49305550186"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 transition-colors duration-300 hover:text-purple-400"
+                  >
+                    <MessageSquare className="size-4" />
+                    +49 30 555 0186
+                  </a>
+                </div>
               </div>
-            </div>
-          </>
-        )}
+            </>
+          )}
+        </div>
       </div>
 
       <div className="mx-auto mt-16 flex max-w-7xl flex-col items-start justify-between gap-8 border-t border-white/10 pt-16 text-xs text-white/50 md:flex-row md:items-center">
