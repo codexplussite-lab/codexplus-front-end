@@ -188,21 +188,6 @@ export default function Footer() {
           </ul>
         </nav>
 
-        <div className="space-y-5 pt-1.5">
-          <ul className="space-y-4 text-lg text-white/70">
-            {usefulLinks.map((link) => (
-              <li key={link.label}>
-                <a
-                  href={link.href}
-                  className="transition-colors hover:text-white"
-                >
-                  {link.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-
         <div className="flex flex-col gap-8 pt-1.5">
           {locations.length > 0 ? (
             locations.map((loc) => (
@@ -285,6 +270,21 @@ export default function Footer() {
               </div>
             </>
           )}
+        </div>
+
+        <div className="space-y-5 pt-1.5">
+          <ul className="space-y-4 text-lg text-white/70">
+            {usefulLinks.map((link) => (
+              <li key={link.label}>
+                <a
+                  href={link.href}
+                  className="transition-colors hover:text-white"
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
 
