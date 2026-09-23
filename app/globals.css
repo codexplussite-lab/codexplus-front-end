@@ -57,8 +57,20 @@
   }
 }
 
+html.light {
+  --color-base: #f8fafc;
+  --color-panel: #ffffff;
+  --color-elevated: #f1f5f9;
+  --color-line: #e2e8f0;
+  --color-line-soft: rgba(15, 23, 42, 0.08);
+  --color-muted: #475569;
+  --color-faint: #64748b;
+  --color-ink: #0f172a;
+}
+
 html {
   scroll-behavior: smooth;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 body {
@@ -67,6 +79,7 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 ::selection {

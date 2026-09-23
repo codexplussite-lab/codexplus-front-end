@@ -13,6 +13,7 @@ export const navLinks = [
   { label: "Home", href: "/" },
   { label: "Portfolio", href: "/portfolio" },
   { label: "Services", href: "/services" },
+  { label: "Skills", href: "/#skills" },
   { label: "Team", href: "/team" },
   { label: "Contact", href: "/contact" },
   { label: "Blog", href: "/articles" },
@@ -159,28 +160,7 @@ export const projects: Project[] = [
       imageAlt: "Modern luxury home at dusk for Halcyon Estates",
     },
   },
-  {
-    id: "meridian-legal",
-    title: "Meridian Legal",
-    client: "Meridian & Partners LLP",
-    category: "Web Design",
-    year: "2025",
-    liveUrl: "https://meridianlegal.example.com",
-    services: ["Web Design", "Content Strategy", "CMS Integration"],
-    summary: "A calm, authoritative digital presence for a global law firm — built for trust at scale.",
-    description: [
-      "Meridian's practice spans 14 jurisdictions, and their old site made that feel like a maze. We redesigned around clarity: a disciplined editorial grid, a practice-area navigation that explains the firm in one scroll, and typography that reads like print.",
-      "A headless CMS gives their marketing team ownership of every page, while edge caching keeps the site instant worldwide. Organic inbound enquiries grew 44% within six months of launch.",
-    ],
-    palette: ["#0b0f19", "#2e3a59", "#9a66ff"],
-    variant: "grid",
-    backgroundMedia: {
-      mediaType: "image",
-      image:
-        "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1800&auto=format&fit=crop",
-      imageAlt: "Refined office interior for Meridian Legal",
-    },
-  },
+
   {
     id: "atlas-ventures",
     title: "Atlas Ventures",

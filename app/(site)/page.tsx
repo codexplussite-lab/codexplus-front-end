@@ -8,6 +8,7 @@ import LogoMarquee from "@/components/LogoMarquee";
 import Navbar from "@/components/Navbar";
 import Portfolio from "@/components/Portfolio";
 import Services from "@/components/Services";
+import SkillsSection from "@/components/SkillsSection";
 import Testimonials from "@/components/Testimonials";
 import { getHome } from "@/lib/data";
 
@@ -23,6 +24,7 @@ export default async function Home() {
       <LogoMarquee />
       <About />
       <Services />
+      <SkillsSection />
       <Portfolio carousel />
       <Testimonials />
       <Blog />
