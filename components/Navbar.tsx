@@ -1,45 +1,44 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import CardNav, { CardNavItem } from "@/components/CardNav";
+import { defaultCardNavItems } from "@/data/content";
 
 export default function Navbar() {
-  const items: CardNavItem[] = [
-    {
-      label: "About",
-      bgColor: "#1B1722",
-      textColor: "#fff",
-      links: [
-        { label: "Company", ariaLabel: "About Company", href: "/#about" },
-        { label: "Services", ariaLabel: "Our Services", href: "/services" },
-        { label: "Careers", ariaLabel: "About Careers", href: "/careers" }
-      ]
-    },
-    {
-      label: "Projects", 
-      bgColor: "#2F293A",
-      textColor: "#fff",
-      links: [
-        { label: "Featured Work", ariaLabel: "Featured Projects", href: "/portfolio" },
-        { label: "Tech Stack", ariaLabel: "Skills & Tech Stack", href: "/#skills" },
-        { label: "Case Studies", ariaLabel: "Project Case Studies", href: "/portfolio" }
-      ]
-    },
-    {
-      label: "Contact",
-      bgColor: "#1B1722", 
-      textColor: "#fff",
-      links: [
-        { label: "Get In Touch", ariaLabel: "Contact Form", href: "/contact" },
-        { label: "Email", ariaLabel: "Email us", href: "mailto:hello@codexplus.studio" },
-        { label: "LinkedIn", ariaLabel: "LinkedIn", href: "https://linkedin.com" },
-        { label: "GitHub", ariaLabel: "GitHub", href: "https://github.com" }
-      ]
-    }
-  ];
+  const [logo, setLogo] = useState<string | undefined>();
+  const [logoAlt, setLogoAlt] = useState<string>("Logo");
+  const [siteName, setSiteName] = useState<string>("CodeXplus");
+  const [items, setItems] = useState<CardNavItem[]>(defaultCardNavItems);
+
+  useEffect(() => {
+    let active = true;
+    fetch("/api/site-settings")
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to load settings");
+        return res.json();
+      })
+      .then((data) => {
+        if (!active) return;
+        if (data.siteLogo) setLogo(data.siteLogo);
+        if (data.logoAlt) setLogoAlt(data.logoAlt);
+        if (data.siteName) setSiteName(data.siteName);
+        if (Array.isArray(data.cardNavItems) && data.cardNavItems.length > 0) {
+          setItems(data.cardNavItems);
+        }
+      })
+      .catch(() => {
+        /* fallback to default */
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   return (
     <CardNav
+      logo={logo}
+      logoAlt={logoAlt}
+      siteName={siteName}
       items={items}
       baseColor="#fff"
       menuColor="#000"

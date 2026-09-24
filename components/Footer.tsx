@@ -47,6 +47,9 @@ export default function Footer() {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [error, setError] = useState("");
   const [siteName, setSiteName] = useState("CodeXplus");
+  const [siteLogo, setSiteLogo] = useState<string | undefined>();
+  const [logoAlt, setLogoAlt] = useState("Logo");
+  const [copyrightText, setCopyrightText] = useState("All Rights Reserved.");
   const [navCol, setNavCol] = useState(fallbackNavCol);
   const [usefulLinks, setUsefulLinks] = useState(fallbackUsefulLinks);
   const [socials, setSocials] = useState(fallbackSocials);
@@ -62,6 +65,9 @@ export default function Footer() {
       .then(
         (data: {
           siteName?: string;
+          siteLogo?: string;
+          logoAlt?: string;
+          copyrightText?: string;
           navLinks?: FooterLink[];
           usefulLinks?: FooterLink[];
           socials?: FooterLink[];
@@ -69,6 +75,9 @@ export default function Footer() {
         }) => {
           if (!active) return;
           if (data.siteName) setSiteName(data.siteName);
+          if (data.siteLogo) setSiteLogo(data.siteLogo);
+          if (data.logoAlt) setLogoAlt(data.logoAlt);
+          if (data.copyrightText) setCopyrightText(data.copyrightText);
           if (Array.isArray(data.navLinks) && data.navLinks.length > 0) {
             setNavCol(
               data.navLinks.map((link, i) => ({ ...link, active: i === 0 })),
@@ -133,7 +142,18 @@ export default function Footer() {
             href="/"
             className="inline-block text-5xl font-bold tracking-tight"
           >
-            {siteName}<span className="text-accent">.</span>
+            {siteLogo ? (
+              <img
+                src={siteLogo}
+                alt={logoAlt || siteName}
+                className="h-10 max-h-12 max-w-[220px] object-contain"
+              />
+            ) : (
+              <span>
+                {siteName}
+                <span className="text-accent">.</span>
+              </span>
+            )}
           </Link>
           <div className="space-y-4">
             <p className="text-[12px] font-normal uppercase tracking-wider text-white/50">
@@ -312,8 +332,7 @@ export default function Footer() {
           ))}
         </div>
         <div className="text-[14px] tracking-wide text-white/50">
-          © Copyright {new Date().getFullYear()} - CodeXplus. All Rights
-          Reserved.Develop by{" "}
+          © Copyright {new Date().getFullYear()} - {siteName}. {copyrightText} Develop by{" "}
           <a
             className="text-gradient"
             href="https://techmiresolutions.com/"

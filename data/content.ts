@@ -1049,3 +1049,84 @@ export const team: TeamMember[] = [
     photoAlt: "Omar Haddad, Product Designer at CodeXplus",
   },
 ];
+
+export type SkillCategory = {
+  id: string;
+  title: string;
+  icon: string;
+  skills: string[];
+  sortOrder: number;
+};
+
+export const skillCategories: SkillCategory[] = [
+  {
+    id: "frontend",
+    title: "Frontend Engineering",
+    icon: "Code2",
+    skills: ["React.js", "Next.js 15", "TypeScript", "Tailwind CSS", "Three.js / WebGL", "Framer Motion", "GSAP"],
+    sortOrder: 0,
+  },
+  {
+    id: "backend",
+    title: "Backend & CMS",
+    icon: "Database",
+    skills: ["Node.js", "Sanity CMS", "REST / GraphQL", "PostgreSQL", "Next API Routes", "Server Components"],
+    sortOrder: 1,
+  },
+  {
+    id: "design",
+    title: "UI/UX & Product Design",
+    icon: "Palette",
+    skills: ["Figma", "Design Systems", "Wireframing", "Interactive Prototypes", "Micro-interactions", "User Research"],
+    sortOrder: 2,
+  },
+  {
+    id: "performance",
+    title: "Performance & Workflow",
+    icon: "Zap",
+    skills: ["Vercel", "Git / GitHub", "SEO Optimization", "Web Vitals", "CI/CD", "Responsive Architecture"],
+    sortOrder: 3,
+  },
+];
+
+export type CardNavItemData = {
+  label: string;
+  bgColor?: string;
+  textColor?: string;
+  links: { label: string; href?: string; ariaLabel?: string }[];
+};
+
+export const defaultCardNavItems: CardNavItemData[] = [
+  {
+    label: "About",
+    bgColor: "#1B1722",
+    textColor: "#fff",
+    links: [
+      { label: "Company", ariaLabel: "About Company", href: "/#about" },
+      { label: "Services", ariaLabel: "Our Services", href: "/services" },
+      { label: "Careers", ariaLabel: "About Careers", href: "/careers" },
+    ],
+  },
+  {
+    label: "Projects",
+    bgColor: "#2F293A",
+    textColor: "#fff",
+    links: [
+      { label: "Featured Work", ariaLabel: "Featured Projects", href: "/portfolio" },
+      { label: "Tech Stack", ariaLabel: "Skills & Tech Stack", href: "/#skills" },
+      { label: "Case Studies", ariaLabel: "Project Case Studies", href: "/portfolio" },
+    ],
+  },
+  {
+    label: "Contact",
+    bgColor: "#1B1722",
+    textColor: "#fff",
+    links: [
+      { label: "Get In Touch", ariaLabel: "Contact Form", href: "/contact" },
+      { label: "Email", ariaLabel: "Email us", href: "mailto:hello@codexplus.studio" },
+      { label: "LinkedIn", ariaLabel: "LinkedIn", href: "https://linkedin.com" },
+      { label: "GitHub", ariaLabel: "GitHub", href: "https://github.com" },
+    ],
+  },
+];
+

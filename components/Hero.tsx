@@ -6,8 +6,33 @@ import { ArrowDown, ArrowUpRight, Sparkles } from "lucide-react";
 import MoltenMetal from "@/components/MoltenMetal";
 import { brand } from "@/data/content";
 
-export default function Hero({ heroTitle, heroSubtitle }: { heroTitle?: string; heroSubtitle?: string }) {
+export default function Hero({
+  heroTitle,
+  heroSubtitle,
+  ctaLabel,
+  ctaUrl,
+  secondaryCtaLabel,
+  secondaryCtaUrl,
+  scrollLabel,
+}: {
+  heroTitle?: string;
+  heroSubtitle?: string;
+  ctaLabel?: string;
+  ctaUrl?: string;
+  secondaryCtaLabel?: string;
+  secondaryCtaUrl?: string;
+  scrollLabel?: string;
+}) {
   const [studioName, setStudioName] = useState(brand.name);
+  const [homeData, setHomeData] = useState({
+    heroTitle: heroTitle,
+    heroSubtitle: heroSubtitle,
+    ctaLabel: ctaLabel || "View Selected Work",
+    ctaUrl: ctaUrl || "#portfolio",
+    secondaryCtaLabel: secondaryCtaLabel || "Get In Touch",
+    secondaryCtaUrl: secondaryCtaUrl || "#contact",
+    scrollLabel: scrollLabel || "Scroll Down",
+  });
 
   useEffect(() => {
     let active = true;
@@ -20,14 +45,38 @@ export default function Hero({ heroTitle, heroSubtitle }: { heroTitle?: string; 
         if (!active) return;
         if (data.siteName) setStudioName(data.siteName);
       })
-      .catch(() => {
-        /* fall back to static content */
-      });
+      .catch(() => {});
+
+    if (!heroTitle) {
+      fetch("/api/home")
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => {
+          if (!active || !data) return;
+          setHomeData((prev) => ({
+            heroTitle: data.heroTitle || prev.heroTitle,
+            heroSubtitle: data.heroSubtitle || prev.heroSubtitle,
+            ctaLabel: data.ctaLabel || prev.ctaLabel,
+            ctaUrl: data.ctaUrl || prev.ctaUrl,
+            secondaryCtaLabel: data.secondaryCtaLabel || prev.secondaryCtaLabel,
+            secondaryCtaUrl: data.secondaryCtaUrl || prev.secondaryCtaUrl,
+            scrollLabel: data.scrollLabel || prev.scrollLabel,
+          }));
+        })
+        .catch(() => {});
+    }
 
     return () => {
       active = false;
     };
-  }, []);
+  }, [heroTitle]);
+
+  const activeTitle = heroTitle || homeData.heroTitle;
+  const activeSubtitle = heroSubtitle || homeData.heroSubtitle;
+  const activeCtaLabel = ctaLabel || homeData.ctaLabel;
+  const activeCtaUrl = ctaUrl || homeData.ctaUrl;
+  const activeSecLabel = secondaryCtaLabel || homeData.secondaryCtaLabel;
+  const activeSecUrl = secondaryCtaUrl || homeData.secondaryCtaUrl;
+  const activeScroll = scrollLabel || homeData.scrollLabel;
 
   return (
     <section id="home" className="relative flex min-h-screen w-full flex-col justify-between overflow-hidden bg-[#0b0f19] pt-24 pb-8">
@@ -57,8 +106,6 @@ export default function Hero({ heroTitle, heroSubtitle }: { heroTitle?: string; 
 
       {/* Main Centered Content */}
       <div className="relative z-10 my-auto flex w-full flex-col items-center justify-center text-center px-5 md:px-8 max-w-5xl mx-auto">
-
-
         {/* Main Animated Headline */}
         <h1 className="text-white font-display text-[clamp(2.8rem,7.5vw,7rem)] font-bold leading-[1.0] tracking-[-0.03em] max-w-4xl mx-auto">
           <span className="block overflow-hidden">
@@ -72,7 +119,7 @@ export default function Hero({ heroTitle, heroSubtitle }: { heroTitle?: string; 
                 ease: [0.22, 1, 0.36, 1],
               }}
             >
-              {heroTitle || (
+              {activeTitle || (
                 <>
                   Crafting Digital <span className="bg-gradient-to-r from-accent via-purple-300 to-indigo-300 bg-clip-text text-transparent">Excellence</span>
                 </>
@@ -88,7 +135,7 @@ export default function Hero({ heroTitle, heroSubtitle }: { heroTitle?: string; 
           transition={{ duration: 0.7, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
           className="mt-6 max-w-2xl text-[1.05rem] leading-relaxed text-white/80 md:text-xl font-light mx-auto"
         >
-          {heroSubtitle || (
+          {activeSubtitle || (
             <>
               {studioName} is a high-end digital agency & engineering studio. We build conversion-driven web products, modern brand identities, and immersive digital experiences.
             </>
@@ -103,20 +150,20 @@ export default function Hero({ heroTitle, heroSubtitle }: { heroTitle?: string; 
           className="mt-10 flex flex-wrap items-center justify-center gap-4"
         >
           <a
-            href="#portfolio"
+            href={activeCtaUrl}
             className="group relative inline-flex items-center gap-2.5 overflow-hidden rounded-xl bg-accent px-8 py-4 text-sm font-semibold text-white shadow-xl shadow-accent/25 transition-all duration-300 hover:bg-accent-deep hover:shadow-accent/40 active:scale-95"
           >
             <span className="relative z-10 flex items-center gap-2">
-              View Selected Work
+              {activeCtaLabel}
               <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
             </span>
           </a>
 
           <a
-            href="#contact"
+            href={activeSecUrl}
             className="inline-flex items-center gap-2.5 rounded-xl border border-white/20 bg-black/40 px-7 py-4 text-sm font-medium text-white backdrop-blur-md transition-all duration-300 hover:border-white/40 hover:bg-white/10 active:scale-95"
           >
-            Get In Touch
+            {activeSecLabel}
             <Sparkles className="size-4 text-accent animate-pulse" />
           </a>
         </motion.div>
@@ -128,7 +175,7 @@ export default function Hero({ heroTitle, heroSubtitle }: { heroTitle?: string; 
           href="#about"
           className="group inline-flex items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.22em] text-white/60 transition-colors hover:text-white"
         >
-          Scroll Down
+          {activeScroll}
           <ArrowDown className="size-4 text-accent animate-bounce" />
         </a>
       </div>

@@ -12,6 +12,10 @@ import {
   Phone,
   Send,
   Twitter,
+  Github,
+  Linkedin,
+  Dribbble,
+  Globe,
 } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import { brand } from "@/data/content";
@@ -27,17 +31,35 @@ type Status = "idle" | "loading" | "success" | "error";
 const inputClass =
   "w-full rounded-2xl border border-line bg-elevated px-5 py-4 text-sm text-ink placeholder:text-faint transition-colors duration-300 focus:border-accent/60 focus:outline-none";
 
-const features = [
+const defaultFeatures = [
   "Personalized assistance",
   "Timely response",
   "Comprehensive support",
 ];
 
-const socials = [
-  { label: "X / Twitter", icon: Twitter, href: "https://twitter.com" },
-  { label: "Facebook", icon: Facebook, href: "https://www.facebook.com/" },
-  { label: "Instagram", icon: Instagram, href: "https://www.instagram.com/" },
+const defaultSocials = [
+  { label: "Twitter", href: "https://twitter.com" },
+  { label: "Facebook", href: "https://www.facebook.com/" },
+  { label: "Instagram", href: "https://www.instagram.com/" },
 ];
+
+const socialIconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  twitter: Twitter,
+  x: Twitter,
+  facebook: Facebook,
+  instagram: Instagram,
+  github: Github,
+  linkedin: Linkedin,
+  dribbble: Dribbble,
+};
+
+function getSocialIcon(label: string) {
+  const key = label.toLowerCase();
+  for (const [k, Icon] of Object.entries(socialIconMap)) {
+    if (key.includes(k)) return Icon;
+  }
+  return Globe;
+}
 
 export default function Contact() {
   const [name, setName] = useState("");
@@ -49,6 +71,8 @@ export default function Contact() {
   const [contactEmail, setContactEmail] = useState(brand.email);
   const [contactPhone, setContactPhone] = useState(brand.phoneIntl[0]);
   const [locations, setLocations] = useState(brand.locations);
+  const [features, setFeatures] = useState<string[]>(defaultFeatures);
+  const [socialList, setSocialList] = useState<{ label: string; href: string }[]>(defaultSocials);
   const formRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const flashTimer = useRef<number | null>(null);
@@ -76,6 +100,8 @@ export default function Contact() {
           email?: string;
           phoneIntl?: string[];
           locations?: typeof brand.locations;
+          contactFeatures?: string[];
+          socials?: { label: string; href: string }[];
         }) => {
           if (!active) return;
           if (data.email) setContactEmail(data.email);
@@ -84,6 +110,12 @@ export default function Contact() {
           }
           if (Array.isArray(data.locations) && data.locations.length > 0) {
             setLocations(data.locations);
+          }
+          if (Array.isArray(data.contactFeatures) && data.contactFeatures.length > 0) {
+            setFeatures(data.contactFeatures);
+          }
+          if (Array.isArray(data.socials) && data.socials.length > 0) {
+            setSocialList(data.socials);
           }
         }
       )
@@ -192,19 +224,22 @@ export default function Contact() {
                 </span>
                 <span className="h-px w-10 bg-line" />
                 <div className="flex items-center gap-2.5">
-                  {socials.map(({ label, icon: Icon, href }) => (
-                    <a
-                      key={label}
-                      href={href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={label}
-                      data-hover
-                      className="grid size-10 place-items-center rounded-full border border-line bg-elevated/80 text-faint transition-all duration-300 hover:-translate-y-0.5 hover:border-accent/60 hover:bg-accent/15 hover:text-accent"
-                    >
-                      <Icon className="size-4" />
-                    </a>
-                  ))}
+                  {socialList.map(({ label, href }) => {
+                    const Icon = getSocialIcon(label);
+                    return (
+                      <a
+                        key={label}
+                        href={href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={label}
+                        data-hover
+                        className="grid size-10 place-items-center rounded-full border border-line bg-elevated/80 text-faint transition-all duration-300 hover:-translate-y-0.5 hover:border-accent/60 hover:bg-accent/15 hover:text-accent"
+                      >
+                        <Icon className="size-4" />
+                      </a>
+                    );
+                  })}
                 </div>
               </div>
             </Reveal>

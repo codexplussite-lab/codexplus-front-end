@@ -12,10 +12,12 @@ import blockContent from "./blockContent";
 import job from "./job";
 import page from "./page";
 import home from "./home";
+import skillCategory from "./skillCategory";
 
 export const schemaTypes = [
   siteSettings,
   home,
+  skillCategory,
   page,
   job,
   service,

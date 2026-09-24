@@ -1,5 +1,5 @@
 import { createClient, type SanityClient } from "@sanity/client";
-import imageUrlBuilder from "@sanity/image-url";
+import { createImageUrlBuilder } from "@sanity/image-url";
 
 function requireEnv(value: string | undefined, name: string): string {
   if (!value) {
@@ -27,7 +27,7 @@ export const apiVersion = requireEnv(
 let _client: SanityClient | undefined;
 let _writeClient: SanityClient | undefined;
 
-const builder = imageUrlBuilder({ projectId, dataset });
+const builder = createImageUrlBuilder({ projectId, dataset });
 
 export function urlForImage(source: any) {
   return builder.image(source);
@@ -167,6 +167,10 @@ export const siteSettingsQuery = `
   "siteLogo": logo.asset->url,
   "logoAlt": logo.alt,
   "favicon": favicon.asset->url,
+  metaTitle,
+  metaDescription,
+  keywords,
+  "ogImage": ogImage.asset->url,
   tagline,
   email,
   phoneIntl,
@@ -179,11 +183,36 @@ export const siteSettingsQuery = `
     contactType
   },
   navLinks,
+  cardNavItems[]{
+    label,
+    bgColor,
+    textColor,
+    links[]{
+      label,
+      href,
+      ariaLabel
+    }
+  },
   usefulLinks,
   socials,
   stats,
   clients,
-  highlights
+  highlights,
+  aboutKicker,
+  aboutTitle,
+  aboutDescription,
+  aboutBadge1Number,
+  aboutBadge1Label,
+  aboutBadge2Number,
+  aboutBadge2Label,
+  ctaTagline,
+  ctaHeading,
+  ctaDescription,
+  ctaBookingNotice,
+  ctaSecondaryLabel,
+  ctaSecondaryUrl,
+  contactFeatures,
+  copyrightText
 }
 `;
 
@@ -192,7 +221,32 @@ export const homeQuery = `
   heroTitle,
   heroSubtitle,
   ctaLabel,
-  ctaUrl
+  ctaUrl,
+  secondaryCtaLabel,
+  secondaryCtaUrl,
+  scrollLabel,
+  servicesKicker,
+  servicesTitle,
+  servicesDescription,
+  skillsKicker,
+  skillsTitle,
+  skillsDescription,
+  portfolioKicker,
+  portfolioTitle,
+  testimonialsKicker,
+  testimonialsTitle,
+  blogKicker,
+  blogTitle
+}
+`;
+
+export const skillsQuery = `
+*[_type == "skillCategory"] | order(sortOrder asc) {
+  "id": _id,
+  title,
+  icon,
+  skills,
+  sortOrder
 }
 `;
 

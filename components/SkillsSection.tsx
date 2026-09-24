@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
 import { 
@@ -15,43 +15,78 @@ import {
   Terminal,
   Workflow
 } from "lucide-react";
+import { skillCategories as defaultSkillCategories, type SkillCategory } from "@/data/content";
 
-const skillCategories = [
-  {
-    title: "Frontend Engineering",
-    icon: Code2,
-    skills: ["React.js", "Next.js 15", "TypeScript", "Tailwind CSS", "Three.js / WebGL", "Framer Motion", "GSAP"]
-  },
-  {
-    title: "Backend & CMS",
-    icon: Database,
-    skills: ["Node.js", "Sanity CMS", "REST / GraphQL", "PostgreSQL", "Next API Routes", "Server Components"]
-  },
-  {
-    title: "UI/UX & Product Design",
-    icon: Palette,
-    skills: ["Figma", "Design Systems", "Wireframing", "Interactive Prototypes", "Micro-interactions", "User Research"]
-  },
-  {
-    title: "Performance & Workflow",
-    icon: Zap,
-    skills: ["Vercel", "Git / GitHub", "SEO Optimization", "Web Vitals", "CI/CD", "Responsive Architecture"]
-  }
-];
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  Code2,
+  Database,
+  Palette,
+  Zap,
+  Globe,
+  Cpu,
+  Terminal,
+  Sparkles,
+  Workflow,
+  Layers,
+};
 
-export default function SkillsSection() {
+export default function SkillsSection({
+  kicker,
+  title,
+  description,
+}: {
+  kicker?: string;
+  title?: string;
+  description?: string;
+}) {
+  const [categories, setCategories] = useState<SkillCategory[]>(defaultSkillCategories);
+  const [sectionKicker, setSectionKicker] = useState(kicker || "Skills & Stack");
+  const [sectionTitle, setSectionTitle] = useState(title || "Engineered with precision & modern technology.");
+  const [sectionDescription, setSectionDescription] = useState(
+    description || "A curated tech stack focused on high performance, seamless user experience, and scalable code standards."
+  );
+
+  useEffect(() => {
+    let active = true;
+    fetch("/api/skills")
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data: SkillCategory[]) => {
+        if (!active) return;
+        if (Array.isArray(data) && data.length > 0) {
+          setCategories(data);
+        }
+      })
+      .catch(() => {});
+
+    if (!kicker || !title) {
+      fetch("/api/home")
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => {
+          if (!active || !data) return;
+          if (data.skillsKicker) setSectionKicker(data.skillsKicker);
+          if (data.skillsTitle) setSectionTitle(data.skillsTitle);
+          if (data.skillsDescription) setSectionDescription(data.skillsDescription);
+        })
+        .catch(() => {});
+    }
+
+    return () => {
+      active = false;
+    };
+  }, [kicker, title]);
+
   return (
     <section id="skills" className="relative py-20 md:py-32 border-t border-line/60 bg-panel/30">
       <div className="mx-auto max-w-7xl px-5 md:px-8">
         <SectionHeading
-          kicker="Skills & Stack"
-          title="Engineered with precision & modern technology."
-          description="A curated tech stack focused on high performance, seamless user experience, and scalable code standards."
+          kicker={sectionKicker}
+          title={sectionTitle}
+          description={sectionDescription}
         />
 
         <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {skillCategories.map((cat, idx) => {
-            const Icon = cat.icon;
+          {categories.map((cat, idx) => {
+            const Icon = iconMap[cat.icon] || Code2;
             return (
               <Reveal key={cat.title} delay={idx * 0.1}>
                 <div className="group relative h-full rounded-2xl border border-line bg-panel/70 p-6 transition-all duration-300 hover:border-accent/50 hover:bg-panel hover:shadow-xl hover:shadow-accent/5">

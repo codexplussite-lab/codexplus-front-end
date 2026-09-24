@@ -21,6 +21,7 @@ export interface CardNavItem {
 export interface CardNavProps {
   logo?: string | React.ReactNode;
   logoAlt?: string;
+  siteName?: string;
   items: CardNavItem[];
   baseColor?: string;
   menuColor?: string;
@@ -32,6 +33,7 @@ export interface CardNavProps {
 export default function CardNav({
   logo,
   logoAlt = "Logo",
+  siteName = "CodeXplus",
   items,
   baseColor = "#fff",
   menuColor = "#000",
@@ -103,17 +105,17 @@ export default function CardNav({
       >
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3">
-          {typeof logo === "string" ? (
-            <img src={logo} alt={logoAlt} className="h-8 object-contain" />
+          {typeof logo === "string" && logo ? (
+            <img src={logo} alt={logoAlt} className="h-8 max-h-8 max-w-[160px] object-contain" />
           ) : logo ? (
             logo
           ) : (
             <div className="flex items-center gap-2.5">
               <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-accent to-purple-500 text-white font-bold text-lg shadow-md shadow-accent/30">
-                <span className="font-display">C</span>
+                <span className="font-display">{(siteName || "C").charAt(0).toUpperCase()}</span>
               </div>
               <span className={`font-display text-xl font-bold tracking-tight ${theme === "light" ? "text-slate-900" : "text-white"}`}>
-                CodeX<span className="text-accent">+</span>
+                {siteName}
               </span>
             </div>
           )}

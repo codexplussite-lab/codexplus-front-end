@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
-import { getClient, siteSettingsQuery } from "@/lib/sanity";
+import { getSiteSettings } from "@/lib/data";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -15,40 +15,40 @@ const spaceGrotesk = Space_Grotesk({
   display: "swap",
 });
 
-type SiteSettingsMeta = {
-  siteName?: string;
-  siteLogo?: string;
-  logoAlt?: string;
-  favicon?: string;
-};
-
 export async function generateMetadata(): Promise<Metadata> {
-  let favicon: string | undefined;
+  const settings = await getSiteSettings();
 
-  try {
-    const settings = await getClient().fetch<SiteSettingsMeta>(siteSettingsQuery);
-    favicon = settings?.favicon;
-  } catch {
-    /* Sanity unavailable — fall back to defaults. */
-  }
+  const siteName = settings.siteName || "CodeXplus";
+  const tagline = settings.tagline || "Creative Studio & Digital Design Agency";
+  const title = settings.metaTitle || `${siteName} — ${tagline}`;
+  const description =
+    settings.metaDescription ||
+    `${siteName} is a creative studio crafting brand identities, websites and full-stack digital products that move the world. Design. Engineering. Imagination.`;
+
+  const keywords =
+    Array.isArray(settings.keywords) && settings.keywords.length > 0
+      ? settings.keywords
+      : [
+          "creative agency",
+          "design studio",
+          "Next.js development",
+          "brand identity",
+          "UI UX design",
+          "portfolio",
+        ];
+
+  const favicon = settings.favicon;
+  const ogImage = settings.ogImage;
 
   return {
-    title: "CodeXplus — Creative Studio & Digital Design Agency",
-    description:
-      "CodeXplus is a creative studio crafting brand identities, websites and full-stack digital products that move the world. Design. Engineering. Imagination.",
-    keywords: [
-      "creative agency",
-      "design studio",
-      "Next.js development",
-      "brand identity",
-      "UI UX design",
-      "portfolio",
-    ],
+    title,
+    description,
+    keywords,
     openGraph: {
-      title: "CodeXplus — Creative Studio & Digital Design Agency",
-      description:
-        "We design & build digital experiences that move the world. Branding, websites and full-stack products.",
+      title,
+      description,
       type: "website",
+      images: ogImage ? [{ url: ogImage }] : undefined,
     },
     icons: favicon
       ? {

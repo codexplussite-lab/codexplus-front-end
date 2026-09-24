@@ -20,11 +20,27 @@ export default async function Home() {
   return (
     <main>
       <Navbar />
-      <Hero heroTitle={homeData?.heroTitle} heroSubtitle={homeData?.heroSubtitle} />
+      <Hero
+        heroTitle={homeData?.heroTitle}
+        heroSubtitle={homeData?.heroSubtitle}
+        ctaLabel={homeData?.ctaLabel}
+        ctaUrl={homeData?.ctaUrl}
+        secondaryCtaLabel={homeData?.secondaryCtaLabel}
+        secondaryCtaUrl={homeData?.secondaryCtaUrl}
+        scrollLabel={homeData?.scrollLabel}
+      />
       <LogoMarquee />
       <About />
-      <Services />
-      <SkillsSection />
+      <Services
+        kicker={homeData?.servicesKicker}
+        title={homeData?.servicesTitle}
+        description={homeData?.servicesDescription}
+      />
+      <SkillsSection
+        kicker={homeData?.skillsKicker}
+        title={homeData?.skillsTitle}
+        description={homeData?.skillsDescription}
+      />
       <Portfolio carousel />
       <Testimonials />
       <Blog />

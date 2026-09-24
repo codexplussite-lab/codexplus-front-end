@@ -56,6 +56,16 @@ function Counter({
 export default function About() {
   const [highlights, setHighlights] = useState(fallbackHighlights);
   const [statsData, setStatsData] = useState(stats);
+  const [kicker, setKicker] = useState("About the studio");
+  const [title, setTitle] = useState("Where imagination meets engineering.");
+  const [descriptions, setDescriptions] = useState<string[]>([
+    "At our design studio, we're passionate about transforming raw ideas into reality. Every project starts with curiosity and ends with something people genuinely love to use.",
+    "From first sketch to final deploy, we grow together with our clients — pairing clean, thoughtful engineering with visual direction that refuses to blend in.",
+  ]);
+  const [badge1Number, setBadge1Number] = useState("12+");
+  const [badge1Label, setBadge1Label] = useState("Years of craft");
+  const [badge2Number, setBadge2Number] = useState("40k+");
+  const [badge2Label, setBadge2Label] = useState("creators shipped");
 
   useEffect(() => {
     let active = true;
@@ -64,7 +74,7 @@ export default function About() {
         if (!res.ok) throw new Error("Failed to load site settings");
         return res.json();
       })
-      .then((data: { stats?: typeof stats; highlights?: string[] }) => {
+      .then((data: any) => {
         if (!active) return;
         if (Array.isArray(data.highlights) && data.highlights.length > 0) {
           setHighlights(data.highlights);
@@ -72,6 +82,15 @@ export default function About() {
         if (Array.isArray(data.stats) && data.stats.length > 0) {
           setStatsData(data.stats);
         }
+        if (data.aboutKicker) setKicker(data.aboutKicker);
+        if (data.aboutTitle) setTitle(data.aboutTitle);
+        if (Array.isArray(data.aboutDescription) && data.aboutDescription.length > 0) {
+          setDescriptions(data.aboutDescription);
+        }
+        if (data.aboutBadge1Number) setBadge1Number(data.aboutBadge1Number);
+        if (data.aboutBadge1Label) setBadge1Label(data.aboutBadge1Label);
+        if (data.aboutBadge2Number) setBadge2Number(data.aboutBadge2Number);
+        if (data.aboutBadge2Label) setBadge2Label(data.aboutBadge2Label);
       })
       .catch(() => {
         /* fall back to static content */
@@ -100,10 +119,10 @@ export default function About() {
             <Reveal delay={0.15}>
               <div className="absolute -right-4 top-8 rounded-2xl border border-line bg-base/85 p-5 backdrop-blur-md md:-right-10 md:p-6">
                 <p className="font-display text-4xl font-medium text-gradient md:text-5xl">
-                  12+
+                  {badge1Number}
                 </p>
                 <p className="mt-1 text-xs uppercase tracking-[0.18em] text-muted">
-                  Years of craft
+                  {badge1Label}
                 </p>
               </div>
             </Reveal>
@@ -122,7 +141,7 @@ export default function About() {
                   ))}
                 </span>
                 <span className="text-sm text-muted">
-                  <span className="font-semibold text-ink">40k+</span> creators shipped
+                  <span className="font-semibold text-ink">{badge2Number}</span> {badge2Label}
                 </span>
               </div>
             </Reveal>
@@ -130,28 +149,26 @@ export default function About() {
 
           <div>
             <SectionHeading
-              kicker="About the studio"
+              kicker={kicker}
               title={
-                <>
-                  Where imagination
-                  <br />
-                  meets <span className="text-gradient">engineering.</span>
-                </>
+                title.includes("\n") ? (
+                  title.split("\n").map((line, idx) => (
+                    <span key={idx}>
+                      {idx > 0 && <br />}
+                      {line}
+                    </span>
+                  ))
+                ) : (
+                  title
+                )
               }
             />
 
             <Reveal delay={0.1}>
               <div className="space-y-5 text-[1rem] leading-relaxed text-muted md:text-lg">
-                <p>
-                  At our design studio, we&apos;re passionate about transforming raw
-                  ideas into reality. Every project starts with curiosity and ends with
-                  something people genuinely love to use.
-                </p>
-                <p>
-                  From first sketch to final deploy, we grow together with our clients —
-                  pairing clean, thoughtful engineering with visual direction that
-                  refuses to blend in.
-                </p>
+                {descriptions.map((desc, i) => (
+                  <p key={i}>{desc}</p>
+                ))}
               </div>
             </Reveal>
 

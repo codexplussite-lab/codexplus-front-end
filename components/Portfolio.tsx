@@ -11,7 +11,7 @@ import SectionHeading from "@/components/SectionHeading";
 import type { Project } from "@/data/content";
 import { cn } from "@/lib/utils";
 
-const categories = ["All", "Web Design", "E-Commerce", "Product Design", "Brand Identity", "Web App", "Mobile App"];
+const defaultCategories = ["All", "Web Design", "E-Commerce", "Product Design", "Brand Identity", "Web App", "Mobile App"];
 
 export default function Portfolio({
   heading = true,
@@ -27,6 +27,11 @@ export default function Portfolio({
   const [activeIndex, setActiveIndex] = useState(0);
   const reduce = useReducedMotion();
   const trackRef = useRef<HTMLDivElement>(null);
+
+  const categories =
+    projects.length > 0
+      ? ["All", ...Array.from(new Set(projects.map((p) => p.category).filter(Boolean)))]
+      : defaultCategories;
 
   useEffect(() => {
     let cancelled = false;

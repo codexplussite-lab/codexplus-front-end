@@ -1,11 +1,27 @@
 import SectionHeading from "@/components/SectionHeading";
 import ServicesAccordion from "@/components/ServicesAccordion";
-import { getServices } from "@/lib/data";
+import { getServices, getHome } from "@/lib/data";
 import type { Service } from "@/data/content";
 
-export default async function Services() {
+export default async function Services({
+  kicker,
+  title,
+  description,
+}: {
+  kicker?: string;
+  title?: string;
+  description?: string;
+}) {
   const rows = await getServices();
   const services = rows as unknown as Service[];
+  const homeData = !kicker || !title || !description ? await getHome() : null;
+
+  const sectionKicker = kicker || homeData?.servicesKicker || "What we do";
+  const sectionTitle = title || homeData?.servicesTitle || "Services engineered for impact.";
+  const sectionDescription =
+    description ||
+    homeData?.servicesDescription ||
+    "Four tightly-argued disciplines, one accountable team. Strategy through shipping — no hand-offs, no dropped balls.";
 
   return (
     <section
@@ -14,15 +30,20 @@ export default async function Services() {
     >
       <div className="mx-auto max-w-7xl px-5 md:px-8">
         <SectionHeading
-          kicker="What we do"
+          kicker={sectionKicker}
           title={
-            <>
-              Services engineered
-              <br />
-              for <span className="text-outline-accent">impact.</span>
-            </>
+            sectionTitle.includes("\n") ? (
+              sectionTitle.split("\n").map((line, idx) => (
+                <span key={idx}>
+                  {idx > 0 && <br />}
+                  {line}
+                </span>
+              ))
+            ) : (
+              sectionTitle
+            )
           }
-          description="Four tightly-argued disciplines, one accountable team. Strategy through shipping — no hand-offs, no dropped balls."
+          description={sectionDescription}
         />
 
         <ServicesAccordion services={services} />

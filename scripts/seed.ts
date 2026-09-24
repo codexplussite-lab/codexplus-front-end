@@ -12,6 +12,8 @@ import {
   stats,
   team as teamData,
   testimonials as testimonialData,
+  skillCategories as skillCategoriesData,
+  defaultCardNavItems,
 } from "../data/content";
 
 config();
@@ -208,15 +210,83 @@ async function main() {
       _type: "siteSettings",
       name: brand.name,
       tagline: brand.tagline,
+      metaTitle: `${brand.name} — Creative Studio & Digital Design Agency`,
+      metaDescription: `${brand.name} is a creative studio crafting brand identities, websites and full-stack digital products that move the world.`,
+      keywords: ["creative agency", "design studio", "Next.js", "branding", "UI UX design"],
       email: brand.email,
       phoneIntl: brand.phoneIntl,
       locations: brand.locations,
       navLinks,
+      cardNavItems: defaultCardNavItems,
       socials,
       stats,
       clients: clientsData,
+      aboutKicker: "About the studio",
+      aboutTitle: "Where imagination\nmeets engineering.",
+      aboutDescription: [
+        "At our design studio, we're passionate about transforming raw ideas into reality. Every project starts with curiosity and ends with something people genuinely love to use.",
+        "From first sketch to final deploy, we grow together with our clients — pairing clean, thoughtful engineering with visual direction that refuses to blend in.",
+      ],
+      aboutBadge1Number: "12+",
+      aboutBadge1Label: "Years of craft",
+      aboutBadge2Number: "40k+",
+      aboutBadge2Label: "creators shipped",
+      ctaTagline: "Let's build something",
+      ctaHeading: "Have an idea worth building?",
+      ctaDescription:
+        "Tell us where you want to go. We'll bring the strategy, the craft and the code. Response within 24 hours.",
+      ctaBookingNotice: `Currently booking Q3 ${new Date().getFullYear()} projects`,
+      ctaSecondaryLabel: "See the work",
+      ctaSecondaryUrl: "#portfolio",
+      contactFeatures: [
+        "Personalized assistance",
+        "Timely response",
+        "Comprehensive support",
+      ],
+      copyrightText: "All rights reserved.",
     }),
   );
+
+  ops.push(
+    client.createOrReplace({
+      _id: "home",
+      _type: "home",
+      heroTitle: "Crafting Digital Excellence",
+      heroSubtitle: `${brand.name} is a high-end digital agency & engineering studio. We build conversion-driven web products, modern brand identities, and immersive digital experiences.`,
+      ctaLabel: "View Selected Work",
+      ctaUrl: "#portfolio",
+      secondaryCtaLabel: "Get In Touch",
+      secondaryCtaUrl: "#contact",
+      scrollLabel: "Scroll Down",
+      servicesKicker: "What we do",
+      servicesTitle: "Services engineered for impact.",
+      servicesDescription:
+        "Four tightly-argued disciplines, one accountable team. Strategy through shipping — no hand-offs, no dropped balls.",
+      skillsKicker: "Skills & Stack",
+      skillsTitle: "Engineered with precision & modern technology.",
+      skillsDescription:
+        "A curated tech stack focused on high performance, seamless user experience, and scalable code standards.",
+      portfolioKicker: "Selected work",
+      portfolioTitle: "Crafted for scale.",
+      testimonialsKicker: "Customer voices",
+      testimonialsTitle: "Trusted by teams worldwide.",
+      blogKicker: "Journal",
+      blogTitle: "Insights & field notes.",
+    }),
+  );
+
+  skillCategoriesData.forEach((cat, i) => {
+    ops.push(
+      client.createOrReplace({
+        _id: `skill-${cat.id}`,
+        _type: "skillCategory",
+        title: cat.title,
+        icon: cat.icon,
+        skills: cat.skills,
+        sortOrder: i,
+      }),
+    );
+  });
 
   ops.push(
     client.createOrReplace({
@@ -245,7 +315,7 @@ async function main() {
   await Promise.all(ops);
 
   console.log(
-    `Seeded ${serviceData.length} services, ${projectData.length} projects, ${postData.length} posts, ${testimonialData.length} testimonials, owner, team, and siteSettings into Sanity.`,
+    `Seeded ${serviceData.length} services, ${projectData.length} projects, ${postData.length} posts, ${testimonialData.length} testimonials, ${skillCategoriesData.length} skill categories, home, owner, team, and siteSettings into Sanity.`,
   );
 
   process.exit(0);

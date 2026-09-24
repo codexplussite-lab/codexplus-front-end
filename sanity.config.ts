@@ -28,7 +28,7 @@ const structure = (S: StructureBuilder) =>
     .title("Content")
     .items([
       S.listItem()
-        .title("Site Settings")
+        .title("Site Settings (Logo, Favicon, SEO, Nav)")
         .icon(CogIcon)
         .child(
           S.editor()
@@ -36,8 +36,18 @@ const structure = (S: StructureBuilder) =>
             .schemaType("siteSettings")
             .documentId("siteSettings"),
         ),
+      S.listItem()
+        .title("Home Page (Hero & Sections)")
+        .child(
+          S.editor()
+            .id("home")
+            .schemaType("home")
+            .documentId("home"),
+        ),
       S.divider(),
-      ...S.documentTypeListItems().filter((item) => item.getId() !== "siteSettings"),
+      ...S.documentTypeListItems().filter(
+        (item) => item.getId() !== "siteSettings" && item.getId() !== "home",
+      ),
     ]);
 
 export default defineConfig({
