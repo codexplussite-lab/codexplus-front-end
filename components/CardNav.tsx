@@ -44,8 +44,13 @@ export default function CardNav({
   const [isOpen, setIsOpen] = useState(false);
   const [activeCard, setActiveCard] = useState<number | null>(null);
   const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const [imgError, setImgError] = useState(false);
   const navRef = useRef<HTMLDivElement>(null);
   const cardsContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setImgError(false);
+  }, [logo]);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") as "dark" | "light" | null;
@@ -105,9 +110,18 @@ export default function CardNav({
       >
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3">
-          {typeof logo === "string" && logo ? (
-            <img src={logo} alt={logoAlt} className="h-8 max-h-8 max-w-[160px] object-contain" />
-          ) : logo ? (
+          {typeof logo === "string" && logo && !imgError ? (
+            <img
+              src={logo}
+              alt={logoAlt || siteName}
+              onError={() => setImgError(true)}
+              className={`h-8 sm:h-9 max-h-9 w-auto max-w-[170px] object-contain block transition-all duration-300 ${
+                theme === "light"
+                  ? "drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]"
+                  : "drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]"
+              }`}
+            />
+          ) : logo && typeof logo !== "string" ? (
             logo
           ) : (
             <div className="flex items-center gap-2.5">

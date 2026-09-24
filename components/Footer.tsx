@@ -1,8 +1,10 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { ArrowRight, ArrowUp, Dribbble, Github, Twitter, MessageSquare, Phone } from "lucide-react";
+import React from "react";
 import Link from "next/link";
+import { Dribbble, Github, Twitter, MessageSquare, Phone } from "lucide-react";
+import NewsletterForm from "@/components/NewsletterForm";
+import BackToTop from "@/components/BackToTop";
+import { getSiteSettings } from "@/lib/data";
+import { brand } from "@/data/content";
 
 const fallbackNavCol = [
   { label: "Home", href: "/", active: true },
@@ -14,10 +16,10 @@ const fallbackNavCol = [
 ];
 
 const fallbackUsefulLinks = [
-  { label: "Privacy Policy", href: "#" },
-  { label: "Terms and conditions", href: "#" },
-  { label: "Cookie Policy", href: "#" },
-  { label: "Careers", href: "#" },
+  { label: "Privacy Policy", href: "/privacy-policy" },
+  { label: "Terms and conditions", href: "/terms-and-conditions" },
+  { label: "Cookie Policy", href: "/cookie-policy" },
+  { label: "Careers", href: "/careers" },
 ];
 
 const fallbackSocials = [
@@ -27,7 +29,7 @@ const fallbackSocials = [
   { label: "GitHub", href: "https://github.com" },
 ];
 
-type FooterLink = { label: string; href: string };
+type FooterLink = { label: string; href: string; active?: boolean };
 
 function BehanceIcon({ className }: { className?: string }) {
   return (
@@ -42,87 +44,32 @@ function BehanceIcon({ className }: { className?: string }) {
   );
 }
 
-export default function Footer() {
-  const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
-  const [error, setError] = useState("");
-  const [siteName, setSiteName] = useState("CodeXplus");
-  const [siteLogo, setSiteLogo] = useState<string | undefined>();
-  const [logoAlt, setLogoAlt] = useState("Logo");
-  const [copyrightText, setCopyrightText] = useState("All Rights Reserved.");
-  const [navCol, setNavCol] = useState(fallbackNavCol);
-  const [usefulLinks, setUsefulLinks] = useState(fallbackUsefulLinks);
-  const [socials, setSocials] = useState(fallbackSocials);
-  const [locations, setLocations] = useState<any[]>([]);
+export default async function Footer() {
+  const settings = await getSiteSettings();
 
-  useEffect(() => {
-    let active = true;
-    fetch("/api/site-settings")
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to load site settings");
-        return res.json();
-      })
-      .then(
-        (data: {
-          siteName?: string;
-          siteLogo?: string;
-          logoAlt?: string;
-          copyrightText?: string;
-          navLinks?: FooterLink[];
-          usefulLinks?: FooterLink[];
-          socials?: FooterLink[];
-          locations?: any[];
-        }) => {
-          if (!active) return;
-          if (data.siteName) setSiteName(data.siteName);
-          if (data.siteLogo) setSiteLogo(data.siteLogo);
-          if (data.logoAlt) setLogoAlt(data.logoAlt);
-          if (data.copyrightText) setCopyrightText(data.copyrightText);
-          if (Array.isArray(data.navLinks) && data.navLinks.length > 0) {
-            setNavCol(
-              data.navLinks.map((link, i) => ({ ...link, active: i === 0 })),
-            );
-          }
-          if (Array.isArray(data.usefulLinks) && data.usefulLinks.length > 0) {
-            setUsefulLinks(data.usefulLinks);
-          }
-          if (Array.isArray(data.socials) && data.socials.length > 0) {
-            setSocials(data.socials);
-          }
-          if (Array.isArray(data.locations) && data.locations.length > 0) {
-            setLocations(data.locations);
-          }
-        },
-      )
-      .catch(() => {
-        /* fall back to static content */
-      });
-    return () => {
-      active = false;
-    };
-  }, []);
-
-  const submit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!email.trim() || status === "loading") return;
-    setStatus("loading");
-    setError("");
-    try {
-      const res = await fetch("/api/subscribe", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "Something went wrong");
-      setStatus("success");
-      setEmail("");
-      window.setTimeout(() => setStatus("idle"), 4000);
-    } catch (err) {
-      setStatus("error");
-      setError(err instanceof Error ? err.message : "Something went wrong");
-    }
-  };
+  const siteName = settings.siteName || brand.name;
+  const siteLogo = settings.siteLogo;
+  const logoAlt = settings.logoAlt || siteName;
+  const copyrightText = settings.copyrightText || "All Rights Reserved.";
+  const navCol: FooterLink[] = (settings.navLinks && settings.navLinks.length > 0)
+    ? settings.navLinks.map((link, i) => ({ ...link, active: i === 0 }))
+    : fallbackNavCol;
+  const usefulLinks: FooterLink[] = (settings.usefulLinks && settings.usefulLinks.length > 0)
+    ? settings.usefulLinks
+    : fallbackUsefulLinks;
+  const socials: FooterLink[] = (settings.socials && settings.socials.length > 0)
+    ? settings.socials
+    : fallbackSocials;
+  const locations: Array<{
+    city?: string;
+    country?: string;
+    region?: string;
+    address?: string;
+    phone?: string;
+    contactType?: string;
+  }> = (settings.locations && settings.locations.length > 0)
+    ? settings.locations
+    : brand.locations;
 
   return (
     <footer className="relative overflow-hidden bg-gradient-to-b from-[#0b0f19] to-[#070a12] px-8 pb-12 pt-24 text-white md:px-20">
@@ -145,8 +92,8 @@ export default function Footer() {
             {siteLogo ? (
               <img
                 src={siteLogo}
-                alt={logoAlt || siteName}
-                className="h-10 max-h-12 max-w-[220px] object-contain"
+                alt={logoAlt}
+                className="h-10 max-h-12 max-w-[220px] object-contain drop-shadow-sm"
               />
             ) : (
               <span>
@@ -155,38 +102,7 @@ export default function Footer() {
               </span>
             )}
           </Link>
-          <div className="space-y-4">
-            <p className="text-[12px] font-normal uppercase tracking-wider text-white/50">
-              Subscribe our newsletter:
-            </p>
-            <form onSubmit={submit} className="relative flex max-w-sm items-center">
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="ENTER OUR EMAIL"
-                aria-label="Email address"
-                className="h-[56px] w-full rounded-full border border-white/15 bg-white/10 px-6 py-4 pr-12 text-xs tracking-wider text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-accent/60"
-              />
-              <button
-                type="submit"
-                aria-label="Subscribe"
-                disabled={status === "loading"}
-                className="absolute right-1.5 flex size-10 items-center justify-center rounded-xl bg-accent-gradient text-white transition-opacity duration-300 hover:opacity-95 disabled:opacity-60"
-              >
-                <ArrowRight className="size-4" />
-              </button>
-            </form>
-            {status === "success" && (
-              <p className="mt-2 pl-2 text-xs text-accent">
-                Thanks — you&apos;re on the list!
-              </p>
-            )}
-            {status === "error" && (
-              <p className="mt-2 pl-2 text-xs text-red-400">{error}</p>
-            )}
-          </div>
+          <NewsletterForm />
         </div>
 
         <nav aria-label="Footer navigation" className="space-y-5">
@@ -209,87 +125,45 @@ export default function Footer() {
         </nav>
 
         <div className="flex flex-col gap-8 pt-1.5">
-          {locations.length > 0 ? (
-            locations.map((loc) => (
-              <div key={loc.city} className="space-y-4">
-                <h4 className="text-lg font-bold uppercase tracking-wider text-white">
-                  {loc.country}
-                </h4>
-                <p className="text-sm leading-relaxed text-white/60">
-                  {loc.address}
-                  <br />
-                  {loc.city}
-                </p>
-                {loc.phone && (
-                  <div className="pt-2">
-                    {loc.contactType === "whatsapp" ? (
-                      <a
-                        href={`https://wa.me/${loc.phone.replace(/[^+\d]/g, "")}`}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-flex items-center gap-2 transition-colors duration-300 hover:text-purple-400"
-                      >
-                        <MessageSquare className="size-4" />
-                        {loc.phone}
-                      </a>
-                    ) : (
-                      <a
-                        href={`tel:${loc.phone.replace(/[^+\d]/g, "")}`}
-                        className="inline-flex items-center gap-2 transition-colors duration-300 hover:text-purple-400"
-                      >
-                        <Phone className="size-4" />
-                        {loc.phone}
-                      </a>
-                    )}
-                  </div>
+          {locations.map((loc, i) => (
+            <div key={loc.city || i} className="space-y-4">
+              <h4 className="text-lg font-bold uppercase tracking-wider text-white">
+                {loc.country}
+              </h4>
+              <p className="text-sm leading-relaxed text-white/60">
+                {loc.address && (
+                  <>
+                    {loc.address}
+                    <br />
+                  </>
                 )}
-              </div>
-            ))
-          ) : (
-            <>
-              <div className="space-y-4">
-                <h4 className="text-lg font-bold uppercase tracking-wider text-white">
-                  Canada
-                </h4>
-                <p className="text-sm leading-relaxed text-white/60">
-                  71 South Los Carneros Road,
-                  <br />
-                  California
-                </p>
+                {loc.city}
+              </p>
+              {loc.phone && (
                 <div className="pt-2">
-                  <a
-                    href="tel:+14165550147"
-                    className="inline-flex items-center gap-2 transition-colors duration-300 hover:text-purple-400"
-                  >
-                    <Phone className="size-4" />
-                    +1 (416) 555-0147
-                  </a>
+                  {loc.contactType === "whatsapp" ? (
+                    <a
+                      href={`https://wa.me/${loc.phone.replace(/[^+\d]/g, "")}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-2 transition-colors duration-300 hover:text-purple-400"
+                    >
+                      <MessageSquare className="size-4" />
+                      {loc.phone}
+                    </a>
+                  ) : (
+                    <a
+                      href={`tel:${loc.phone.replace(/[^+\d]/g, "")}`}
+                      className="inline-flex items-center gap-2 transition-colors duration-300 hover:text-purple-400"
+                    >
+                      <Phone className="size-4" />
+                      {loc.phone}
+                    </a>
+                  )}
                 </div>
-              </div>
-
-              <div className="space-y-4">
-                <h4 className="text-lg font-bold uppercase tracking-wider text-white">
-                  Germany
-                </h4>
-                <p className="text-sm leading-relaxed text-white/60">
-                  Leehove 40, 2678 MC De Lier,
-                  <br />
-                  Netherlands
-                </p>
-                <div className="pt-2">
-                  <a
-                    href="https://wa.me/49305550186"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-2 transition-colors duration-300 hover:text-purple-400"
-                  >
-                    <MessageSquare className="size-4" />
-                    +49 30 555 0186
-                  </a>
-                </div>
-              </div>
-            </>
-          )}
+              )}
+            </div>
+          ))}
         </div>
 
         <div className="space-y-5 pt-1.5">
@@ -344,19 +218,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="absolute bottom-12 right-6 hidden items-center gap-3 md:flex">
-        <span className="text-[12px] font-medium uppercase tracking-[0.25em] text-white [writing-mode:vertical-rl]">
-          Back to top
-        </span>
-        <button
-          type="button"
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          aria-label="Back to top"
-          className="flex size-10 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white transition-colors duration-300 hover:bg-accent-gradient hover:text-white"
-        >
-          <ArrowUp className="size-4" />
-        </button>
-      </div>
+      <BackToTop />
     </footer>
   );
 }

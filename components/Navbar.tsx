@@ -1,45 +1,44 @@
-"use client";
-
-import React, { useEffect, useState } from "react";
+import React from "react";
 import CardNav, { CardNavItem } from "@/components/CardNav";
 import { defaultCardNavItems } from "@/data/content";
+import { getSiteSettings } from "@/lib/data";
 
-export default function Navbar() {
-  const [logo, setLogo] = useState<string | undefined>();
-  const [logoAlt, setLogoAlt] = useState<string>("Logo");
-  const [siteName, setSiteName] = useState<string>("CodeXplus");
-  const [items, setItems] = useState<CardNavItem[]>(defaultCardNavItems);
+export interface NavbarProps {
+  initialLogo?: string;
+  initialLogoAlt?: string;
+  initialSiteName?: string;
+  initialItems?: CardNavItem[];
+}
 
-  useEffect(() => {
-    let active = true;
-    fetch("/api/site-settings")
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to load settings");
-        return res.json();
-      })
-      .then((data) => {
-        if (!active) return;
-        if (data.siteLogo) setLogo(data.siteLogo);
-        if (data.logoAlt) setLogoAlt(data.logoAlt);
-        if (data.siteName) setSiteName(data.siteName);
-        if (Array.isArray(data.cardNavItems) && data.cardNavItems.length > 0) {
-          setItems(data.cardNavItems);
-        }
-      })
-      .catch(() => {
-        /* fallback to default */
-      });
-    return () => {
-      active = false;
-    };
-  }, []);
+export default async function Navbar({
+  initialLogo,
+  initialLogoAlt,
+  initialSiteName,
+  initialItems,
+}: NavbarProps = {}) {
+  let logo = initialLogo;
+  let logoAlt = initialLogoAlt;
+  let siteName = initialSiteName;
+  let items = initialItems;
+
+  try {
+    const settings = await getSiteSettings();
+    if (!logo && settings.siteLogo) logo = settings.siteLogo;
+    if (!logoAlt) logoAlt = settings.logoAlt || settings.siteName || "Logo";
+    if (!siteName) siteName = settings.siteName || "CodeXplus";
+    if (!items && Array.isArray(settings.cardNavItems) && settings.cardNavItems.length > 0) {
+      items = settings.cardNavItems;
+    }
+  } catch {
+    /* fallback to defaults */
+  }
 
   return (
     <CardNav
       logo={logo}
-      logoAlt={logoAlt}
-      siteName={siteName}
-      items={items}
+      logoAlt={logoAlt || "Logo"}
+      siteName={siteName || "CodeXplus"}
+      items={items && items.length > 0 ? items : defaultCardNavItems}
       baseColor="#fff"
       menuColor="#000"
       buttonBgColor="#7437ff"
