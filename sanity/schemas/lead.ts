@@ -18,6 +18,11 @@ export default defineType({
       validation: (Rule) => Rule.required().email(),
     },
     {
+      name: "phone",
+      title: "Phone Number",
+      type: "string",
+    },
+    {
       name: "message",
       title: "Message",
       type: "text",

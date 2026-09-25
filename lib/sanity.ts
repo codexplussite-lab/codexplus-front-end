@@ -128,11 +128,15 @@ export const postsQuery = `
 export const testimonialsQuery = `
 *[_type == "testimonial"] | order(sortOrder asc) {
   "id": _id,
-  quote,
+  _id,
   name,
+  date,
   role,
-  initials,
-  accent,
+  review,
+  quote,
+  rating,
+  clientImage,
+  "imageUrl": clientImage.asset->url,
   sortOrder
 }
 `;

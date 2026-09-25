@@ -6,45 +6,71 @@ export default defineType({
   type: "document",
   fields: [
     {
-      name: "quote",
-      title: "Quote",
-      type: "text",
-      rows: 4,
+      name: "name",
+      title: "Client Name",
+      type: "string",
       validation: (Rule) => Rule.required(),
     },
     {
-      name: "name",
-      title: "Name",
+      name: "date",
+      title: "Date / Subtitle",
       type: "string",
-      validation: (Rule) => Rule.required(),
+      description: "e.g. 'Jan 20, 2027' or designation",
     },
     {
       name: "role",
-      title: "Role",
+      title: "Designation / Role (Optional Fallback)",
       type: "string",
     },
     {
-      name: "initials",
-      title: "Initials",
-      type: "string",
-      description: "Avatar initials, e.g. \"EV\".",
+      name: "review",
+      title: "Review / Feedback",
+      type: "text",
+      rows: 4,
+      description: "Client feedback or testimonial statement.",
     },
     {
-      name: "accent",
-      title: "Accent",
-      type: "string",
-      description: "Hex color used for the avatar.",
+      name: "quote",
+      title: "Quote (Alternative)",
+      type: "text",
+      rows: 3,
+      description: "Optional fallback for quote if review is empty.",
+    },
+    {
+      name: "rating",
+      title: "Rating",
+      type: "number",
+      description: "Rating score, e.g. 4.9 or 5.0",
+      validation: (Rule) => Rule.min(1).max(5),
+      initialValue: 4.9,
+    },
+    {
+      name: "clientImage",
+      title: "Client Image",
+      type: "image",
+      options: {
+        hotspot: true,
+      },
     },
     {
       name: "sortOrder",
       title: "Sort Order",
       type: "number",
+      initialValue: 0,
     },
   ],
   preview: {
     select: {
       title: "name",
-      subtitle: "role",
+      subtitle: "date",
+      media: "clientImage",
+    },
+    prepare({ title, subtitle, media }) {
+      return {
+        title: title || "Unnamed Testimonial",
+        subtitle: subtitle || "Client",
+        media,
+      };
     },
   },
 });

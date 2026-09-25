@@ -626,52 +626,60 @@ export const projects: Project[] = [
 
 export const testimonials = [
   {
+    name: "Rufus Stewart",
+    date: "Jan 20, 2027",
+    role: "Jan 20, 2027",
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.",
     quote:
-      "CodeX+ didn't just design a website — they rebuilt how our entire company thinks about its brand. Every pixel feels deliberate. It changed the business.",
-    name: "Elena Vasquez",
-    role: "Founder, Maison Noor",
-    initials: "EV",
-    accent: "#7437ff",
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.",
+    rating: 4.9,
+    imageUrl:
+      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400&auto=format&fit=crop",
+    initials: "RS",
+    accent: "#06b6d4",
   },
   {
+    name: "Richard Sanchez",
+    date: "Apr 10, 2027",
+    role: "Apr 10, 2027",
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.",
     quote:
-      "The fastest, most considered build we've ever run. Conversion up 38% in one quarter, and the dev experience is genuinely beautiful.",
-    name: "Marcus Feld",
-    role: "CPO, Vanta Commerce",
-    initials: "MF",
-    accent: "#9a66ff",
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.",
+    rating: 4.9,
+    imageUrl:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&auto=format&fit=crop",
+    initials: "RS",
+    accent: "#0ea5e9",
   },
   {
+    name: "Francisco Andrade",
+    date: "June 10, 2027",
+    role: "June 10, 2027",
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.",
     quote:
-      "They translate vision into craft better than any team we've worked with. Our dashboard finally feels premium enough for our clients.",
-    name: "Sofia Lindgren",
-    role: "VP Product, Pulse Analytics",
-    initials: "SL",
-    accent: "#232746",
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.",
+    rating: 4.9,
+    imageUrl:
+      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=400&auto=format&fit=crop",
+    initials: "FA",
+    accent: "#06b6d4",
   },
   {
+    name: "Lars Peeters",
+    date: "Desc 30, 2027",
+    role: "Desc 30, 2027",
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.",
     quote:
-      "From strategy to shipping, a single accountable partner. Our rebrand doubled wholesale inquiries in six months. Unreal.",
-    name: "Jonas Weber",
-    role: "CEO, Northwind",
-    initials: "JW",
-    accent: "#2e3a59",
-  },
-  {
-    quote:
-      "We shipped a full product from zero in four months. The care they put into motion and micro-interaction is what makes it feel expensive.",
-    name: "Aisha Bello",
-    role: "Head of Design, Folio",
-    initials: "AB",
-    accent: "#7437ff",
-  },
-  {
-    quote:
-      "Design that genuinely calms people down. Our retention numbers prove it. CodeX+ sets the bar for health-tech craft.",
-    name: "Tomás Rivera",
-    role: "CEO, Aurora Health",
-    initials: "TR",
-    accent: "#9a66ff",
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.",
+    rating: 4.9,
+    imageUrl:
+      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=400&auto=format&fit=crop",
+    initials: "LP",
+    accent: "#0ea5e9",
   },
 ];
 

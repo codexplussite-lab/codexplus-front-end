@@ -189,14 +189,17 @@ async function main() {
     );
   });
 
-  testimonialData.forEach((t, i) => {
+  testimonialData.forEach((t: any, i) => {
     ops.push(
       client.createOrReplace({
         _id: `testimonial-${slugify(t.name)}`,
         _type: "testimonial",
-        quote: t.quote,
         name: t.name,
+        date: t.date || t.role,
         role: t.role,
+        review: t.review || t.quote,
+        quote: t.quote,
+        rating: t.rating ?? 4.9,
         initials: t.initials,
         accent: t.accent,
         sortOrder: i,

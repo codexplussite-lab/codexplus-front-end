@@ -97,12 +97,18 @@ export type PostRow = {
 
 export type TestimonialRow = {
   id: string;
-  quote: string;
+  _id?: string;
   name: string;
-  role: string;
-  initials: string;
-  accent: string;
-  sortOrder: number;
+  date?: string;
+  role?: string;
+  review?: string;
+  quote?: string;
+  rating?: number;
+  clientImage?: any;
+  imageUrl?: string;
+  initials?: string;
+  accent?: string;
+  sortOrder?: number;
 };
 
 export type OwnerRow = {

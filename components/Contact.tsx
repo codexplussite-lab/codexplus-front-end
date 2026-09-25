@@ -2,20 +2,13 @@
 
 import { useEffect, useRef, useState } from "react";
 import {
-  ArrowUpRight,
   Check,
-  Facebook,
-  Instagram,
+  Globe,
   Loader2,
   Mail,
   MapPin,
   Phone,
-  Send,
-  Twitter,
-  Github,
-  Linkedin,
-  Dribbble,
-  Globe,
+  Play,
 } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import { brand } from "@/data/content";
@@ -24,68 +17,28 @@ import {
   leadContextMessage,
   type LeadContext,
 } from "@/lib/leadContext";
-import { cn } from "@/lib/utils";
 
 type Status = "idle" | "loading" | "success" | "error";
-
-const inputClass =
-  "w-full rounded-2xl border border-line bg-elevated px-5 py-4 text-sm text-ink placeholder:text-faint transition-colors duration-300 focus:border-accent/60 focus:outline-none";
-
-const defaultFeatures = [
-  "Personalized assistance",
-  "Timely response",
-  "Comprehensive support",
-];
-
-const defaultSocials = [
-  { label: "Twitter", href: "https://twitter.com" },
-  { label: "Facebook", href: "https://www.facebook.com/" },
-  { label: "Instagram", href: "https://www.instagram.com/" },
-];
-
-const socialIconMap: Record<string, React.ComponentType<{ className?: string }>> = {
-  twitter: Twitter,
-  x: Twitter,
-  facebook: Facebook,
-  instagram: Instagram,
-  github: Github,
-  linkedin: Linkedin,
-  dribbble: Dribbble,
-};
-
-function getSocialIcon(label: string) {
-  const key = label.toLowerCase();
-  for (const [k, Icon] of Object.entries(socialIconMap)) {
-    if (key.includes(k)) return Icon;
-  }
-  return Globe;
-}
 
 export default function Contact() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState("");
-  const [flash, setFlash] = useState(false);
+
   const [contactEmail, setContactEmail] = useState(brand.email);
   const [contactPhone, setContactPhone] = useState(brand.phoneIntl[0]);
   const [locations, setLocations] = useState(brand.locations);
-  const [features, setFeatures] = useState<string[]>(defaultFeatures);
-  const [socialList, setSocialList] = useState<{ label: string; href: string }[]>(defaultSocials);
-  const formRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const flashTimer = useRef<number | null>(null);
 
   const applyLeadContext = (context: LeadContext) => {
     const prefix = `${leadContextMessage(context)}\n\n`;
     setMessage((prev) => (prev.trim() ? prev : prefix));
-    setFlash(true);
-    if (flashTimer.current) window.clearTimeout(flashTimer.current);
-    flashTimer.current = window.setTimeout(() => setFlash(false), 2400);
     window.setTimeout(() => {
       textareaRef.current?.focus({ preventScroll: true });
-    }, 700);
+    }, 500);
   };
 
   useEffect(() => {
@@ -100,8 +53,6 @@ export default function Contact() {
           email?: string;
           phoneIntl?: string[];
           locations?: typeof brand.locations;
-          contactFeatures?: string[];
-          socials?: { label: string; href: string }[];
         }) => {
           if (!active) return;
           if (data.email) setContactEmail(data.email);
@@ -111,16 +62,10 @@ export default function Contact() {
           if (Array.isArray(data.locations) && data.locations.length > 0) {
             setLocations(data.locations);
           }
-          if (Array.isArray(data.contactFeatures) && data.contactFeatures.length > 0) {
-            setFeatures(data.contactFeatures);
-          }
-          if (Array.isArray(data.socials) && data.socials.length > 0) {
-            setSocialList(data.socials);
-          }
         }
       )
       .catch(() => {
-        /* fall back to static content */
+        /* fallback */
       });
 
     const onLeadContext = (e: Event) => {
@@ -139,9 +84,7 @@ export default function Contact() {
     return () => {
       active = false;
       window.removeEventListener(LEAD_CONTEXT_EVENT, onLeadContext);
-      if (flashTimer.current) window.clearTimeout(flashTimer.current);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -153,13 +96,14 @@ export default function Contact() {
       const res = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, message }),
+        body: JSON.stringify({ name, email, phone, message }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Something went wrong");
       setStatus("success");
       setName("");
       setEmail("");
+      setPhone("");
       setMessage("");
     } catch (err) {
       setStatus("error");
@@ -169,245 +113,215 @@ export default function Contact() {
 
   const primaryLocation = locations[0];
   const telHref = `tel:${contactPhone.replace(/[^+\d]/g, "")}`;
+  const addressString = primaryLocation
+    ? `123 Anywhere St., ${primaryLocation.city}, ${primaryLocation.country}`
+    : "123 Anywhere St., Any City, ST 12345";
 
   return (
-    <section id="contact" className="relative scroll-mt-20 overflow-hidden py-24 md:scroll-mt-24 md:py-36">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute left-1/2 top-1/3 z-0 h-[420px] w-[720px] -translate-x-1/2 rounded-full opacity-10 blur-[140px]"
-        style={{
-          background:
-            "radial-gradient(closest-side, #7437ff 0%, #9a66ff 45%, transparent 100%)",
-        }}
-      />
+    <section id="contact" className="relative scroll-mt-20 overflow-hidden py-16 md:py-24 text-white">
+      {/* Exact Atmospheric Backdrop with soft grayscale/silver diffused radial flares */}
+      <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+        {/* Soft upper-left ambient cloud */}
+        <div className="absolute -top-32 -left-32 h-[550px] w-[550px] rounded-full bg-white/[0.04] blur-[140px]" />
+        {/* Center-right large luminous orb matching the right-side glow in the reference image */}
+        <div className="absolute top-1/2 -right-24 h-[650px] w-[650px] -translate-y-1/2 rounded-full bg-white/[0.07] blur-[150px]" />
+        {/* Subtle bottom-right flare */}
+        <div className="absolute -bottom-20 right-10 h-[450px] w-[450px] rounded-full bg-slate-300/[0.05] blur-[130px]" />
+      </div>
 
-      <div className="relative z-10 mx-auto max-w-7xl px-5 md:px-8">
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
-          {/* Left column */}
-          <div className="lg:col-span-5">
-            <Reveal>
-              <span className="inline-flex items-center gap-3 text-[11px] font-medium uppercase tracking-[0.28em] text-accent">
-                <span className="inline-block h-px w-8 bg-accent" />
-                Contact
-              </span>
-            </Reveal>
-            <Reveal delay={0.08}>
-              <h2 className="mt-5 font-display text-5xl font-medium leading-[1.02] tracking-tight md:text-6xl">
-                Reach out
-                <ArrowUpRight className="ml-3 inline-block size-10 text-accent md:size-12" />
-              </h2>
-            </Reveal>
-            <Reveal delay={0.14}>
-              <p className="mt-6 max-w-md text-[1rem] leading-relaxed text-muted md:text-lg">
-                Have a question or need assistance? Reach out to our dedicated
-                support team — we&apos;ll get back to you within 24 hours.
-              </p>
-            </Reveal>
+      <div className="relative z-10 mx-auto max-w-7xl px-6 md:px-12 lg:px-16">
+        <div className="grid grid-cols-1 gap-14 lg:grid-cols-12 lg:gap-20 items-start">
+          
+          {/* Left Column: Heading, Description, Line Divider, Contact List */}
+          <div className="lg:col-span-5 flex flex-col justify-between pt-1">
+            <div>
+              <Reveal>
+                <h1 className="text-4xl md:text-5xl lg:text-[54px] font-normal tracking-wide text-white font-sans">
+                  Contact Us
+                </h1>
+              </Reveal>
 
-            <Reveal delay={0.2}>
-              <ul className="mt-9 space-y-3.5">
-                {features.map((feature) => (
-                  <li key={feature} className="flex items-center gap-3 text-sm text-ink/90">
-                    <span className="grid size-6 shrink-0 place-items-center rounded-full bg-accent/15">
-                      <Check className="size-3.5 text-accent" />
-                    </span>
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-            </Reveal>
+              <Reveal delay={0.08}>
+                <p className="mt-8 text-sm md:text-[15px] leading-relaxed text-slate-300 font-normal max-w-sm">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                </p>
+              </Reveal>
 
-            <Reveal delay={0.26}>
-              <div className="mt-10 flex items-center gap-4">
-                <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-faint">
-                  Follow us
-                </span>
-                <span className="h-px w-10 bg-line" />
-                <div className="flex items-center gap-2.5">
-                  {socialList.map(({ label, href }) => {
-                    const Icon = getSocialIcon(label);
-                    return (
-                      <a
-                        key={label}
-                        href={href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label={label}
-                        data-hover
-                        className="grid size-10 place-items-center rounded-full border border-line bg-elevated/80 text-faint transition-all duration-300 hover:-translate-y-0.5 hover:border-accent/60 hover:bg-accent/15 hover:text-accent"
-                      >
-                        <Icon className="size-4" />
-                      </a>
-                    );
-                  })}
+              {/* Exact clean silver/gray horizontal divider bar */}
+              <Reveal delay={0.12}>
+                <div className="mt-10 h-[1.5px] w-20 bg-slate-400/60" />
+              </Reveal>
+            </div>
+
+            {/* Contact Details List with circular frosted icons */}
+            <Reveal delay={0.16}>
+              <div className="mt-14 space-y-4 text-sm text-slate-300 font-normal">
+                {/* Phone */}
+                <a
+                  href={telHref}
+                  className="flex items-center gap-3.5 transition-colors duration-200 hover:text-white group"
+                >
+                  <span className="grid size-7 shrink-0 place-items-center rounded-full bg-white/[0.12] text-white backdrop-blur-sm transition-transform duration-200 group-hover:scale-105">
+                    <Phone className="size-3.5" />
+                  </span>
+                  <span className="tracking-wide">{contactPhone || "+123-456-7890"}</span>
+                </a>
+
+                {/* Email */}
+                <a
+                  href={`mailto:${contactEmail}`}
+                  className="flex items-center gap-3.5 transition-colors duration-200 hover:text-white group"
+                >
+                  <span className="grid size-7 shrink-0 place-items-center rounded-full bg-white/[0.12] text-white backdrop-blur-sm transition-transform duration-200 group-hover:scale-105">
+                    <Mail className="size-3.5" />
+                  </span>
+                  <span className="tracking-wide">{contactEmail || "hello@reallygreatsite.com"}</span>
+                </a>
+
+                {/* Website */}
+                <a
+                  href="https://reallygreatsite.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3.5 transition-colors duration-200 hover:text-white group"
+                >
+                  <span className="grid size-7 shrink-0 place-items-center rounded-full bg-white/[0.12] text-white backdrop-blur-sm transition-transform duration-200 group-hover:scale-105">
+                    <Globe className="size-3.5" />
+                  </span>
+                  <span className="tracking-wide">www.reallygreatsite.com</span>
+                </a>
+
+                {/* Location */}
+                <div className="flex items-center gap-3.5">
+                  <span className="grid size-7 shrink-0 place-items-center rounded-full bg-white/[0.12] text-white backdrop-blur-sm">
+                    <MapPin className="size-3.5" />
+                  </span>
+                  <span className="tracking-wide text-slate-300">
+                    {addressString}
+                  </span>
                 </div>
               </div>
             </Reveal>
           </div>
 
-          {/* Right column — form card */}
+          {/* Right Column: Form matching exact design */}
           <div className="lg:col-span-7">
-            <Reveal delay={0.18}>
-              <div
-                ref={formRef}
-                className={cn(
-                  "gradient-border rounded-3xl border border-line bg-panel/70 p-6 backdrop-blur-xl transition-shadow duration-500 md:p-9",
-                  flash && "shadow-[0_0_70px_rgba(116,55,255,0.4)] ring-1 ring-accent/70"
-                )}
-              >
-                <form onSubmit={submit} className="space-y-5">
-                  <div className="grid gap-5 sm:grid-cols-2">
-                    <div>
-                      <label
-                        htmlFor="name"
-                        className="mb-2 block text-xs uppercase tracking-[0.2em] text-faint"
-                      >
-                        Your name
-                      </label>
-                      <input
-                        id="name"
-                        type="text"
-                        required
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        placeholder="Jane Cooper"
-                        className={inputClass}
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="email"
-                        className="mb-2 block text-xs uppercase tracking-[0.2em] text-faint"
-                      >
-                        Email address
-                      </label>
-                      <input
-                        id="email"
-                        type="email"
-                        required
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="jane@company.com"
-                        className={inputClass}
-                      />
-                    </div>
-                  </div>
+            <Reveal delay={0.14}>
+              <form onSubmit={submit} className="space-y-6">
+                {/* Name */}
+                <div>
+                  <label
+                    htmlFor="contact-name"
+                    className="mb-2 block text-sm font-normal text-white"
+                  >
+                    Name
+                  </label>
+                  <input
+                    id="contact-name"
+                    type="text"
+                    required
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Francisco Andrade"
+                    className="w-full rounded-sm border-t border-l border-r border-white/5 border-b border-b-white/40 bg-white/[0.12] px-4 py-3.5 text-sm text-white placeholder:text-slate-400 placeholder:italic backdrop-blur-md transition-all duration-200 focus:border-b-white focus:bg-white/[0.18] focus:outline-none shadow-sm"
+                  />
+                </div>
 
+                {/* Email & Phone Number Side by Side */}
+                <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                   <div>
                     <label
-                      htmlFor="message"
-                      className="mb-2 block text-xs uppercase tracking-[0.2em] text-faint"
+                      htmlFor="contact-email"
+                      className="mb-2 block text-sm font-normal text-white"
                     >
-                      Message
+                      Email
                     </label>
-                    <textarea
-                      id="message"
-                      ref={textareaRef}
+                    <input
+                      id="contact-email"
+                      type="email"
                       required
-                      rows={6}
-                      value={message}
-                      onChange={(e) => setMessage(e.target.value)}
-                      placeholder="Tell us how we can help..."
-                      className={`${inputClass} resize-none`}
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="hello@reallygreatsite.com"
+                      className="w-full rounded-sm border-t border-l border-r border-white/5 border-b border-b-white/40 bg-white/[0.12] px-4 py-3.5 text-sm text-white placeholder:text-slate-400 placeholder:italic backdrop-blur-md transition-all duration-200 focus:border-b-white focus:bg-white/[0.18] focus:outline-none shadow-sm"
                     />
                   </div>
+                  <div>
+                    <label
+                      htmlFor="contact-phone"
+                      className="mb-2 block text-sm font-normal text-white"
+                    >
+                      Phone Number
+                    </label>
+                    <input
+                      id="contact-phone"
+                      type="tel"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      placeholder="123-456-7890"
+                      className="w-full rounded-sm border-t border-l border-r border-white/5 border-b border-b-white/40 bg-white/[0.12] px-4 py-3.5 text-sm text-white placeholder:text-slate-400 placeholder:italic backdrop-blur-md transition-all duration-200 focus:border-b-white focus:bg-white/[0.18] focus:outline-none shadow-sm"
+                    />
+                  </div>
+                </div>
 
+                {/* Message */}
+                <div>
+                  <label
+                    htmlFor="contact-message"
+                    className="mb-2 block text-sm font-normal text-white"
+                  >
+                    Message
+                  </label>
+                  <textarea
+                    id="contact-message"
+                    ref={textareaRef}
+                    required
+                    rows={4}
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    placeholder="Hi..."
+                    className="w-full resize-none rounded-sm border-t border-l border-r border-white/5 border-b border-b-white/40 bg-white/[0.12] px-4 py-3.5 text-sm text-white placeholder:text-slate-400 placeholder:italic backdrop-blur-md transition-all duration-200 focus:border-b-white focus:bg-white/[0.18] focus:outline-none shadow-sm"
+                  />
+                </div>
+
+                {/* Submit Button (Exact match: Black rectangle with white text 'SUBMIT' and solid right play triangle) */}
+                <div className="flex flex-col items-end gap-3 pt-4">
                   <button
                     type="submit"
                     disabled={status === "loading"}
-                    className="inline-flex h-13 w-full items-center justify-center gap-2.5 rounded-xl bg-ink px-8 py-4 text-sm font-semibold text-[#0b0f19] transition-all duration-300 hover:bg-white hover:shadow-[0_0_30px_rgba(238,241,251,0.25)] disabled:opacity-60"
+                    className="inline-flex items-center justify-center gap-2.5 rounded-sm bg-[#090b10] px-9 py-3.5 text-xs font-semibold tracking-wider text-white uppercase transition-all duration-200 hover:bg-[#151922] hover:shadow-lg disabled:opacity-60 border border-white/20"
                   >
                     {status === "loading" ? (
                       <>
-                        Sending...
-                        <Loader2 className="size-4 animate-spin" />
+                        <span>SUBMITTING</span>
+                        <Loader2 className="size-3 animate-spin text-white" />
                       </>
                     ) : status === "success" ? (
                       <>
-                        Message sent
-                        <Check className="size-4" />
+                        <span>SENT</span>
+                        <Check className="size-3 text-emerald-400" />
                       </>
                     ) : (
                       <>
-                        Submit
-                        <Send className="size-4" />
+                        <span>SUBMIT</span>
+                        <Play className="size-2.5 fill-white text-white translate-y-[0.5px]" />
                       </>
                     )}
                   </button>
 
                   {status === "success" && (
-                    <p className="text-center text-sm text-accent">
-                      Thanks — we&apos;ll get back to you within 24 hours.
+                    <p className="text-xs text-emerald-400">
+                      Thank you! Your message has been sent successfully.
                     </p>
                   )}
                   {status === "error" && (
-                    <p className="text-center text-sm text-red-400">{error}</p>
+                    <p className="text-xs text-red-400">{error}</p>
                   )}
-                </form>
-              </div>
+                </div>
+              </form>
             </Reveal>
           </div>
-        </div>
 
-        {/* Bottom info cards row */}
-        <div className="mt-14 grid grid-cols-1 gap-5 md:grid-cols-3 lg:mt-16">
-          <Reveal delay={0.05}>
-            <a
-              href={`mailto:${contactEmail}`}
-              data-hover
-              className="group flex items-center gap-4 rounded-3xl border border-line bg-panel/70 p-6 backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-accent/50 hover:shadow-[0_16px_40px_-16px_rgba(116,55,255,0.35)]"
-            >
-              <span className="grid size-12 shrink-0 place-items-center rounded-2xl border border-line bg-elevated/80 text-accent transition-colors duration-300 group-hover:bg-accent group-hover:text-white">
-                <Mail className="size-5" />
-              </span>
-              <span className="min-w-0">
-                <span className="block text-[11px] uppercase tracking-[0.2em] text-faint">
-                  Email us
-                </span>
-                <span className="mt-1 block truncate text-sm font-medium text-ink">
-                  {contactEmail}
-                </span>
-              </span>
-            </a>
-          </Reveal>
-
-          <Reveal delay={0.12}>
-            <a
-              href={telHref}
-              data-hover
-              className="group flex items-center gap-4 rounded-3xl border border-line bg-panel/70 p-6 backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-accent/50 hover:shadow-[0_16px_40px_-16px_rgba(116,55,255,0.35)]"
-            >
-              <span className="grid size-12 shrink-0 place-items-center rounded-2xl border border-line bg-elevated/80 text-accent transition-colors duration-300 group-hover:bg-accent group-hover:text-white">
-                <Phone className="size-5" />
-              </span>
-              <span className="min-w-0">
-                <span className="block text-[11px] uppercase tracking-[0.2em] text-faint">
-                  Call us
-                </span>
-                <span className="mt-1 block truncate text-sm font-medium text-ink">
-                  {contactPhone}
-                </span>
-              </span>
-            </a>
-          </Reveal>
-
-          <Reveal delay={0.19}>
-            <div className="flex items-center gap-4 rounded-3xl border border-line bg-panel/70 p-6 backdrop-blur-xl">
-              <span className="grid size-12 shrink-0 place-items-center rounded-2xl border border-line bg-elevated/80 text-accent">
-                <MapPin className="size-5" />
-              </span>
-              <span className="min-w-0">
-                <span className="block text-[11px] uppercase tracking-[0.2em] text-faint">
-                  Our location
-                </span>
-                <span className="mt-1 block text-sm font-medium text-ink">
-                  {primaryLocation
-                    ? `${primaryLocation.city}, ${primaryLocation.country}`
-                    : "Worldwide"}
-                </span>
-              </span>
-            </div>
-          </Reveal>
         </div>
       </div>
     </section>
