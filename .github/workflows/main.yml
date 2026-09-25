@@ -18,6 +18,9 @@ jobs:
           script: |
             cd /www/wwwroot/codexplus.site
             git pull origin main
-            npm install
+            chmod -R 755 /www/wwwroot/codexplus.site
+            chmod -R +x node_modules/.bin/ 2>/dev/null || true
+            npm install --production=false
             npm run build
-            pm2 restart all
+            pm2 restart codexplus || pm2 restart all || pm2 start npm --name "codexplus" --cwd "/www/wwwroot/codexplus.site" -- start
+            pm2 save
